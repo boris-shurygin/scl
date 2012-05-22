@@ -63,10 +63,7 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <Link>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
       <OutputFile>$(OutDir)utestd.exe</OutputFile>
-      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
@@ -102,12 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest_impl.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Utils\Utils.vcxproj">
-      <Project>{21e81e7e-0e8b-4cbb-bbfb-9319cca98ec4}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
