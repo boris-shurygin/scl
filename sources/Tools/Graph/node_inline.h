@@ -286,7 +286,7 @@ inline void SuccIterImpl::nextEdge()
     edge_p = edge_p->nextSucc();
 }
 
-/** Preincrement operator */
+/** Next edge in undirected edges traversal */
 inline void UnDirIterImpl::nextEdge()
 {
     GRAPH_ASSERTD( isNotNullP( edge_p), "Edge iterator is at end ( NULL in edge_p pointer)");

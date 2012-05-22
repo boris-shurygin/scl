@@ -59,9 +59,7 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
-    <ProjectReference>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
+    <ProjectReference />
     <Link>
       <OutputFile>$(OutDir)utestd.exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -99,6 +97,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utest_impl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tools\Tools.vcxproj">
+      <Project>{114df7a4-3f91-58e0-f988-7ff6798ea39a}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

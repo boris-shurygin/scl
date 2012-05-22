@@ -29,7 +29,7 @@ class ANode: public Node
 {
     int dummy;
     /** We can't create nodes separately, do it through newNode method of graph */
-    ANode( AGraph *graph_p, int _id);
+    ANode( AGraph *graph_p, GraphUid _id);
     friend class AGraph;
 public:
         /** Get next graph's node */
@@ -67,7 +67,7 @@ class AEdge: public Edge
     int dummy;
 
     /** Constructors are made private, only nodes and graph can create edges */
-    AEdge( AGraph *graph_p, int _id, ANode *_pred, ANode* _succ);
+    AEdge( AGraph *graph_p, GraphUid _id, ANode *_pred, ANode* _succ);
         
     friend class AGraph;
     friend class ANode;
@@ -125,9 +125,9 @@ class AGraph: public Graph
 
 
     /** Node creation overload */
-    Node * createNode( int _id);
+    Node * createNode( GraphUid _id);
 	/** Edge creation overload */
-    Edge * createEdge( int _id, Node *_pred, Node* _succ);
+    Edge * createEdge( GraphUid _id, Node *_pred, Node* _succ);
 
     public:
             
@@ -168,26 +168,26 @@ class AGraph: public Graph
 };
 
 /** Node constructor */
-inline ANode::ANode( AGraph *graph_p, int _id):
+inline ANode::ANode( AGraph *graph_p, GraphUid _id):
         Node( graph_p, _id)
 {
 
 }
 
 /** Edge constructor */
-inline AEdge::AEdge( AGraph *graph_p, int _id, ANode *_pred, ANode* _succ):
+inline AEdge::AEdge( AGraph *graph_p, GraphUid _id, ANode *_pred, ANode* _succ):
         Edge( graph_p, _id, _pred, _succ)
 {
 
 }
         
 /** Node creation overload */
-inline Node * AGraph::createNode( int _id)
+inline Node * AGraph::createNode( GraphUid _id)
 {
     return new ( nodePool()) ANode( this, _id);
 }
 /** Edge creation overload */
-inline Edge * AGraph::createEdge( int _id, Node *_pred, Node* _succ)
+inline Edge * AGraph::createEdge( GraphUid _id, Node *_pred, Node* _succ)
 {
     return new ( edgePool()) AEdge( this, _id, static_cast<ANode*>( _pred), static_cast< ANode *>(_succ));
 } 
