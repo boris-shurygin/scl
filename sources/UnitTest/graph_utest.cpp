@@ -3,12 +3,10 @@
  * Implementation of testing of Graph library
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #include "utest_impl.h"
 #include <vector>
-
-using namespace std;
 
  /**
   * TODO: Check graph's data structures being consistent with node and edge functionality
@@ -245,7 +243,7 @@ bool uTestSave()
     /** 
      *  Check basic operation of graph library
      */
-    vector<ANode *> nodes;
+    std::vector<ANode *> nodes;
 
     /** Create nodes and edges */
     for ( int i =0; i<20; i++)

@@ -6,16 +6,16 @@
  * @brief Low level utils
  */
 /*
- * Utils library in Showgraph tool
- * Copyright (C) 2009  Boris Shurygin
+ * Utils library in SCL
+ * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
 
 #ifndef UTILS_IFACE_H
 #define UTILS_IFACE_H
-#include <stdio.h>
-#include "misc.h"
 #include "types.h"
+#include "host.h"
+#include "misc.h"
 #include "asrt.h"
 #include "print.h"
 #include "list.h"

@@ -1,6 +1,6 @@
 /**
  * File: print.h - Wrapper for printing routines in SCL (Simple Compiler)
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef PRINT_H
 #define PRINT_H

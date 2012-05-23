@@ -3,7 +3,7 @@
  * Implementation of testing of memory manager
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #include "utils_iface.h"
 #include "mem.h"
@@ -35,18 +35,18 @@ uTestRef()
     ObjRef ref2; /** Test default constructor */
 
     /** Test operator bool() */
-    assertd( !ref2 && ref);
-    assertd( ref2 == NULL && ref != NULL);
+    ASSERT( !ref2 && ref);
+    ASSERT( ref2 == NULL && ref != NULL);
     /** Test copy constructor */
     ref2 = ref;
-    assertd( ref2 && ref);
+    ASSERT( ref2 && ref);
     /** Test operator == ( ref) */
-    assertd( ref == ref2);
+    ASSERT( ref == ref2);
 
     /** Test operator -> */
     ref->a = 2;
 #ifdef USE_REF_COUNTERS
-    assertd( ref->refCount() == 2);
+    ASSERT_X( ref->refCount() == 2, "reference utest", "incorrect reference counter");
 #endif	
     bool catched = false;
 
@@ -59,7 +59,7 @@ uTestRef()
             catched = true;
             ref2->a = a;
     }
-    assertd( catched);
+    ASSERT_X( catched, "reference utest", "Exception is not catched");
 
     /** Test ref to pointer conversion and Obj destructor */
     delete ref2;

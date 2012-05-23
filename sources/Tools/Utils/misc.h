@@ -5,7 +5,7 @@
  * @ingroup Utils
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef MISC_H
 #define MISC_H

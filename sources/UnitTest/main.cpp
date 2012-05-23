@@ -3,7 +3,7 @@
  * Implementation and entry point for unit testing of SCL (Simple Compiler)
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #include "utest_impl.h"
 

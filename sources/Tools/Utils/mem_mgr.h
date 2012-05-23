@@ -3,7 +3,7 @@
  * Definition of memory manager class. Utils library in SCL (Simple Compiler).
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef MEM_MGR_H
 #define MEM_MGR_H

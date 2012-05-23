@@ -3,24 +3,17 @@
  * Implementation of various utils
  */
 /*
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #include "utils_iface.h"
-
-/**
- * Die with message
- */
-void fatal(const char *msg, ...)
-{
-    abort();
-}
 
 /*
   The ASSERT macro calls this this function when the test fails.
 */
 void fatalAssert(const char *assertion, const char *file, int line)
 {
-    fatal("ASSERT: \"%s\" in file %s, line %d", assertion, file, line);
+	cerr << "ASSERT: " << assertion << " in file " << file << "line " << line << endl;
+	abort();
 }
 
 /*
@@ -28,5 +21,6 @@ void fatalAssert(const char *assertion, const char *file, int line)
 */
 void fatalAssertWithMess(const char *where, const char *what, const char *file, int line)
 {
-    fatal("ASSERT failure in %s: \"%s\", file %s, line %d", where, what, file, line);
+    cerr << "ASSERT failure in "<< where <<": \""<< what <<"\", file "<< file <<", line " << line << endl;
+	abort();
 }

@@ -8,7 +8,7 @@
  */
 /*
  * Utils library in Showgraph tool
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef LIST_H
 #define LIST_H

@@ -5,7 +5,7 @@
  */
 /* 
  * GraphCore for SCL (Simple Compiler) tool.
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef TOOLS_IFFACE_H
 #define TOOLS_IFFACE_H

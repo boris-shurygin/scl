@@ -4,7 +4,7 @@
  */
 /*
  * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
- * Copyright (C) 2009  Boris Shurygin
+ * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
 #ifndef NODE_ITER_H
