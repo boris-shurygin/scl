@@ -14,15 +14,23 @@
  */
 int main(int argc, char **argv)
 {
+    Log::init();
     MemMgr::init();
     
+    Log::ptr()->Register( LOG_DEFAULT, "log ", "log.txt");
+
+    LOG( LOG_DEFAULT, 0, "Log message");
+    LOGS( LOG_DEFAULT, 0, "Log message " << "with stream");
+
     /** Test utils */
     if ( !uTestUtils())
         return -1;
 
-	/** Test graph package */
+    /** Test graph package */
     if ( !uTestGraph())
         return -1;
     
     MemMgr::deinit();
+    Log::deinit();
+
 }

@@ -12,8 +12,8 @@
 */
 void fatalAssert(const char *assertion, const char *file, int line)
 {
-	cerr << "ASSERT: " << assertion << " in file " << file << "line " << line << endl;
-	abort();
+    cerr << "ASSERT: " << assertion << " in file " << file << "line " << line << endl;
+    abort();
 }
 
 /*
@@ -22,5 +22,5 @@ void fatalAssert(const char *assertion, const char *file, int line)
 void fatalAssertWithMess(const char *where, const char *what, const char *file, int line)
 {
     cerr << "ASSERT failure in "<< where <<": \""<< what <<"\", file "<< file <<", line " << line << endl;
-	abort();
+    abort();
 }

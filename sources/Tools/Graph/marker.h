@@ -155,7 +155,7 @@ class Marked
 {
 public:
     /** Default constructor */
-	inline Marked();
+    inline Marked();
 
     /** Mark node with marker. Return false if node is already marked. True otherwise. */
     inline bool mark( Marker marker);

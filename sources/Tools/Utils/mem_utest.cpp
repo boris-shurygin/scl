@@ -13,10 +13,10 @@ using namespace Mem;
 /** Test object class */
 class TestObj: public Obj
 {
-	
-public:	
-	/** Some variable */
-	int a;
+    
+public:    
+    /** Some variable */
+    int a;
 };
 
 /**
@@ -30,7 +30,7 @@ typedef Ref< TestObj> ObjRef;
 static bool
 uTestRef()
 {
-	/** Test smart pointers behaviour */
+    /** Test smart pointers behaviour */
     ObjRef ref = new TestObj(); /** Test constructor from pointer */
     ObjRef ref2; /** Test default constructor */
 
@@ -47,7 +47,7 @@ uTestRef()
     ref->a = 2;
 #ifdef USE_REF_COUNTERS
     ASSERT_X( ref->refCount() == 2, "reference utest", "incorrect reference counter");
-#endif	
+#endif    
     bool catched = false;
 
     /** Test exception generation */

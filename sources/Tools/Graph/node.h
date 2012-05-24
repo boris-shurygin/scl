@@ -127,8 +127,8 @@ protected:
     /** We can't create nodes separately, do it through newNode method of graph */
     inline Node( Graph *_graph_p, GraphUid _id);
 private:
-	/** Graph class controls nodes */
-    friend class Graph;	
+    /** Graph class controls nodes */
+    friend class Graph;    
     
     /** Detach this node from graph's node list */
     inline void detachFromGraph();

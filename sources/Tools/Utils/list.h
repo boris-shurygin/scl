@@ -7,11 +7,12 @@
  * @ingroup Utils
  */
 /*
- * Utils library in Showgraph tool
+ * Utils library in SCL (Simple Compiler)
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef LIST_H
 #define LIST_H
+
 /**
  * @brief Types of direction in lists.
  * @ingroup List  

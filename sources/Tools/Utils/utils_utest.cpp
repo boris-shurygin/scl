@@ -53,7 +53,7 @@ bool uTestUtils()
 
     /** Test memory management */
     if ( !uTestMem())
-		return false;
+        return false;
 
-	return true;
+    return true;
 }

@@ -24,18 +24,18 @@
 
 /* Edges traversal implementation */
 #define ITERATE_NODE_EDGES(node, edge, dir) for ( edge = node->first##dir();\
-										          isNotNullP( edge);\
-								                  edge = edge->next##dir())
+                                                  isNotNullP( edge);\
+                                                  edge = edge->next##dir())
 
 /* Succs traverse implementation */
 #define ITERATE_NODE_SUCCS(edge, node) for ( edge = node->firstSucc();\
-										     isNotNullP( edge);\
-								             edge = edge->nextSucc())
+                                             isNotNullP( edge);\
+                                             edge = edge->nextSucc())
 
 /* Preds traverse implementation */
 #define ITERATE_NODE_PREDS(edge, node) for ( edge = node->firstPred();\
-									         isNotNullP( edge);\
-								             edge = edge->nextPred())
+                                             isNotNullP( edge);\
+                                             edge = edge->nextPred())
 
 /**
  * Convenience macro for traversing edges in given direction
@@ -70,12 +70,12 @@
 
 /* Graph's edges traverse implementation */
 #define ITERATE_GRAPH_EDGES(edge, graph) for ( edge = graph->firstEdge();\
-									           isNotNullP( edge);\
-								               edge = edge->nextEdge())
+                                               isNotNullP( edge);\
+                                               edge = edge->nextEdge())
 /* Graph's nodes traverse implementation */
 #define ITERATE_GRAPH_NODES(node, graph) for ( node = graph->firstNode();\
-									           isNotNullP( node);\
-								               node = node->nextNode())
+                                               isNotNullP( node);\
+                                               node = node->nextNode())
 
 /**
  * Convenience macro for traversing edges in graph

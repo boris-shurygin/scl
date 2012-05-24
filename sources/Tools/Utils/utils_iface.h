@@ -20,6 +20,7 @@
 #include "print.h"
 #include "list.h"
 #include "singleton.h"
+#include "log.h"
 #include "mem.h"
 //#include "conf.h"
 

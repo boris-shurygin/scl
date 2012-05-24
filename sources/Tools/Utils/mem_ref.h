@@ -9,7 +9,7 @@
 #pragma once
 
 #ifndef MEM_H
-#	error
+#    error
 #endif
 
 #ifndef MEM_REF_H
@@ -26,101 +26,101 @@ namespace Mem
 #ifdef USE_REF_COUNTERS
 
 #endif
-	private:
-		RefObj *ptr;
-	public:
-		/** Default constructor */
-		Ref(): ptr( NULL){};
-		/** Copy constructor !!! NO uTEST !!! */
-		Ref( const Ref< RefObj>& orig): ptr( orig.ptr)
-		{
+    private:
+        RefObj *ptr;
+    public:
+        /** Default constructor */
+        Ref(): ptr( NULL){};
+        /** Copy constructor !!! NO uTEST !!! */
+        Ref( const Ref< RefObj>& orig): ptr( orig.ptr)
+        {
 #ifdef USE_REF_COUNTERS
-			ptr->incRefCount();
+            ptr->incRefCount();
 #endif
-		}
-		/** Assignement operator overloading */
-		Ref< RefObj> & operator=( const Ref< RefObj>& orig)
-		{
-			ptr = orig.ptr;
+        }
+        /** Assignement operator overloading */
+        Ref< RefObj> & operator=( const Ref< RefObj>& orig)
+        {
+            ptr = orig.ptr;
 #ifdef USE_REF_COUNTERS
-			ptr->incRefCount();
+            ptr->incRefCount();
 #endif
-			return *this;
-		}
-	    /**
-		 * Constructor from pointer
-		 * Used in Ref ref = new Obj(...) initialization
-		 * !!! No uTEST !!!
-		 */
-		Ref( RefObj* p): ptr( p)
-		{
+            return *this;
+        }
+        /**
+         * Constructor from pointer
+         * Used in Ref ref = new Obj(...) initialization
+         * !!! No uTEST !!!
+         */
+        Ref( RefObj* p): ptr( p)
+        {
 #ifdef USE_REF_COUNTERS
-			if ( ptr != 0)
-				ptr->incRefCount();
-#endif	
-		}
-		/**
-		 * Assignement of pointer
-		 * Used in Ref ref; ref = new Obj(...) expression
-		 */
-		Ref< RefObj> & operator=( RefObj* p)
-		{
+            if ( ptr != 0)
+                ptr->incRefCount();
+#endif    
+        }
+        /**
+         * Assignement of pointer
+         * Used in Ref ref; ref = new Obj(...) expression
+         */
+        Ref< RefObj> & operator=( RefObj* p)
+        {
 #ifdef USE_REF_COUNTERS
-			/** Decrement object's ref count */
-			if ( ptr != 0)
-				ptr->decRefCount();
-#endif	
-			/** Assign a new pointer */
-			ptr = p;
+            /** Decrement object's ref count */
+            if ( ptr != 0)
+                ptr->decRefCount();
+#endif    
+            /** Assign a new pointer */
+            ptr = p;
 #ifdef USE_REF_COUNTERS
-			/** Increment ref count */
-			if ( ptr != 0)
-				ptr->incRefCount();
-#endif	
-			return *this;
-		}
-		/** Destructor */
-		~Ref()
-		{
+            /** Increment ref count */
+            if ( ptr != 0)
+                ptr->incRefCount();
+#endif    
+            return *this;
+        }
+        /** Destructor */
+        ~Ref()
+        {
 #ifdef USE_REF_COUNTERS
-			if ( ptr != 0)
-				ptr->decRefCount();
+            if ( ptr != 0)
+                ptr->decRefCount();
 #endif
-		}
-		/** Member access operator */
-		inline RefObj* operator->()
-		{
-			return ptr;
-		}
-		/** Equals operator */
-		inline bool operator == ( Ref< RefObj> &r)
-		{
-			return ptr == r.ptr;
-		}
-		/** Conversion to boolean */
-		inline operator bool()
-		{
-			return ptr != NULL;
-		}
-		/**
-		 * Conversion to Pointer
-		 * For using ref as delete operator argument.
-		 * Use in other expressions is prohibited. Unfortunatelly this is not ( can't be?) enforced.
-		 */
-		inline operator RefObj*()
-		{
+        }
+        /** Member access operator */
+        inline RefObj* operator->()
+        {
+            return ptr;
+        }
+        /** Equals operator */
+        inline bool operator == ( Ref< RefObj> &r)
+        {
+            return ptr == r.ptr;
+        }
+        /** Conversion to boolean */
+        inline operator bool()
+        {
+            return ptr != NULL;
+        }
+        /**
+         * Conversion to Pointer
+         * For using ref as delete operator argument.
+         * Use in other expressions is prohibited. Unfortunatelly this is not ( can't be?) enforced.
+         */
+        inline operator RefObj*()
+        {
                         RefObj *ret_val = ptr;
-			assertd( ret_val != NULL);
-			/** Decrement object's ref count */
-			if ( ptr != 0)
-			{
+            assertd( ret_val != NULL);
+            /** Decrement object's ref count */
+            if ( ptr != 0)
+            {
 #ifdef USE_REF_COUNTERS
-				ptr->decRefCount();	
+                ptr->decRefCount();    
 #endif
-				ptr = 0;
-			}
-			return ret_val;
-		}
+                ptr = 0;
+            }
+            return ret_val;
+        }
     };
 };
 #endif /* MEM_REF_H */

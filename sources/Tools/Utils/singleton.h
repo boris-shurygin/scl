@@ -65,6 +65,8 @@ public:
     static void deinit();
     /** Get a pointer to client object */
     static T* instance();
+    /** Get a pointer to client object */
+    static T* ptr();
 
 private:/* Uniqueness ensurance */
     /** Private constructor */
@@ -110,6 +112,17 @@ Single< T>::deinit()
 template < class T> 
 T*
 Single< T>::instance()
+{
+    ASSERTD( isNotNullP( instance_p));
+    return instance_p;
+}
+
+/**
+ * Access to client object
+ */
+template < class T> 
+T*
+Single< T>::ptr()
 {
     ASSERTD( isNotNullP( instance_p));
     return instance_p;

@@ -126,7 +126,7 @@ class AGraph: public Graph
 
     /** Node creation overload */
     Node * createNode( GraphUid _id);
-	/** Edge creation overload */
+    /** Edge creation overload */
     Edge * createEdge( GraphUid _id, Node *_pred, Node* _succ);
 
     public:

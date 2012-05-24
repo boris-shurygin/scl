@@ -216,7 +216,7 @@ template < class EdgeIterImpl>
 inline EdgeIterIface< EdgeIterImpl> 
 EdgeIterIface< EdgeIterImpl>::operator++( int)
 {
-	EdgeIterIface tmp = *this;
+    EdgeIterIface tmp = *this;
     ++*this;
     return tmp;
 }

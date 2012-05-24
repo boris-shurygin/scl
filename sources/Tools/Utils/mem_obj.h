@@ -9,7 +9,7 @@
 #pragma once
 
 #ifndef MEM_H
-#	error
+#    error
 #endif
 
 #ifndef MEM_OBJ_H
@@ -22,9 +22,9 @@
 namespace Mem
 {
     /** Type of reference count */
-	typedef unsigned int RefNumber;
+    typedef unsigned int RefNumber;
 
-	/**
+    /**
      * Base class for all memory-managed objects
      * @ingroup Mem
      */
@@ -35,49 +35,49 @@ namespace Mem
         Pool *_pool;
         
 #ifdef USE_REF_COUNTERS
-	private:
-		/** Counter for references */
-		RefNumber ref_count; /* Additional memory used, the overhead of counted references */
-	public:	
-		/** Get the number of references */
-		inline RefNumber refCount() const
-		{
-			return ref_count;
-		}
-		/** Increase reference count */
-		inline void incRefCount()
-		{
-			ref_count++;
-		}
-		/** Decrease reference count */
-		inline void decRefCount()
-		{
-			assertd( ref_count > 0);
-			ref_count--;
-		}
-#endif		
-	public:
+    private:
+        /** Counter for references */
+        RefNumber ref_count; /* Additional memory used, the overhead of counted references */
+    public:    
+        /** Get the number of references */
+        inline RefNumber refCount() const
+        {
+            return ref_count;
+        }
+        /** Increase reference count */
+        inline void incRefCount()
+        {
+            ref_count++;
+        }
+        /** Decrease reference count */
+        inline void decRefCount()
+        {
+            assertd( ref_count > 0);
+            ref_count--;
+        }
+#endif        
+    public:
         /** Get pointer to pool */
         inline Pool* pool() const
         {
             return _pool;
         }
 
-		/** Constructor */
-		inline Obj() 
+        /** Constructor */
+        inline Obj() 
 #ifdef USE_REF_COUNTERS
-		:ref_count( 0)
+        :ref_count( 0)
 #endif
-		{
-		
-		}
-		/** Destructor */
-		~Obj()
-		{
+        {
+        
+        }
+        /** Destructor */
+        ~Obj()
+        {
 #ifdef USE_REF_COUNTERS
-			assertd( ref_count == 0);
+            assertd( ref_count == 0);
 #endif
-		}
+        }
     };
 };
 

@@ -163,8 +163,8 @@ public:
 protected:
 
     /** Node creation routine is to be overloaded by derived class */
-	virtual Node * createNode( GraphUid _id);
-	/** Edge creation routine is to be overloaded by derived class */
+    virtual Node * createNode( GraphUid _id);
+    /** Edge creation routine is to be overloaded by derived class */
     virtual Edge * createEdge( GraphUid _id, Node *_pred, Node* _succ);
     
     /** Pools' creation routine */
@@ -189,7 +189,7 @@ private:
     /**
      * Implementation of edge creation
      */
-	inline Edge * newEdgeImpl( Node * pred, Node * succ);
+    inline Edge * newEdgeImpl( Node * pred, Node * succ);
 
     /** Clear unused markers from marked objects */
     void clearMarkersInObjects();

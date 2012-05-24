@@ -103,7 +103,7 @@ public:
     /** Print edge in dot fomat to stdout */
     virtual void debugPrint();
 
-	/**
+    /**
      * Insert a node on this edge
      *
      * Creates a node on edge and a new edge from new node to former successor of original edge.
@@ -125,7 +125,7 @@ protected:
     /** Graph should have access to Edge's members */
     friend class Graph;
     /** Node should have access to Edge's members */
-	friend class Node;
+    friend class Node;
 
     /** Constructors are made private, only nodes and graph can create edges */
     Edge( Graph *_graph_p, GraphUid _id, Node *_pred, Node* _succ):
@@ -144,9 +144,9 @@ protected:
     inline void detachFromNode( GraphDir dir);
 
     /**
-	 * Remove myself from graph's list of edges
-	 */
-	inline void detachFromGraph()
+     * Remove myself from graph's list of edges
+     */
+    inline void detachFromGraph()
     {
         detach( EDGE_LIST_GRAPH);
     }
