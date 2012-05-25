@@ -47,7 +47,7 @@ bool uTestGraphOwn()
         for ( Node::Succ succ_iter = node2->succsBegin(),
                          succ_iter_end = node2->succsEnd();
               succ_iter != succ_iter_end;
-              succ_iter++ )
+              ++succ_iter )
         {
             assert( areEqP( *succ_iter, edge2));
         }

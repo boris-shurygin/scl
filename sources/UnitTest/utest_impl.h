@@ -13,13 +13,3 @@ bool uTestUtils();
  * Graph library unit testing
  */
 bool uTestGraph();
-
-/**
- * UnitTesting of GUI
- */
-bool uTestGUI(int argc, char **argv);
-
-/**
- * Frontend unit testing
- */
-bool uTestFE();

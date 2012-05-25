@@ -10,7 +10,7 @@
 /**
  * Constructor for logs
  */
-LogControlImpl::LogControlImpl() 
+LogControl::LogControl() 
 {
     for ( Int8 id = 0; id < LOGS_NUM; id++)
     {
@@ -24,7 +24,7 @@ LogControlImpl::LogControlImpl()
 /**
  * Constructor for logs
  */
-LogControlImpl::~LogControlImpl()
+LogControl::~LogControl()
 {
     for ( Int8 id = 0; id < LOGS_NUM; id++)
     {

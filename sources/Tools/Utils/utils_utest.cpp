@@ -7,6 +7,10 @@
  */
 #include "utils_iface.h"
 
+/**
+ * Test logging package
+ */
+bool uTestLogs();
 
 /** Sample class */
 class classA
@@ -43,6 +47,10 @@ bool uTestSingle()
  */
 bool uTestUtils()
 {
+    /** test logs */
+    if ( !uTestLogs())
+        return false;
+
     /** test singleton */
     if ( !uTestSingle())
         return false;

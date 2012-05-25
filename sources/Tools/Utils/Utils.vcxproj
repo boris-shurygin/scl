@@ -79,6 +79,7 @@
     </ClCompile>
     <ClCompile Include="list_utest.cpp" />
     <ClCompile Include="log.cpp" />
+    <ClCompile Include="log_utest.cpp" />
     <ClCompile Include="mem_mgr.cpp" />
     <ClCompile Include="mem_pool.cpp" />
     <ClCompile Include="mem_utest.cpp" />

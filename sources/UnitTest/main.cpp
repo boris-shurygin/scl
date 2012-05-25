@@ -16,11 +16,6 @@ int main(int argc, char **argv)
 {
     Log::init();
     MemMgr::init();
-    
-    Log::ptr()->Register( LOG_DEFAULT, "log ", "log.txt");
-
-    LOG( LOG_DEFAULT, 0, "Log message");
-    LOGS( LOG_DEFAULT, 0, "Log message " << "with stream");
 
     /** Test utils */
     if ( !uTestUtils())
@@ -30,6 +25,7 @@ int main(int argc, char **argv)
     if ( !uTestGraph())
         return -1;
     
+    cout.flush();
     MemMgr::deinit();
     Log::deinit();
 

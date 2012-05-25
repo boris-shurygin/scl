@@ -16,6 +16,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <string>
 using namespace std;
 
 #endif /* UTILS_HOST_H */
