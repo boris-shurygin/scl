@@ -16,6 +16,14 @@
 #define UTILS_LOG_H
 
 /**
+ * Debug assert for logs
+ * @ingroup GraphBase
+ */
+#if !defined(LOG_ASSERTD)
+#    define LOG_ASSERTD(cond, what) ASSERT_XD(cond, "Logs", what)
+#endif
+
+/**
  * Log identificator
  * @ingroup Logs
  */
@@ -38,21 +46,39 @@ enum LogId
 class LogControl
 {
 public:
+    
+    /** Log colntrol contructor. 
+     *  By default all logs are disabled, use add routine to register them.
+     *  Use enable/disable to turn it on/off.
+     */
     LogControl();
+    
+    /** Destructor */
     virtual ~LogControl();
-    inline void add( LogId id, string prefix_str, UInt8 verbosity_level, string filename);
-    inline void add( LogId id, string prefix_str, UInt8 verbosity_level, ostream &stream);
-    inline void add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id);
-    inline void log( LogId id, std::ostringstream& os);
-    inline void log( LogId id, char *mess, ...);
-    inline UInt8 verb( LogId id);
-    inline bool isEnabled( LogId id);
-   
+    
+    /** Register log that writes to file with given name */
+    void add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log = false); 
+    
+    /** Register log that writes to file with given name */
+    void add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id, bool enable_log = false);
+    
+    /* Control of logs suppression */
+    inline void enable( LogId id);  /**< Enable log with given id */
+    inline void disable( LogId id); /**< Disable log with given id */
+
+    /* Log printing interface */
+    inline void log( LogId id, std::ostringstream& os); /**< Print string stream to log */
+    inline void log( LogId id, char *mess, ...);        /**< Print formatted string to log */
+    
+    inline UInt8 verb( LogId id);     /**< Get verbosity level of log with given id */
+    inline bool isEnabled( LogId id); /**< Check that log is enabled */
+
 private:
 
     static const UInt8 max_verbosity = (UInt8)(-1);
     static const UInt32 max_buf_size = 256;
 
+    bool registered[ LOGS_NUM];
     bool enabled[ LOGS_NUM];
     ostream* stream[ LOGS_NUM];
     string prefix[ LOGS_NUM];
@@ -61,11 +87,12 @@ private:
 };
 
 /**
- * 
+ * Get verbosity level of log with given id
  */
 inline UInt8 
 LogControl::verb( LogId id)
 {
+    LOG_ASSERTD( registered[ id], "log id is not registered");
     return verbosity[ id];
 }
 
@@ -75,57 +102,61 @@ LogControl::verb( LogId id)
 inline bool 
 LogControl::isEnabled( LogId id)
 {
+    LOG_ASSERTD( registered[ id], "log id is not registered");
     return enabled[ id];
 }
-
-/**
- *
- */
-inline void 
-LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string filename)
-{
-    enabled[ id] = true;
-    prefix[ id] = prefix_str;
-    verbosity[ id] = verbosity_level;
-    fb[ id].open ( filename, ios::out);
-    stream[ id] = new ostream(&fb[ id]);
-}
-
-
-inline void LogControl::add( LogId id, string prefix, UInt8 verbosity_level, ostream &stream)
-{ ASSERT_X( 0, "Log implementation", "adding logs to custom stream is not supported yet");}
-
-inline void LogControl::add( LogId id, string prefix, UInt8 verbosity_level, LogId parent_id)
-{ ASSERT_X( 0, "Log implementation", "logs hierarchy is not supported yet");}
 
 /**
  * Print formated message into log
  */
 inline void LogControl::log( LogId id, char *mess, ...)
 {
+    LOG_ASSERTD( registered[ id], "log id is not registered");
     if ( enabled[ id])
     {
         char buf[ max_buf_size];
+        
+        /* Fill buffer with formatted string */
         va_list args;
         va_start( args, mess);
         vsnprintf_s( buf, max_buf_size - 1, mess, args);
         va_end( args);
+
+        /* Print string to stream */
         *(stream[ id]) << prefix[ id] << ": " << buf << endl;
     }
 }
 
 /**
- * Get stream for paticular log id and verbosity level
+ * Print string stream to log
  */
 inline void
 LogControl::log( LogId id, std::ostringstream& os)
 {
+    LOG_ASSERTD( registered[ id], "log id is not registered");
     if ( enabled[ id])
     {
         *(stream[ id]) << prefix[ id] << ": " << os.str() << endl;
     }
 }
+  
+/**
+ * Enable log with given id 
+ */
+inline void LogControl::enable( LogId id)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    enabled[ id] = true;
+}  
 
+/**
+ * Disable log with given id
+ */
+inline void LogControl::disable( LogId id)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    enabled[ id] = false;
+}
 
 
 /**
