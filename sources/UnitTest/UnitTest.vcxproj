@@ -100,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tools\Tools.vcxproj">
-      <Project>{114DF7A4-3F91-58E0-F988-7FF6798EA39A}</Project>
+      <Project>{d128839b-3939-4b47-b2ae-7dc75c56f282}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
