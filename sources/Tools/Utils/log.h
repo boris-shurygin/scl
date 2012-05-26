@@ -29,8 +29,28 @@
  */
 enum LogId
 {
-    /** LOG default */
+    /** Default log */
     LOG_DEFAULT,
+    /** Unit testing log */
+    LOG_UTEST,
+    /** Frontend log */
+    LOG_FE,
+    /** Lexical analyzer log */
+    LOG_FE_LEXER,
+    /** Parser log */
+    LOG_FE_PARSER,
+    /** AST->IR lowering log */
+    LOG_FE_AST_IR,
+    /** High-level optimizations log */
+    LOG_HLO,
+    /** Backend log */
+    LOG_BE,
+    /** Machine-specific optimizations log */
+    LOG_BE_OPT,
+    /** Scheduler log */
+    LOG_BE_SCH,
+    /** Register allocator log */
+    LOG_BE_RA,
     /** Number of logs */
     LOGS_NUM
 };
@@ -80,6 +100,8 @@ private:
 
     bool registered[ LOGS_NUM];
     bool enabled[ LOGS_NUM];
+    bool unique_name[ LOGS_NUM];
+    string fname[ LOGS_NUM];
     ostream* stream[ LOGS_NUM];
     string prefix[ LOGS_NUM];
     UInt8 verbosity[ LOGS_NUM];
@@ -168,19 +190,17 @@ inline void LogControl::disable( LogId id)
  * 
  * Usage example:
  * @code
-//Register logs with identificators LOG_ID1 and LOG_ID2
-Log::ptr()->Register( LOG_ID1, "filename");
-Log::ptr()->Register( LOG_ID2, LOG_ID1); // Stream of log with LOG_ID2 redirected to log LOG_ID1
- 
-// Configure logging
-Log::ptr()->setVerbosityLevel( VERBOSITY_LEVEL_MAX);
-if ( some_cond)
-{
-    Log::ptr()->disable( LOG_ID2); // Messages from log with LOG_ID2 wont be shown
-}
+    // Add default log
+    Log::ptr()->add( LOG_DEFAULT, "Default log", 5, "log.txt"); // Default log
+    Log::ptr()->add( LOG_FE, "Default log", 5, "log.txt"); // FE log
 
-LOG( LOG_ID1, VERBOSITY_LEVEL,"my favourite constant is %d", 10);
-LOGS( LOG_ID2, VERBOSITY_LEVEL, "my message");
+    // Logging is disabled by default so we should enable logs we want to see
+    // Calls like this should be put into options parsing code to control logging by options
+    Log::ptr()->enable( LOG_DEFAULT);
+
+    LOG( LOG_DEFAULT, "Log message %d", 1);              // Simple formatted message
+    LOGS( LOG_DEFAULT, "Log message " << "with stream"); // Message using C++ stream syntax (uses ostringstream internally)
+    LOG( LOG_FE, "Log message %d", 2);                   // Won be printed since LOG_FE is not enabled
 @endcode
  *
  * @sa LogControl
