@@ -39,16 +39,19 @@ LogControl::~LogControl()
     }
 }
 
+/**
+ * Register log that writes to given file
+ */
 void 
 LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log)
 {
-    ASSERT_X( id < LOGS_NUM, "Log implementation", "adding logs to custom stream is not supported yet");
+    LOG_ASSERTD( id < LOGS_NUM, "Id is out of range");
 
     /* Check if we already have opened the file for some other log */
     bool already_opened = false;
     for ( Int8 tmp_id = 0; tmp_id < LOGS_NUM; ++tmp_id)
     {
-        if ( registered[ id] )
+        if ( registered[ tmp_id] )
         {
             if ( fname[ tmp_id] == filename)
             {
@@ -71,6 +74,21 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string file
     }
 }
 
+/**
+ * Register log that is redirected to given parent log
+ */
 void
-LogControl::add( LogId id, string prefix, UInt8 verbosity_level, LogId parent_id, bool enable_log)
-{ ASSERT_X( 0, "Log implementation", "logs hierarchy is not supported yet");}
+LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id, bool enable_log)
+{
+    LOG_ASSERTD( id < LOGS_NUM, "Id is out of range");
+    LOG_ASSERTD( parent_id < LOGS_NUM, "Parent id is out of range");
+    LOG_ASSERTD( registered[ parent_id], "Parent log is not registered");
+
+    /* Check if we already have opened the file for some other log */
+    stream[ id] = stream[ parent_id];
+    registered[ id] = true;
+    enabled[ id] = enable_log;
+    prefix[ id] = prefix_str;
+    verbosity[ id] = verbosity_level;
+    fname[ id] = fname[ parent_id];
+}

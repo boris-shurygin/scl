@@ -145,7 +145,8 @@ inline void LogControl::log( LogId id, char *mess, ...)
         va_end( args);
 
         /* Print string to stream */
-        *(stream[ id]) << prefix[ id] << ": " << buf << endl;
+        ostream &output_stream = *(stream[ id]);
+        output_stream << prefix[ id] << ": " << buf << endl;
     }
 }
 
@@ -158,7 +159,8 @@ LogControl::log( LogId id, std::ostringstream& os)
     LOG_ASSERTD( registered[ id], "log id is not registered");
     if ( enabled[ id])
     {
-        *(stream[ id]) << prefix[ id] << ": " << os.str() << endl;
+        ostream &output_stream = *(stream[ id]);
+        output_stream << prefix[ id] << ": " << os.str() << endl;
     }
 }
   
