@@ -65,7 +65,11 @@ namespace MemImpl
     /* Predeclaration on MemInfo */
     class MemInfo;
     /* Predeclaration of mem entry class */
-    template < class Data> class Entry;
+    template < size_t size> class Entry;
+
+    /* Predeclaration of mem entry class */
+    template < class Data> class FixedEntry;
+    
     /* Predeclaration of chunk class */
     template < class Data> class Chunk;
     /**

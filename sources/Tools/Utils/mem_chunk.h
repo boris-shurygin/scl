@@ -43,13 +43,13 @@ namespace MemImpl
         /** busy entries num */
         ChunkPos busy;
         /** Get chunk for given number */
-        inline Entry<Data> *entry( ChunkPos pos);
+        inline FixedEntry<Data> *entry( ChunkPos pos);
 
     public:
 #ifdef CHECK_CHUNKS
         void *pool;       
         /** Get chunk's first busy entry */
-        inline Entry<Data> *firstBusyEntry();
+        inline FixedEntry<Data> *firstBusyEntry();
 #endif
         /** Constructor */
         inline Chunk();
@@ -62,7 +62,7 @@ namespace MemImpl
         /** Allocate on entry */
         inline Data *allocateEntry();
         /** Deallocate one entry */
-        inline void deallocateEntry( Entry<Data> *e);
+        inline void deallocateEntry( FixedEntry<Data> *e);
         /** For some reason GCC asks for it :( */
         inline void operator delete( void* mem);
         /** Placement new */
@@ -79,13 +79,13 @@ namespace MemImpl
     template <class Data> 
     Chunk< Data>::Chunk()
     {
-        Entry<Data> *e = NULL;
+        FixedEntry<Data> *e = NULL;
         
         for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
         {
-            e = ( Entry< Data> *)( (UInt8 *) this 
+            e = ( FixedEntry< Data> *)( (UInt8 *) this 
                                        + sizeof( Chunk< Data>) 
-                                       + sizeof( Entry< Data>) * i);
+                                       + sizeof( FixedEntry< Data>) * i);
             /** Initialization of every entry */
             e->setPos( i);
             e->setNextFree( i + 1);
@@ -130,28 +130,28 @@ namespace MemImpl
   
     /** Get entry by number */
     template<class Data> 
-    Entry< Data>*
+    FixedEntry< Data>*
     Chunk< Data>::entry( ChunkPos pos)
     {
         MEM_ASSERTD( pos != UNDEF_POS, "Requested entry with undefined number");
-        return ( Entry< Data> *)( (UInt8 *) this 
+        return ( FixedEntry< Data> *)( (UInt8 *) this 
                                   + sizeof( Chunk< Data>) 
-                                  + sizeof( Entry< Data>) * pos);
+                                  + sizeof( FixedEntry< Data>) * pos);
     }
    
 #ifdef CHECK_CHUNKS        
     /** Get chunk's first busy entry */
     template<class Data> 
-    Entry< Data>*
+    FixedEntry< Data>*
     Chunk< Data>::firstBusyEntry()
     {
-        Entry<Data> *e = NULL;
+        FixedEntry<Data> *e = NULL;
         
         for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
         {
-            e = ( Entry< Data> *)( (UInt8 *) this 
+            e = ( FixedEntry< Data> *)( (UInt8 *) this 
                                        + sizeof( Chunk< Data>) 
-                                       + sizeof( Entry< Data>) * i);
+                                       + sizeof( FixedEntry< Data>) * i);
             if ( e->is_busy)
                 return e;
         }
@@ -180,7 +180,7 @@ namespace MemImpl
     {
         MEM_ASSERTD( this->isFree(), "Trying to allocated entry in a full chunk");
         
-        Entry< Data> *e = entry( free_entry);
+        FixedEntry< Data> *e = entry( free_entry);
 #ifdef CHECK_ENTRY
         e->is_busy = true;
 #endif
@@ -195,7 +195,7 @@ namespace MemImpl
     /** Deallocate one entry */
     template<class Data> 
     void
-    Chunk< Data>::deallocateEntry( Entry<Data> *e)
+    Chunk< Data>::deallocateEntry( FixedEntry<Data> *e)
     {
         MEM_ASSERTD( busy > 0, "Trying to deallocate entry of an empty chunk");
 #ifdef CHECK_ENTRY

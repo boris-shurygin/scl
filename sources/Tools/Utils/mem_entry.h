@@ -22,25 +22,18 @@ namespace MemImpl
      *
      * @ingroup MemImpl
      */
-    template < class Data> class Entry: private Data
+    template < size_t size> class Entry
     {
     public:
-        /** Get position */
-        inline ChunkPos pos() const;
-        /** Get position of next free chunk */
-        inline ChunkPos nextFree() const;
-        /** Set position */
-        inline void setPos( ChunkPos pos);
-        /** Set position of next free chunk */
-        inline void setNextFree( ChunkPos next);
+        /** Get pointer to data */
+        inline void *dataMem();
+#ifdef CHECK_ENTRY   
+        inline bool isBusy();                   /**< Check if entry has busy flag */
+        inline void setBusy( bool busy = true); /**< Set busy flag */
+#endif
     private:
-        /** Classes fixed pool and chunk should have access to data and constructors */
-        friend class Chunk<Data>;
-
-        /** Own position of this entry in chunk */
-        ChunkPos my_pos;
-        /** Position of next free entry in chunk */
-        ChunkPos next_free_pos;
+        /** Data memory */
+        UInt8 data[ size];
 
 #ifdef CHECK_ENTRY        
         /** Debug info: entry status */
@@ -63,8 +56,66 @@ namespace MemImpl
     /**
      * Private constructor to prevent direct creation of such objects
      */
+    template< size_t size>
+    Entry< size>::Entry()
+    {
+        assert( 0);
+    }
+    /**
+     * Private destructor
+     */
+    template< size_t size>
+    Entry< size>::~Entry()
+    {
+        assert( 0);
+    }
+
+    /**
+     * Private destructor
+     */
+    template< size_t size>
+    void *
+    Entry< size>::dataMem()
+    {
+        return &data;
+    }
+    
+    /**
+     * Entry in memory that holds user data
+     *
+     * @ingroup MemImpl
+     */
+    template < class Data> class FixedEntry: public Entry< sizeof( Data)>
+    {
+    public:
+        /** Get position */
+        inline ChunkPos pos() const;
+        /** Get position of next free chunk */
+        inline ChunkPos nextFree() const;
+        /** Set position */
+        inline void setPos( ChunkPos pos);
+        /** Set position of next free chunk */
+        inline void setNextFree( ChunkPos next);
+    private:
+        /** Classes fixed pool and chunk should have access to data and constructors */
+        friend class Chunk<Data>;
+
+        /** Own position of this entry in chunk */
+        ChunkPos my_pos;
+        /** Position of next free entry in chunk */
+        ChunkPos next_free_pos;
+
+        /** Private constructor to prevent direct creation of such objects */
+        FixedEntry();
+        /** Private destructor */
+        ~FixedEntry();
+    };
+
+    /**
+     * Private constructor to prevent direct creation of such objects
+     */
     template< class Data>
-    Entry< Data>::Entry()
+    FixedEntry< Data>::FixedEntry()
     {
         assert( 0);
     }
@@ -72,35 +123,35 @@ namespace MemImpl
      * Private destructor
      */
     template< class Data>
-    Entry< Data>::~Entry()
+    FixedEntry< Data>::~FixedEntry()
     {
         assert( 0);
     }
     /** Get position */
     template< class Data>
     ChunkPos 
-    Entry< Data>::pos() const
+    FixedEntry< Data>::pos() const
     {
         return my_pos;
     }
     /** Get position of next free chunk */
     template< class Data>
     ChunkPos
-    Entry< Data>::nextFree() const
+    FixedEntry< Data>::nextFree() const
     {
         return next_free_pos;
     }
     /** Set position */
     template< class Data>
     void
-    Entry< Data>::setPos( ChunkPos pos)
+    FixedEntry< Data>::setPos( ChunkPos pos)
     {
         my_pos = pos;
     }
     /** Set position of next free chunk */
     template< class Data>
     void
-    Entry< Data>::setNextFree( ChunkPos next)
+    FixedEntry< Data>::setNextFree( ChunkPos next)
     {
         next_free_pos = next;
     }

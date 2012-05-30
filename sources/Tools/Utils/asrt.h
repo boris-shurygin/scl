@@ -30,6 +30,15 @@ inline void noop() {}
 
 void fatalAssertWithMess(const char *where, const char *what, const char *file, int line);
 
+/**
+ * @brief Assert macro with description
+ * @ingroup Asserts
+ * @param cond The condition
+ * @param where Description of functionality where failure occured
+ * @param what Error message explaining what happened
+ *
+ * Assertion that in case of failure provides additional info about what happened
+ */
 #if !defined(ASSERT_X)
 #  ifndef NO_DEBUG
 #    define ASSERT_X(cond, where, what) ((!(cond)) ? fatalAssertWithMess(where, what,__FILE__,__LINE__) : noop())

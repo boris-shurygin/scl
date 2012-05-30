@@ -35,14 +35,16 @@
  * The same result can be achieved using macros 
  * @code
  
- // Graph *g; Node *n; Edge *e;
+ // Graph *g;
  // Traversing nodes
+ Node *n;
  foreachNode( n, g)
  {
     ...
  }
  
  // Traversing edges
+ Edge *e;
  foreachEdge( e, g)
  {
     ...
@@ -61,10 +63,11 @@
  * New @ref Marker "marker" can be obtained by newMarker() routine. New @ref Numeration "numeration" is
  * created by newNum().
  * Example:
- * @code
- //Graph *graph; Node *n;
- Marker m = graph.newMarker();
- Numeration num = graph.newNum();
+@code
+ //Graph *graph; 
+ Node *n;
+ Marker m = graph->newMarker();
+ Numeration num = graph->newNum();
     
  GraphNum i = 0; //unsigned int 32
  //Mark nodes without predecessors
@@ -88,8 +91,7 @@
  }
  graph->freeMarker( m);
  graph->freeNum( num);
-
- @endcode
+@endcode
  *
  * @par Deriving classes from Graph
  * To make a graph-like data structure one can use Graph as a base class. Most likely

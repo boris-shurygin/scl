@@ -15,6 +15,7 @@
 #ifndef MEM_FIXED_POOL_H
 #define MEM_FIXED_POOL_H
 
+#define MEM_USE_MALLOC
 
 namespace Mem
 {
@@ -67,7 +68,7 @@ namespace Mem
     class FixedPool: public Pool
     {
         static const size_t CHUNK_SIZE = sizeof( MemImpl::Chunk< Data>) 
-            + sizeof( MemImpl::Entry< Data>) * MemImpl::MAX_CHUNK_ENTRIES_NUM;
+            + sizeof( MemImpl::FixedEntry< Data>) * MemImpl::MAX_CHUNK_ENTRIES_NUM;
     public:
         /** Create fixed pool with default parameters */
         FixedPool();
@@ -100,7 +101,7 @@ namespace Mem
         /** Deallocate one chunk */
         inline void deallocateChunk( MemImpl::Chunk< Data> *chunk);
         /** Get pointer to chunk from pointer to entry */
-        inline MemImpl::Chunk< Data> *entryChunk( MemImpl::Entry< Data> *e);
+        inline MemImpl::Chunk< Data> *entryChunk( MemImpl::FixedEntry< Data> *e);
     };
 
     /** Create fixed pool with default parameters */
@@ -151,7 +152,11 @@ namespace Mem
         
         /* Allocate memory for chunk */
         void *chunk_mem = 
-              ( MemImpl::Chunk< Data> *) new UInt8[ CHUNK_SIZE];
+#ifdef MEM_USE_MALLOC              
+            ( MemImpl::Chunk< Data> *) malloc( sizeof( UInt8) * CHUNK_SIZE);
+#else
+            ( MemImpl::Chunk< Data> *) new UInt8[ CHUNK_SIZE];
+#endif
         MemImpl::Chunk< Data> * chunk = new ( chunk_mem) MemImpl::Chunk< Data>();
 
         /* Add this chunk to pool */
@@ -185,17 +190,21 @@ namespace Mem
             first_chunk = chunk->next( MemImpl::CHUNK_LIST_ALL);
         }
         chunk->~Chunk();
+#ifdef MEM_USE_MALLOC 
+        free( chunk);
+#else
         delete[] (UInt8 *)chunk;
+#endif
     }
 
     /* Calculate pointer to chunk from pointer to entry */
     template < class Data> 
     MemImpl::Chunk< Data> *
-    FixedPool<Data>::entryChunk( MemImpl::Entry< Data> *e)
+    FixedPool<Data>::entryChunk( MemImpl::FixedEntry< Data> *e)
     {
         MemImpl::ChunkPos e_pos = e->pos();
         UInt8 *ptr = ( UInt8 *) e;
-        ptr = ptr - sizeof( MemImpl::Entry< Data>) * e_pos - sizeof ( MemImpl::Chunk< Data>);
+        ptr = ptr - sizeof( MemImpl::FixedEntry< Data>) * e_pos - sizeof ( MemImpl::Chunk< Data>);
         return (MemImpl::Chunk< Data> *) ptr;
     }
 
@@ -238,7 +247,7 @@ namespace Mem
         /* 2. Check entry count */
         MEM_ASSERTD( entry_count > 0, "Trying deallocate entry of an empty pool"); 
 
-        MemImpl::Entry< Data> *e =(MemImpl::Entry< Data> *) ptr;
+        MemImpl::FixedEntry< Data> *e =(MemImpl::FixedEntry< Data> *) ptr;
         
         /* 3. Get chunk of the deallocated entry */
         MemImpl::Chunk< Data> *chunk = entryChunk( e);
