@@ -31,6 +31,14 @@ namespace MemImpl
         inline bool isBusy();                   /**< Check if entry has busy flag */
         inline void setBusy( bool busy = true); /**< Set busy flag */
 #endif
+
+#ifdef USE_MEM_EVENTS          
+        inline MemEventId allocEvent();            /**< Get id of allocation event */
+        inline void setAllocEvent( MemEventId id); /**< Set id of allocation event */
+
+        inline MemEventId deallocEvent();            /**< Get id of deallocation event */
+        inline void setDeallocEvent( MemEventId id); /**< Set id of deallocation event */
+#endif
     private:
         /** Data memory */
         UInt8 data[ size];
@@ -59,7 +67,7 @@ namespace MemImpl
     template< size_t size>
     Entry< size>::Entry()
     {
-        assert( 0);
+        MEM_ASSERTD( 0, "Entry constructor called");
     }
     /**
      * Private destructor
@@ -67,7 +75,7 @@ namespace MemImpl
     template< size_t size>
     Entry< size>::~Entry()
     {
-        assert( 0);
+        MEM_ASSERTD( 0, "Entry destructor called");
     }
 
     /**
@@ -79,9 +87,59 @@ namespace MemImpl
     {
         return &data;
     }
+
+#ifdef CHECK_ENTRY
+    /** Check if entry has busy flag */
+    template< size_t size>
+    bool
+    Entry< size>::isBusy()
+    {
+        return is_busy;
+    }
     
+    /** Set busy flag */
+    template< size_t size>
+    void
+    Entry< size>::setBusy( bool busy = true)
+    {
+        is_busy = busy;
+    }
+#endif
+
+
+#ifdef USE_MEM_EVENTS
+    /** Get id of allocation event */
+    template< size_t size>
+    MemEventId
+    Entry< size>:: allocEvent()
+    {
+        return alloc_event;
+    }
+    
+    /** Set id of allocation event */           
+    template< size_t size>
+    void
+    Entry< size>::setAllocEvent( MemEventId id)
+    {
+        alloc_event = id;
+    }
+    /** Get id of deallocation event */
+    template< size_t size>
+    MemEventId
+    Entry< size>::deallocEvent()
+    {
+        return dealloc_event;
+    }          
+    /** Set id of deallocation event */ 
+    template< size_t size>
+    void
+    Entry< size>::setDeallocEvent( MemEventId id)
+    {
+        dealloc_event = id;
+    }
+#endif
     /**
-     * Entry in memory that holds user data
+     * Entry in memory FixedPool that holds user data
      *
      * @ingroup MemImpl
      */

@@ -76,14 +76,17 @@ public:
     /** Destructor */
     virtual ~LogControl();
     
-    /** Register log that writes to file with given name */
+    /**
+     * Register log that writes to file with given name.
+     * File is not open until enable() is called.
+     */
     void add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log = false); 
     
     /** Register log that writes to file with given name */
     void add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id, bool enable_log = false);
     
     /* Control of logs suppression */
-    inline void enable( LogId id);  /**< Enable log with given id */
+    void enable( LogId id);  /**< Enable log with given id */
     inline void disable( LogId id); /**< Disable log with given id */
 
     /* Log printing interface */
@@ -164,15 +167,6 @@ LogControl::log( LogId id, std::ostringstream& os)
     }
 }
   
-/**
- * Enable log with given id 
- */
-inline void LogControl::enable( LogId id)
-{
-    LOG_ASSERTD( registered[ id], "log id is not registered");
-    enabled[ id] = true;
-}  
-
 /**
  * Disable log with given id
  */

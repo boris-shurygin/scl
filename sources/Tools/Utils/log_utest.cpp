@@ -16,7 +16,7 @@ bool uTestLogs()
     
     // Add default log
     Log::ptr()->add( LOG_DEFAULT, "Default log", 5, "log.txt");
-    Log::ptr()->add( LOG_UTEST, "Unit testing", 5, "log.txt");
+    Log::ptr()->add( LOG_UTEST, "Unit testing", 5, LOG_DEFAULT);
 
     // Logging is disabled by default so we should not see these messages in the log file
     LOG( LOG_DEFAULT, "Shouldn't be seen 1 %d", message_num++);

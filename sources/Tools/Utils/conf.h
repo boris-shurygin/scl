@@ -62,19 +62,19 @@ class Option
     /** Option user's values */
     OptValues values;
 
-    QString string_val;
+    string string_val;
     
     /** Short name */
-    QString short_name;
+    string short_name;
     
     /** Long name */
-    QString long_name;
+    string long_name;
 
     /** Description */
-    QString descr;
+    string descr;
 public:
     /** Constructor without default val */
-    Option( OptType _t, QString sname, QString lname, QString d):
+    Option( OptType _t, string sname, string lname, string d):
         defined( false),_type( _t), short_name( sname), long_name( lname), descr( d)
     {
         switch ( _t)
@@ -96,7 +96,7 @@ public:
     };
 
     /** Constructor with default bool val */
-    Option( QString sname, QString lname, QString d, bool val):
+    Option( string sname, string lname, string d, bool val):
         defined( false), _type( OPT_BOOL), short_name( sname), long_name( lname), descr( d)
     {
         def_values.bool_val = val;
@@ -104,7 +104,7 @@ public:
     }
 
     /** Constructor for string option */
-    Option( QString sname, QString lname, QString d):
+    Option( string sname, string lname, string d):
         defined( false), _type( OPT_STRING), short_name( sname), long_name( lname), descr( d){};
 
     /** Check if the option was defined */
@@ -118,12 +118,12 @@ public:
         defined = def;
     }
     /** Get short name */
-    inline QString shortName() const
+    inline string shortName() const
     {
         return short_name;    
     }
     /** Get long name */
-    inline QString longName() const
+    inline string longName() const
     {
         return long_name;    
     }
@@ -157,13 +157,13 @@ public:
         values.float_val = val;
     }
     /** Set option boolean value */
-    inline void setStringVal( QString val)
+    inline void setStringVal( string val)
     {
         assertd( _type == OPT_STRING);
         string_val = val;
     }
     /** Get string value of option */
-    inline QString string() const
+    inline string string() const
     {
         assertd( _type == OPT_STRING);
         return string_val;
@@ -212,7 +212,7 @@ public:
      if ( conf.longOption("file")->isDefined() 
           && conf.longOption("output")->isDefined())
      { 
-         QString xmlname = conf.longOption("file")->string(); // read value passed with '-file ...'
+         string xmlname = conf.longOption("file")->string(); // read value passed with '-file ...'
          ...
      } else
      {
@@ -223,11 +223,11 @@ public:
  */
 class Conf
 {
-    QString app_name;
-    QHash< QString, Option *> short_opts;
-    QHash< QString, Option *> long_opts;
+    string app_name;
+    std::map< string, Option *> short_opts;
+    QHash< string, Option *> long_opts;
 
-    QList< QString> unknown_options;
+    QList< string> unknown_options;
 public:
     /** Constructor */
     Conf();
@@ -253,20 +253,20 @@ public:
     }
 
     /** Convenience routine: adds option without default val */
-    inline void addOption( OptType _t, QString sname, QString lname, QString d)
+    inline void addOption( OptType _t, string sname, string lname, string d)
     {
         Option *opt = new Option( _t, sname, lname, d);
         addOption( opt);
     }
 
     /** Convenience routine: adds option with default bool val */
-    inline void addOption( QString sname, QString lname, QString d, bool val)
+    inline void addOption( string sname, string lname, string d, bool val)
     {
         Option *opt = new Option( sname, lname, d, val);
         addOption( opt);
     }
     /** Convenience routine: adds string option without default value */
-    inline void addOption( QString sname, QString lname, QString d)
+    inline void addOption( string sname, string lname, string d)
     {
         Option *opt = new Option( sname, lname, d);
         addOption( opt);
@@ -286,7 +286,7 @@ public:
     void readArgs( int argc, char** argv);
 
     /** Get option based on its name */
-    inline Option* option( QString name)
+    inline Option* option( string name)
     {
         /* try to look among short options */
         if ( short_opts.find( name) != short_opts.end())
@@ -302,7 +302,7 @@ public:
         return NULL;
     }
     /** Get option based on its short name */
-    inline Option* shortOption( QString name)
+    inline Option* shortOption( string name)
     {
         /* try to look among short options */
         if ( short_opts.find( name) != short_opts.end())
@@ -313,7 +313,7 @@ public:
         return NULL;
     }
     /** Get option based on its long name */
-    inline Option* longOption( QString name)
+    inline Option* longOption( string name)
     {
         /* try to look among long options */
         if ( long_opts.find( name) != long_opts.end())

@@ -90,11 +90,11 @@ namespace MemImpl
             e->setPos( i);
             e->setNextFree( i + 1);
 #ifdef CHECK_ENTRY
-            e->is_busy = false;
+            e->setBusy( false);
 #endif
 #ifdef USE_MEM_EVENTS        
-            e->alloc_event = 0;
-            e->dealloc_event = 0;
+            e->setAllocEvent( 0);
+            e->setDeallocEvent( 0);
 #endif 
         }
         MEM_ASSERTD( e->nextFree() == UNDEF_POS, "Chunk size constant and undefined value do not match");
@@ -152,7 +152,7 @@ namespace MemImpl
             e = ( FixedEntry< Data> *)( (UInt8 *) this 
                                        + sizeof( Chunk< Data>) 
                                        + sizeof( FixedEntry< Data>) * i);
-            if ( e->is_busy)
+            if ( e->isBusy())
                 return e;
         }
         return NULL;
@@ -182,12 +182,12 @@ namespace MemImpl
         
         FixedEntry< Data> *e = entry( free_entry);
 #ifdef CHECK_ENTRY
-        e->is_busy = true;
+        e->setBusy( true);
 #endif
 #ifdef USE_MEM_EVENTS        
-        e->alloc_event = Mem::MemMgr::instance()->allocEvent();
+        e->setAllocEvent( Mem::MemMgr::instance()->allocEvent());
 #endif        
-        Data *res = static_cast<Data *>( e);
+        Data *res = static_cast<Data *>( e->dataMem());
         free_entry = e->nextFree();
         busy++;
         return res;
@@ -199,12 +199,12 @@ namespace MemImpl
     {
         MEM_ASSERTD( busy > 0, "Trying to deallocate entry of an empty chunk");
 #ifdef CHECK_ENTRY
-        MEM_ASSERTD( e->is_busy, 
+        MEM_ASSERTD( e->isBusy(), 
                      "Trying to deallocate entry that is free. Check deallocation event ID");
-        e->is_busy = false;
+        e->setBusy( false);
 #endif
 #ifdef USE_MEM_EVENTS        
-        e->dealloc_event = Mem::MemMgr::instance()->deallocEvent();
+        e->setDeallocEvent( Mem::MemMgr::instance()->deallocEvent());
 #endif 
         e->setNextFree( free_entry);
         free_entry = e->pos();

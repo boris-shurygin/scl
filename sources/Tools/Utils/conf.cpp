@@ -53,20 +53,20 @@ void Conf::printDefaults()
 /** Read input arguments */
 void Conf::readArgs( int argc, char** argv)
 {
-    app_name = QString( argv[ 0]);
+    app_name = string( argv[ 0]);
 
     QTextStream err( stderr);
     
     for ( int i = 1; i < argc; i++)
     {
-        QString curr( argv[ i]);
+        string curr( argv[ i]);
         QRegExp short_rx("^-([^-]+)");
         QRegExp long_rx("^--([^-]+)");
         Option *opt = NULL;
         if ( short_rx.indexIn( curr) != -1 )
         {
             /* We look for expression among short option names */
-            QString name = short_rx.cap( 1);
+            string name = short_rx.cap( 1);
             
             if ( short_opts.find( name) != short_opts.end())
             {
@@ -79,7 +79,7 @@ void Conf::readArgs( int argc, char** argv)
         } else if (  long_rx.indexIn( curr) != -1)
         {
             /* We look for expression among long option names */
-            QString name = long_rx.cap( 1);
+            string name = long_rx.cap( 1);
             if ( long_opts.find( name) != long_opts.end())
             {
                 opt = long_opts[ name];
@@ -106,7 +106,7 @@ void Conf::readArgs( int argc, char** argv)
                     if ( opt->defBoolVal())
                     {
                         i++; // advance in argument array
-                        QString val( argv[ i]);
+                        string val( argv[ i]);
                         opt->setBoolVal( val.toInt());
                     } else /* However most bool options have default value of 'false' */
                     {
@@ -116,21 +116,21 @@ void Conf::readArgs( int argc, char** argv)
                 case OPT_INT:
                 {
                     i++; // advance in argument array
-                    QString val( argv[ i]);
+                    string val( argv[ i]);
                     opt->setIntVal( val.toInt());
                     break;
                 }
                 case OPT_FLOAT:
                 {
                     i++; // advance in argument array
-                    QString val( argv[ i]);
+                    string val( argv[ i]);
                     opt->setFloatVal( val.toFloat());
                     break;
                 }
                 case OPT_STRING:
                 {
                     i++; // advance in argument array
-                    QString val( argv[ i]);
+                    string val( argv[ i]);
                     opt->setStringVal( val);
                     break;
                 }

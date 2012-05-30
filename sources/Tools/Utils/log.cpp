@@ -16,7 +16,6 @@ LogControl::LogControl()
     {
         enabled[ id] = false;
         registered[ id] = false;
-        prefix[ id] = string("");
         verbosity[ id] = max_verbosity;
         stream[ id] = NULL;
         unique_name[ id] = false;
@@ -48,30 +47,11 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string file
     LOG_ASSERTD( id < LOGS_NUM, "Id is out of range");
 
     /* Check if we already have opened the file for some other log */
-    bool already_opened = false;
-    for ( Int8 tmp_id = 0; tmp_id < LOGS_NUM; ++tmp_id)
-    {
-        if ( registered[ tmp_id] )
-        {
-            if ( fname[ tmp_id] == filename)
-            {
-                already_opened = true;
-                stream[ id] = stream[ tmp_id];
-            }
-        }
-    }
     registered[ id] = true;
     enabled[ id] = enable_log;
     prefix[ id] = prefix_str;
     verbosity[ id] = verbosity_level;
     fname[ id] = filename;
-
-    if ( !already_opened)
-    {
-        fb[ id].open ( filename, ios::out);
-        stream[ id] = new ostream(&fb[ id]);
-        unique_name[ id] = true;
-    }
 }
 
 /**
@@ -83,6 +63,7 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, LogId paren
     LOG_ASSERTD( id < LOGS_NUM, "Id is out of range");
     LOG_ASSERTD( parent_id < LOGS_NUM, "Parent id is out of range");
     LOG_ASSERTD( registered[ parent_id], "Parent log is not registered");
+    LOG_ASSERTD( !fname[ parent_id].empty(), "Parent log file name is not specified");
 
     /* Check if we already have opened the file for some other log */
     stream[ id] = stream[ parent_id];
@@ -92,3 +73,37 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, LogId paren
     verbosity[ id] = verbosity_level;
     fname[ id] = fname[ parent_id];
 }
+
+/**
+ * Enable log with given id 
+ */
+void LogControl::enable( LogId id)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    enabled[ id] = true;
+
+    /** Check if we need to open file */
+    if ( isNullP( stream[ id]))
+    {
+        bool already_opened = false;
+        for ( Int8 tmp_id = 0; tmp_id < LOGS_NUM; ++tmp_id)
+        {
+            if ( registered[ tmp_id] )
+            {
+                if ( fname[ tmp_id] == fname[ id] 
+                     && isNotNullP( stream[ tmp_id]))
+                {
+                    already_opened = true;
+                    stream[ id] = stream[ tmp_id];
+                }
+            }
+        }
+        
+        if ( !already_opened)
+        {
+            fb[ id].open ( fname[ id], ios::out);
+            stream[ id] = new ostream(&fb[ id]);
+            unique_name[ id] = true;
+        }
+    }
+} 
