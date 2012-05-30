@@ -71,12 +71,8 @@
     <ClInclude Include="utils_iface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="conf.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="conf_utest.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="conf.cpp" />
+    <ClCompile Include="conf_utest.cpp" />
     <ClCompile Include="list_utest.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="log_utest.cpp" />

@@ -52,6 +52,8 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string file
     prefix[ id] = prefix_str;
     verbosity[ id] = verbosity_level;
     fname[ id] = filename;
+    if ( enable_log)
+        enable( id);
 }
 
 /**
@@ -72,6 +74,9 @@ LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, LogId paren
     prefix[ id] = prefix_str;
     verbosity[ id] = verbosity_level;
     fname[ id] = fname[ parent_id];
+        
+    if ( enable_log)
+        enable( id);
 }
 
 /**

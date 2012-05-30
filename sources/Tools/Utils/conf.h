@@ -39,9 +39,9 @@ union OptValues
     /** Value for boolean option */
     bool bool_val;
     /** Value for integer option */
-    int int_val;
+    Int32 int_val;
     /** Value for floating point option */
-    qreal float_val;
+    Double float_val;
 }; 
 
 /**
@@ -135,59 +135,61 @@ public:
     /** Get option default val */
     inline bool defBoolVal() const
     {
-        assertd( _type == OPT_BOOL);
+        ASSERTD( _type == OPT_BOOL);
         return def_values.bool_val;
     }
     /** Set option boolean value */
     inline void setBoolVal( bool val)
     {
-        assertd( _type == OPT_BOOL);
+        ASSERTD( _type == OPT_BOOL);
         values.bool_val = val;
     }
     /** Set option boolean value */
-    inline void setIntVal( int val)
+    inline void setIntVal( Int32 val)
     {
-        assertd( _type == OPT_INT);
+        ASSERTD( _type == OPT_INT);
         values.int_val = val;
     }
     /** Set option boolean value */
-    inline void setFloatVal( qreal val)
+    inline void setFloatVal( Double val)
     {
-        assertd( _type == OPT_FLOAT);
+        ASSERTD( _type == OPT_FLOAT);
         values.float_val = val;
     }
     /** Set option boolean value */
     inline void setStringVal( string val)
     {
-        assertd( _type == OPT_STRING);
+        ASSERTD( _type == OPT_STRING);
         string_val = val;
     }
     /** Get string value of option */
     inline string string() const
     {
-        assertd( _type == OPT_STRING);
+        ASSERTD( _type == OPT_STRING);
         return string_val;
     }
     /** Get int value of option */
-    inline int intVal() const
+    inline Int32 intVal() const
     {
-        assertd( _type == OPT_INT);
+        ASSERTD( _type == OPT_INT);
         return values.int_val;
     }
     /** Get float value of option */
-    inline qreal floatVal() const
+    inline Double floatVal() const
     {
-        assertd( _type == OPT_FLOAT);
+        ASSERTD( _type == OPT_FLOAT);
         return values.float_val;
     }
     /** Get int value of option */
-    inline int isSet() const
+    inline bool isSet() const
     {
-        assertd( _type == OPT_BOOL);
+        ASSERTD( _type == OPT_BOOL);
         return values.bool_val;
     }
     /** Print option's synopsis and description */
-    void print();
+    void print( ostream &stream);
+    /** Print option's synopsis and description */
+    void printWithValue( ostream &stream);
 };
 
 /**
@@ -224,10 +226,12 @@ public:
 class Conf
 {
     string app_name;
-    std::map< string, Option *> short_opts;
-    QHash< string, Option *> long_opts;
+    typedef std::map< string, Option *> OptHash;
+    
+    OptHash short_opts;
+    OptHash long_opts;
 
-    QList< string> unknown_options;
+    std::list< string> unknown_options;
 public:
     /** Constructor */
     Conf();
@@ -235,15 +239,18 @@ public:
     /** Destructor wipes all the options */
     ~Conf()
     {
-        foreach( Option *opt, short_opts)
+        for ( OptHash::iterator it = short_opts.begin(), end = short_opts.end();
+              it != end;
+              ++it)
         {
+            Option *opt = (*it).second;
             delete opt;
         }
     }
     /** Get number of arguments that were not recognized */
     inline int unknownOptsNum() const
     {
-        return unknown_options.count();
+        return unknown_options.size();
     }
     /** Add option */
     inline void addOption( Option *opt)
@@ -274,6 +281,9 @@ public:
     
     /** Print options */
     void printOpts();
+
+    /** Print options with values */
+    void printOptValues();
 
     /** Print value defaults */
     void printDefaults();

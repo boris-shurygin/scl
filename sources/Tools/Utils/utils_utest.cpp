@@ -47,6 +47,10 @@ bool uTestSingle()
  */
 bool uTestUtils()
 {
+    /** test options parser */
+    if ( !uTestConf())
+        return false;
+
     /** test logs */
     if ( !uTestLogs())
         return false;

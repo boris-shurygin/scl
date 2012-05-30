@@ -18,6 +18,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <map>
+#include <list>
 using namespace std;
+
 
 #endif /* UTILS_HOST_H */

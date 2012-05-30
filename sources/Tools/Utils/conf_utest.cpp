@@ -50,6 +50,8 @@ bool uTestConf()
     assert( int_opt->intVal()== 80);
     assert( conf->option( "b")->isSet());
     
+    conf->printOptValues();
+    
     delete conf;
     return true;
 }

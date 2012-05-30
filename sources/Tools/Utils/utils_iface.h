@@ -22,7 +22,7 @@
 #include "singleton.h"
 #include "log.h"
 #include "mem.h"
-//#include "conf.h"
+#include "conf.h"
 
 
 namespace Utils

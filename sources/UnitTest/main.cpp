@@ -25,8 +25,9 @@ int main(int argc, char **argv)
     if ( !uTestGraph())
         return -1;
     
-    cout.flush();
     MemMgr::deinit();
     Log::deinit();
-
+    
+    cout.flush();
+    cerr.flush();
 }
