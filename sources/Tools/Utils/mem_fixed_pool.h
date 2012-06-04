@@ -15,8 +15,6 @@
 #ifndef MEM_FIXED_POOL_H
 #define MEM_FIXED_POOL_H
 
-#define MEM_USE_MALLOC
-
 namespace Mem
 {
     /**

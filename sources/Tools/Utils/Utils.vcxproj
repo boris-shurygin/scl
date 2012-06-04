@@ -53,6 +53,7 @@
   <ItemGroup>
     <ClInclude Include="asrt.h" />
     <ClInclude Include="conf.h" />
+    <ClInclude Include="mem_generic_pool.h" />
     <ClInclude Include="host.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="types.h" />

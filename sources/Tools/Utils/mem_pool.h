@@ -37,8 +37,8 @@ namespace Mem
     {
         /** Fixed-size entry pool */
         POOL_FIXED,
-        /** Float-size entry pool */
-        POOL_FLOAT,
+        /** Variable size entry pool */
+        POOL_GENERIC,
         /** Number of types */
         POOL_TYPES_NUM
     };

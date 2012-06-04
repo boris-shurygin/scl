@@ -35,6 +35,8 @@
 #  define CHECK_DELETE
 #endif
 
+#define MEM_USE_MALLOC
+
 /**
  * Debug assert in memory manager
  * @ingroup Mem
