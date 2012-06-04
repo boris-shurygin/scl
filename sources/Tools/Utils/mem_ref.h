@@ -21,25 +21,22 @@ namespace Mem
      * Memory reference template
      * @ingroup Mem
      */
-    template < class RefObj> class Ref
+    template < class PtrObj> class Ptr
     {
-#ifdef USE_REF_COUNTERS
-
-#endif
     private:
-        RefObj *ptr;
+        PtrObj *ptr;
     public:
         /** Default constructor */
-        Ref(): ptr( NULL){};
+        Ptr(): ptr( NULL){};
         /** Copy constructor !!! NO uTEST !!! */
-        Ref( const Ref< RefObj>& orig): ptr( orig.ptr)
+        Ptr( const Ptr< PtrObj>& orig): ptr( orig.ptr)
         {
 #ifdef USE_REF_COUNTERS
             ptr->incRefCount();
 #endif
         }
         /** Assignement operator overloading */
-        Ref< RefObj> & operator=( const Ref< RefObj>& orig)
+        Ptr< PtrObj> & operator=( const Ptr< PtrObj>& orig)
         {
             ptr = orig.ptr;
 #ifdef USE_REF_COUNTERS
@@ -49,10 +46,10 @@ namespace Mem
         }
         /**
          * Constructor from pointer
-         * Used in Ref ref = new Obj(...) initialization
+         * Used in Ptr ref = new Obj(...) initialization
          * !!! No uTEST !!!
          */
-        Ref( RefObj* p): ptr( p)
+        Ptr( PtrObj* p): ptr( p)
         {
 #ifdef USE_REF_COUNTERS
             if ( ptr != 0)
@@ -61,9 +58,9 @@ namespace Mem
         }
         /**
          * Assignement of pointer
-         * Used in Ref ref; ref = new Obj(...) expression
+         * Used in Ptr ref; ref = new Obj(...) expression
          */
-        Ref< RefObj> & operator=( RefObj* p)
+        Ptr< PtrObj> & operator=( PtrObj* p)
         {
 #ifdef USE_REF_COUNTERS
             /** Decrement object's ref count */
@@ -80,7 +77,7 @@ namespace Mem
             return *this;
         }
         /** Destructor */
-        ~Ref()
+        ~Ptr()
         {
 #ifdef USE_REF_COUNTERS
             if ( ptr != 0)
@@ -88,12 +85,12 @@ namespace Mem
 #endif
         }
         /** Member access operator */
-        inline RefObj* operator->()
+        inline PtrObj* operator->()
         {
             return ptr;
         }
         /** Equals operator */
-        inline bool operator == ( Ref< RefObj> &r)
+        inline bool operator == ( Ptr< PtrObj> &r)
         {
             return ptr == r.ptr;
         }
@@ -107,9 +104,9 @@ namespace Mem
          * For using ref as delete operator argument.
          * Use in other expressions is prohibited. Unfortunatelly this is not ( can't be?) enforced.
          */
-        inline operator RefObj*()
+        inline operator PtrObj*()
         {
-                        RefObj *ret_val = ptr;
+                        PtrObj *ret_val = ptr;
             assertd( ret_val != NULL);
             /** Decrement object's ref count */
             if ( ptr != 0)
