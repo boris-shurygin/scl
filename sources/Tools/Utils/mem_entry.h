@@ -130,15 +130,17 @@ namespace MemImpl
     template < size_t size> class Entry
     {
     public:
-        /** Get pointer to data */
-        inline void *dataMem();
+
+        inline void *dataMem();  /**< Get pointer to data */
+        inline static Entry< size>* getEntryPtr( void *data_ptr); /**< Convert data pointer to the pointer */
 
 #ifdef CHECK_ENTRY   
         inline bool isBusy();                   /**< Check if entry has busy flag */
         inline void setBusy( bool busy = true); /**< Set busy flag */
 #endif
 #ifdef USE_DEBUG_INFO
-        inline DebugInfo& debugInfo(); /**< Get debug info pointer */
+        inline DebugInfo& debugInfo(); /**< Get debug info reference */
+        inline DebugInfo* debugInfoP(); /**< Get debug info pointer */
 #endif
     private:
         
@@ -162,15 +164,25 @@ namespace MemImpl
         ~Entry();
     };
 
+
+
     /** Routine for getting pointer to debug info by pointer to data */
-    inline DebugInfo *getDebugInfo( void *ptr);
+    template < size_t size>
+    Entry< size>*
+    Entry< size>::getEntryPtr( void *data_ptr)
     {
         MEM_ASSERTD( isNotNullP( ptr), "Data pointer can't be null");
+        size_t offset = offsetof( Entry< size>, data);
+        return (Entry< size> *)(ptr - offset);
+    }
+    
+    /** Routine for getting pointer to debug info by pointer to data */
+    inline DebugInfo *getDebugInfo( void *data_ptr)
+    {
         MEM_ASSERTD( offsetof( Entry<8>, data) == offsetof( Entry<63>, data),
                      "Debug info offsets should be equal for every possible entry size");
 
-        size_t offset = offsetof( Entry<8>, data);
-        return (DebugInfo *)(ptr - offset);
+        return Entry<8>::getEntryPtr( data_ptr)->debugInfoP(); // Entry size shouldn't matter
     }
 
     /**
@@ -219,12 +231,20 @@ namespace MemImpl
 #endif
 
 #ifdef USE_DEBUG_INFO
-    /**< Get debug info pointer*/
+    /** Get debug info reference */
     template< size_t size>
     DebugInfo&
     Entry< size>::debugInfo()
     {
         return debug_info;
+    }
+    
+    /** Get debug info pointer*/
+    template< size_t size>
+    DebugInfo *
+    Entry< size>::debugInfoP()
+    {
+        return &debug_info;
     }
 #endif
 
