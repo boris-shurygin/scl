@@ -28,11 +28,13 @@
 #undef CHECK_DELETE
 
 #ifdef _DEBUG
+#  define USE_DEBUG_INFO
 #  define CHECK_CHUNKS
 #  define CHECK_ENTRY
 #  define USE_REF_COUNTERS
 #  define USE_MEM_EVENTS
 #  define CHECK_DELETE
+#  define MEM_CHECK_POOL
 #endif
 
 #define MEM_USE_MALLOC

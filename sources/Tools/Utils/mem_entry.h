@@ -18,18 +18,22 @@
 namespace MemImpl
 {
     /**
-     * Entry in memory that holds user data
+     * Debug info for a memory entry
      *
      * @ingroup MemImpl
      */
-    template < size_t size> class Entry
+    class DebugInfo
     {
-    public:
-        /** Get pointer to data */
-        inline void *dataMem();
-#ifdef CHECK_ENTRY   
-        inline bool isBusy();                   /**< Check if entry has busy flag */
-        inline void setBusy( bool busy = true); /**< Set busy flag */
+               
+#ifdef MEM_CHECK_POOL                
+        inline Pool* pool() const;      /**< Get pointer to pool */
+        inline void setPool( Pool* pl); /**< Set pointer to pool */
+#endif        
+
+#ifdef USE_REF_COUNTERS
+        inline RefNumber refCount() const; /**< Get the number of references */
+        inline void incRefCount();         /**< Increase reference count */
+        inline void decRefCount();         /**< Decrease reference count */
 #endif
 
 #ifdef USE_MEM_EVENTS          
@@ -39,7 +43,111 @@ namespace MemImpl
         inline MemEventId deallocEvent();            /**< Get id of deallocation event */
         inline void setDeallocEvent( MemEventId id); /**< Set id of deallocation event */
 #endif
+
     private:
+#ifdef MEM_CHECK_POOL
+        /** Pointer to pool */
+        Pool *_pool;
+#endif
+
+#ifdef USE_REF_COUNTERS
+        /** Counter for references */
+        RefNumber ref_count; /* Additional memory used, the overhead of counted references */
+#endif
+
+#ifdef USE_MEM_EVENTS        
+        /** Debug info: alloc event */
+        MemEventId alloc_event;
+        /** Debug info: dealloc event */
+        MemEventId dealloc_event;
+#endif 
+    };
+
+#ifdef USE_REF_COUNTERS
+    /** Get the number of references */
+    inline RefNumber DebugInfo::refCount() const
+    {
+        return ref_count;
+    }
+    /** Increase reference count */
+    inline void DebugInfo::incRefCount()
+    {
+        ref_count++;
+    }
+    /** Decrease reference count */
+    inline void DebugInfo::decRefCount()
+    {
+        assertd( ref_count > 0);
+        ref_count--;
+    }
+#endif
+    
+#ifdef MEM_CHECK_POOL
+    /** Get pointer to pool */
+    inline Pool* DebugInfo::pool() const
+    {
+        return _pool;
+    }
+    /** Set pointer to pool */
+    inline void DebugInfo::setPool( Pool* pl)
+    {
+        _pool = pl;
+    }
+#endif
+
+#ifdef USE_MEM_EVENTS
+    /** Get id of allocation event */
+    MemEventId
+    DebugInfo::allocEvent()
+    {
+        return alloc_event;
+    }
+    
+    /** Set id of allocation event */           
+    void
+    DebugInfo::setAllocEvent( MemEventId id)
+    {
+        alloc_event = id;
+    }
+    /** Get id of deallocation event */
+    MemEventId
+    DebugInfo::deallocEvent()
+    {
+        return dealloc_event;
+    }          
+    /** Set id of deallocation event */ 
+    void
+    DebugInfo::setDeallocEvent( MemEventId id)
+    {
+        dealloc_event = id;
+    }
+#endif
+    /**
+     * Entry in memory that holds user data
+     *
+     * @ingroup MemImpl
+     */
+    template < size_t size> class Entry
+    {
+    public:
+        /** Get pointer to data */
+        inline void *dataMem();
+
+#ifdef CHECK_ENTRY   
+        inline bool isBusy();                   /**< Check if entry has busy flag */
+        inline void setBusy( bool busy = true); /**< Set busy flag */
+#endif
+#ifdef USE_DEBUG_INFO
+        inline DebugInfo& debugInfo(); /**< Get debug info pointer */
+#endif
+    private:
+        
+#ifdef USE_DEBUG_INFO
+        /** Debug info */
+        DebugInfo debug_info;
+
+        friend DebugInfo *getDebugInfo( void *ptr);
+#endif        
         /** Data memory */
         UInt8 data[ size];
 
@@ -48,18 +156,22 @@ namespace MemImpl
         bool is_busy;
 #endif
 
-#ifdef USE_MEM_EVENTS        
-        /** Debug info: alloc event */
-        MemEventId alloc_event;
-        /** Debug info: dealloc event */
-        MemEventId dealloc_event;
-#endif  
-
         /** Private constructor to prevent direct creation of such objects */
         Entry();
         /** Private destructor */
         ~Entry();
     };
+
+    /** Routine for getting pointer to debug info by pointer to data */
+    inline DebugInfo *getDebugInfo( void *ptr);
+    {
+        MEM_ASSERTD( isNotNullP( ptr), "Data pointer can't be null");
+        MEM_ASSERTD( offsetof( Entry<8>, data) == offsetof( Entry<63>, data),
+                     "Debug info offsets should be equal for every possible entry size");
+
+        size_t offset = offsetof( Entry<8>, data);
+        return (DebugInfo *)(ptr - offset);
+    }
 
     /**
      * Private constructor to prevent direct creation of such objects
@@ -106,44 +218,22 @@ namespace MemImpl
     }
 #endif
 
-
-#ifdef USE_MEM_EVENTS
-    /** Get id of allocation event */
+#ifdef USE_DEBUG_INFO
+    /**< Get debug info pointer*/
     template< size_t size>
-    MemEventId
-    Entry< size>:: allocEvent()
+    DebugInfo&
+    Entry< size>::debugInfo()
     {
-        return alloc_event;
-    }
-    
-    /** Set id of allocation event */           
-    template< size_t size>
-    void
-    Entry< size>::setAllocEvent( MemEventId id)
-    {
-        alloc_event = id;
-    }
-    /** Get id of deallocation event */
-    template< size_t size>
-    MemEventId
-    Entry< size>::deallocEvent()
-    {
-        return dealloc_event;
-    }          
-    /** Set id of deallocation event */ 
-    template< size_t size>
-    void
-    Entry< size>::setDeallocEvent( MemEventId id)
-    {
-        dealloc_event = id;
+        return debug_info;
     }
 #endif
+
     /**
      * Entry in memory FixedPool that holds user data
      *
      * @ingroup MemImpl
      */
-    template < class Data> class FixedEntry: public Entry< sizeof( Data)>
+    template < size_t size> class FixedEntry: public Entry< size>
     {
     public:
         /** Get position */
@@ -172,44 +262,45 @@ namespace MemImpl
     /**
      * Private constructor to prevent direct creation of such objects
      */
-    template< class Data>
-    FixedEntry< Data>::FixedEntry()
+    template< size_t size>
+    FixedEntry< size_t size>::FixedEntry()
     {
-        assert( 0);
+        MEM_ASSERTD( 0, "Constructor of fixed entry shouldn't be called ever");
     }
     /**
      * Private destructor
      */
-    template< class Data>
-    FixedEntry< Data>::~FixedEntry()
+    template< size_t size>
+    FixedEntry< size_t size>::~FixedEntry()
     {
-        assert( 0);
+        MEM_ASSERTD( 0, "Destructor of fixed entry shouldn't be called ever");
     }
+
     /** Get position */
-    template< class Data>
+    template< size_t size>
     ChunkPos 
-    FixedEntry< Data>::pos() const
+    FixedEntry< size_t size>::pos() const
     {
         return my_pos;
     }
     /** Get position of next free chunk */
-    template< class Data>
+    template< size_t size>
     ChunkPos
-    FixedEntry< Data>::nextFree() const
+    FixedEntry< size_t size>::nextFree() const
     {
         return next_free_pos;
     }
     /** Set position */
-    template< class Data>
+    template< size_t size>
     void
-    FixedEntry< Data>::setPos( ChunkPos pos)
+    FixedEntry< size_t size>::setPos( ChunkPos pos)
     {
         my_pos = pos;
     }
     /** Set position of next free chunk */
-    template< class Data>
+    template< size_t size>
     void
-    FixedEntry< Data>::setNextFree( ChunkPos next)
+    FixedEntry< size_t size>::setNextFree( ChunkPos next)
     {
         next_free_pos = next;
     }
