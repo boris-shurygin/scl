@@ -32,8 +32,8 @@ namespace MemImpl
      * Memory chunk representation
      * @ingroup MemImpl
      */
-    template<class Data> class Chunk: 
-        public MListIface< Chunk< Data>, // List client data
+    template< size_t size> class Chunk: 
+        public MListIface< Chunk< size>, // List client data
                            MListItem< CHUNK_LISTS_NUM>, // base class: pure multi-list item
                            CHUNK_LISTS_NUM > // Lists number
     {
@@ -43,13 +43,13 @@ namespace MemImpl
         /** busy entries num */
         ChunkPos busy;
         /** Get chunk for given number */
-        inline FixedEntry<Data> *entry( ChunkPos pos);
+        inline FixedEntry< size> *entry( ChunkPos pos);
 
     public:
 #ifdef CHECK_CHUNKS
         void *pool;       
         /** Get chunk's first busy entry */
-        inline FixedEntry<Data> *firstBusyEntry();
+        inline FixedEntry< size> *firstBusyEntry();
 #endif
         /** Constructor */
         inline Chunk();
@@ -60,9 +60,9 @@ namespace MemImpl
         /** Initialization of chunk */
         inline void initialize();
         /** Allocate on entry */
-        inline Data *allocateEntry();
+        inline void *allocateEntry();
         /** Deallocate one entry */
-        inline void deallocateEntry( FixedEntry<Data> *e);
+        inline void deallocateEntry( FixedEntry< size> *e);
         /** For some reason GCC asks for it :( */
         inline void operator delete( void* mem);
         /** Placement new */
@@ -76,16 +76,16 @@ namespace MemImpl
     };
     
     /** Constructor */
-    template <class Data> 
-    Chunk< Data>::Chunk()
+    template < size_t size> 
+    Chunk< size>::Chunk()
     {
-        FixedEntry<Data> *e = NULL;
+        FixedEntry< size> *e = NULL;
         
         for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
         {
-            e = ( FixedEntry< Data> *)( (UInt8 *) this 
-                                       + sizeof( Chunk< Data>) 
-                                       + sizeof( FixedEntry< Data>) * i);
+            e = ( FixedEntry< size> *)( (UInt8 *) this 
+                                       + sizeof( Chunk< size>) 
+                                       + sizeof( FixedEntry< size>) * i);
             /** Initialization of every entry */
             e->setPos( i);
             e->setNextFree( i + 1);
@@ -102,17 +102,17 @@ namespace MemImpl
         busy = 0;
     }
     /** Placement new */
-    template <class Data> 
+    template < size_t size> 
     void*
-    Chunk< Data>::operator new ( size_t size, void* mem)
+    Chunk< size>::operator new ( size_t size, void* mem)
     {
         return mem;
     }
     
     /** For some reason GCC asks for it :( */
-    template <class Data>
+    template < size_t size>
     void
-    Chunk< Data>::operator delete( void* mem)
+    Chunk< size>::operator delete( void* mem)
     {
 
     }
@@ -121,37 +121,37 @@ namespace MemImpl
      * WARNING: Compiler won't call this for deletion. 
      *          It is needed for freeing memory in case of exceptions in constructor
      */
-    template <class Data> 
+    template < size_t size> 
     void
-    Chunk< Data>::operator delete( void* ptr, void* mem)
+    Chunk< size>::operator delete( void* ptr, void* mem)
     {
     
     }
   
     /** Get entry by number */
-    template<class Data> 
-    FixedEntry< Data>*
-    Chunk< Data>::entry( ChunkPos pos)
+    template< size_t size> 
+    FixedEntry< size>*
+    Chunk< size>::entry( ChunkPos pos)
     {
         MEM_ASSERTD( pos != UNDEF_POS, "Requested entry with undefined number");
-        return ( FixedEntry< Data> *)( (UInt8 *) this 
-                                  + sizeof( Chunk< Data>) 
-                                  + sizeof( FixedEntry< Data>) * pos);
+        return ( FixedEntry< size> *)( (UInt8 *) this 
+                                  + sizeof( Chunk< size>) 
+                                  + sizeof( FixedEntry< size>) * pos);
     }
    
 #ifdef CHECK_CHUNKS        
     /** Get chunk's first busy entry */
-    template<class Data> 
-    FixedEntry< Data>*
-    Chunk< Data>::firstBusyEntry()
+    template< size_t size> 
+    FixedEntry< size>*
+    Chunk< size>::firstBusyEntry()
     {
-        FixedEntry<Data> *e = NULL;
+        FixedEntry< size> *e = NULL;
         
         for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
         {
-            e = ( FixedEntry< Data> *)( (UInt8 *) this 
-                                       + sizeof( Chunk< Data>) 
-                                       + sizeof( FixedEntry< Data>) * i);
+            e = ( FixedEntry< size> *)( (UInt8 *) this 
+                                       + sizeof( Chunk< size>) 
+                                       + sizeof( FixedEntry< size>) * i);
             if ( e->isBusy())
                 return e;
         }
@@ -160,42 +160,42 @@ namespace MemImpl
 #endif
 
     /** Check if this chunk has free entries */
-    template<class Data> 
+    template< size_t size> 
     bool 
-    Chunk< Data>::isFree() const
+    Chunk< size>::isFree() const
     {
         return free_entry != UNDEF_POS;
     }
     /** Check if this chunk is empty */
-    template<class Data> 
+    template< size_t size> 
     bool 
-    Chunk< Data>::isEmpty() const
+    Chunk< size>::isEmpty() const
     {
         return busy == 0;
     }      
     /** Allocate one entry */
-    template<class Data> 
-    Data*
-    Chunk< Data>::allocateEntry()
+    template< size_t size> 
+    void*
+    Chunk< size>::allocateEntry()
     {
         MEM_ASSERTD( this->isFree(), "Trying to allocated entry in a full chunk");
         
-        FixedEntry< Data> *e = entry( free_entry);
+        FixedEntry< size> *e = entry( free_entry);
 #ifdef CHECK_ENTRY
         e->setBusy( true);
 #endif
 #ifdef USE_MEM_EVENTS        
         e->setAllocEvent( Mem::MemMgr::instance()->allocEvent());
 #endif        
-        Data *res = static_cast<Data *>( e->dataMem());
+        void *res = e->dataMem();
         free_entry = e->nextFree();
         busy++;
         return res;
     }
     /** Deallocate one entry */
-    template<class Data> 
+    template< size_t size> 
     void
-    Chunk< Data>::deallocateEntry( FixedEntry<Data> *e)
+    Chunk< size>::deallocateEntry( FixedEntry< size> *e)
     {
         MEM_ASSERTD( busy > 0, "Trying to deallocate entry of an empty chunk");
 #ifdef CHECK_ENTRY

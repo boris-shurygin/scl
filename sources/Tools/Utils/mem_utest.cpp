@@ -10,6 +10,7 @@
 
 using namespace Mem;
 
+#ifdef TEST_SMART_POINTERS
 /** Test object class */
 class TestObj: public Obj
 {
@@ -65,9 +66,17 @@ uTestRef()
     delete ref2;
     return true;
 }
+#else
+static bool
+uTestRef()
+{
+    return true;
+}
+
+#endif /* TEST_SMART_POINTERS */
 
 /** Sample object used as a baseclass for more complicated pool-stored objects */
-class PoolBase: public PoolObj 
+class PoolBase
 {
     virtual void setVal( UInt32 val) = 0;
     virtual UInt32 val() const = 0;
@@ -78,7 +87,10 @@ class PoolBase: public PoolObj
  * Class for testing complex objects stored in pool. Built with 
  * multiple inheritance, virtual functions and additional members.
  */
-class MyPoolObj: public PoolBase, public SListIface< MyPoolObj, SListItem>
+class MyPoolObj: 
+    public PoolBase,
+    public SListIface< MyPoolObj>,
+    public PoolObj< MyPoolObj, UseCustomFixedPool>
 {
     UInt32 priv_field;
 public:
@@ -107,7 +119,7 @@ static bool
 uTestPools()
 {
 
-    Pool *pool = new FixedPool< MyPoolObj>();
+    FixedPool< sizeof( MyPoolObj)> *pool = new FixedPool< sizeof( MyPoolObj)>();
     MyPoolObj *p1 = new ( pool) MyPoolObj();
     MyPoolObj *p2 = new ( pool) MyPoolObj();
     bool called_destructor1 = false;

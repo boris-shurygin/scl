@@ -17,6 +17,8 @@
 
 namespace MemImpl
 {
+    using namespace Mem;
+
     /**
      * Debug info for a memory entry
      *
@@ -24,7 +26,6 @@ namespace MemImpl
      */
     class DebugInfo
     {
-               
 #ifdef MEM_CHECK_POOL                
         inline Pool* pool() const;      /**< Get pointer to pool */
         inline void setPool( Pool* pl); /**< Set pointer to pool */
@@ -171,9 +172,10 @@ namespace MemImpl
     Entry< size>*
     Entry< size>::getEntryPtr( void *data_ptr)
     {
-        MEM_ASSERTD( isNotNullP( ptr), "Data pointer can't be null");
+        MEM_ASSERTD( isNotNullP( data_ptr), "Data pointer can't be null");
         size_t offset = offsetof( Entry< size>, data);
-        return (Entry< size> *)(ptr - offset);
+        void *entry_ptr =  (UInt8 *)data_ptr - offset;
+        return ( Entry< size> *)entry_ptr;
     }
     
     /** Routine for getting pointer to debug info by pointer to data */
@@ -266,7 +268,7 @@ namespace MemImpl
         inline void setNextFree( ChunkPos next);
     private:
         /** Classes fixed pool and chunk should have access to data and constructors */
-        friend class Chunk<Data>;
+        friend class Chunk< size>;
 
         /** Own position of this entry in chunk */
         ChunkPos my_pos;
@@ -283,7 +285,7 @@ namespace MemImpl
      * Private constructor to prevent direct creation of such objects
      */
     template< size_t size>
-    FixedEntry< size_t size>::FixedEntry()
+    FixedEntry< size>::FixedEntry()
     {
         MEM_ASSERTD( 0, "Constructor of fixed entry shouldn't be called ever");
     }
@@ -291,7 +293,7 @@ namespace MemImpl
      * Private destructor
      */
     template< size_t size>
-    FixedEntry< size_t size>::~FixedEntry()
+    FixedEntry< size>::~FixedEntry()
     {
         MEM_ASSERTD( 0, "Destructor of fixed entry shouldn't be called ever");
     }
@@ -299,28 +301,28 @@ namespace MemImpl
     /** Get position */
     template< size_t size>
     ChunkPos 
-    FixedEntry< size_t size>::pos() const
+    FixedEntry< size>::pos() const
     {
         return my_pos;
     }
     /** Get position of next free chunk */
     template< size_t size>
     ChunkPos
-    FixedEntry< size_t size>::nextFree() const
+    FixedEntry< size>::nextFree() const
     {
         return next_free_pos;
     }
     /** Set position */
     template< size_t size>
     void
-    FixedEntry< size_t size>::setPos( ChunkPos pos)
+    FixedEntry< size>::setPos( ChunkPos pos)
     {
         my_pos = pos;
     }
     /** Set position of next free chunk */
     template< size_t size>
     void
-    FixedEntry< size_t size>::setNextFree( ChunkPos next)
+    FixedEntry< size>::setNextFree( ChunkPos next)
     {
         next_free_pos = next;
     }

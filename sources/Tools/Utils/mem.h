@@ -55,6 +55,9 @@ namespace Mem
 {
     /* Class pool predeclaration */
     class Pool;
+    
+    /** Type of reference count */
+    typedef unsigned int RefNumber;
 }
 
 
@@ -72,10 +75,10 @@ namespace MemImpl
     template < size_t size> class Entry;
 
     /* Predeclaration of mem entry class */
-    template < class Data> class FixedEntry;
+    template < size_t size> class FixedEntry;
     
     /* Predeclaration of chunk class */
-    template < class Data> class Chunk;
+    template < size_t size> class Chunk;
     /**
      * Position in chunk type
      * @ingroup MemImpl
@@ -106,12 +109,14 @@ namespace Mem
     typedef Single< MemImpl::MemInfo> MemMgr;
 };
 
-#include "mem_mgr.h"        /** Memory manager */
-#include "mem_ref.h"        /** Memory reference */
-#include "mem_obj.h"        /** Memory object base class */
-#include "mem_chunk.h"      /** Memory chunk class */
-#include "mem_pool.h"       /** Memory pool */
-#include "mem_entry.h"      /** Memory entry class */
-#include "mem_fixed_pool.h" /** Memory pool */
+#include "mem_mgr.h"          /** Memory manager */
+#include "mem_ref.h"          /** Memory reference */
+#include "mem_chunk.h"        /** Memory chunk class */
+#include "mem_pool.h"         /** Memory pool */
+#include "mem_entry.h"        /** Memory entry class */
+#include "mem_fixed_pool.h"   /** Memory pool */
+#include "mem_generic_pool.h" /** Memory pool */
+#include "mem_alloc_policy.h" /** Allocation policies */
+#include "mem_obj.h"          /** Memory object base class */
 
 #endif /* MEM_H */

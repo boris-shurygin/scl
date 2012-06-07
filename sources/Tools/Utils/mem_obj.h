@@ -21,62 +21,38 @@
  */
 namespace Mem
 {
-    /** Type of reference count */
-    typedef unsigned int RefNumber;
-
     /**
-     * Base class for all memory-managed objects
+     * Base class for all objects allocated in pools
+     *
      * @ingroup Mem
-     */
-    class Obj
+     */    
+    template < class ClientType, template <size_t my_size> class AllocationPolicy = UseDefaultFixedPool>
+    class PoolObj: public AllocationPolicy< sizeof(ClientType)>
     {
-    private:
-        /** Pointer to pool */
-        Pool *_pool;
-        
-#ifdef USE_REF_COUNTERS
-    private:
-        /** Counter for references */
-        RefNumber ref_count; /* Additional memory used, the overhead of counted references */
-    public:    
-        /** Get the number of references */
-        inline RefNumber refCount() const
-        {
-            return ref_count;
-        }
-        /** Increase reference count */
-        inline void incRefCount()
-        {
-            ref_count++;
-        }
-        /** Decrease reference count */
-        inline void decRefCount()
-        {
-            assertd( ref_count > 0);
-            ref_count--;
-        }
-#endif        
-    public:
-        /** Get pointer to pool */
-        inline Pool* pool() const
-        {
-            return _pool;
-        }
+#ifdef CHECK_DELETE
+        bool to_be_deleted;
+#endif  
+        public:
+#ifdef CHECK_DELETE
+        /** Default constructor */
+        PoolObj(): to_be_deleted( false){};
 
-        /** Constructor */
-        inline Obj() 
-#ifdef USE_REF_COUNTERS
-        :ref_count( 0)
-#endif
+        /** Mark for deletion */
+        inline void toBeDeleted()
         {
-        
+            MEM_ASSERTD( !to_be_deleted, "Tried to mark object for deletion more than once");
+            to_be_deleted = true;
         }
-        /** Destructor */
-        ~Obj()
-        {
-#ifdef USE_REF_COUNTERS
-            assertd( ref_count == 0);
+#else
+        /** Default constructor */
+        inline PoolObj(){};
 #endif
+        /** Destructor is to be called by 'destroy' routine of pool class */
+        virtual ~PoolObj()
+        {
+#ifdef CHECK_DELETE
+            MEM_ASSERTD( to_be_deleted, "Deleted pool object not through pool interface. Probably operator delete used.");
+#endif        
         }
     };
 };

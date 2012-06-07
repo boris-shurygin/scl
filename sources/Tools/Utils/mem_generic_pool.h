@@ -12,8 +12,8 @@
 #    error
 #endif
 
-#ifndef MEM_FIXED_POOL_H
-#define MEM_FIXED_POOL_H
+#ifndef MEM_GENERIC_POOL_H
+#define MEM_GENERIC_POOL_H
 
 namespace Mem
 {
@@ -28,22 +28,21 @@ namespace Mem
     {
     public:
         
-        GenericPool(); /**< Create pool with default parameters */
-        ~GenericPool();/**< Destroy the pool */
+        GenericPool();  /**< Create pool with default parameters */
+        ~GenericPool(); /**< Destroy the pool                    */
                 
         void* allocate( size_t size); /**< Allocate new memory block */
-        void deallocate( void *ptr);  /**< Free memory block */
-        void destroy( void *ptr);     /**< Calls destructor of pooled object and frees memory */
+        void deallocate( void *ptr);  /**< Free memory block         */
+
+        PoolType type() const; /**< Type of the pool */
     private:        
         /** Number of used entries */
         EntryNum entry_count;
-
-        /* Internal routines */
     };
 
     /** Create pool with default parameters */
     GenericPool::GenericPool(): 
-        entry_count( 0),
+        entry_count( 0)
     {
 
     }
@@ -59,13 +58,13 @@ namespace Mem
     void* 
     GenericPool::allocate( size_t size)
     {
-        void *ptr = malloc( size);
+        MemImpl::Entry< 1> *entry = (MemImpl::Entry< 1> *) malloc( sizeof( MemImpl::Entry< 1>) + size - 1);
+        void *ptr = entry->dataMem();
         entry_count++;
         return ptr;
     }
 
     /** Free memory block */
-    template < class Data> 
     void
     GenericPool::deallocate( void *ptr)
     {
@@ -75,28 +74,19 @@ namespace Mem
         /* 2. Check entry count */
         MEM_ASSERTD( entry_count > 0, "Trying deallocate entry of an empty pool"); 
 
+        MemImpl::Entry< 1> *entry = MemImpl::Entry< 1>::getEntryPtr( ptr);
         free( ptr);
         entry_count--;
     }
 
-    /** Functionality of 'operator delete' for pooled objects */
-    void
-    GenericPool::destroy( void *ptr)
+    /** Type of the pool */
+    PoolType
+    GenericPool::type() const
     {
-        /* 1. Check null pointer( in DEBUG mode) */
-        MEM_ASSERTD( isNotNullP( ptr), "Destruction tried on NULL pointer");
-
-        Data *data_p = static_cast< Data *>( ptr);
-        
-#ifdef CHECK_DELETE
-        /* 2. Mark for deletion */
-        data_p->toBeDeleted();
-#endif
-        /* 3. Call destructor */
-        data_p->~Data();
-        
-        /* 4. Free memory */
-        deallocate( ptr);
+        return POOL_GENERIC;
     }
+
+    /** Default generic pool */
+    typedef Single< GenericPool> DefaultGenericPool;
 }; /* namespace Mem */
 #endif /* MEM_GENERIC_POOL_H */

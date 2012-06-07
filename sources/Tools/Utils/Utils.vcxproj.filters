@@ -72,6 +72,9 @@
     <ClInclude Include="mem_generic_pool.h">
       <Filter>mem</Filter>
     </ClInclude>
+    <ClInclude Include="mem_alloc_policy.h">
+      <Filter>mem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">
