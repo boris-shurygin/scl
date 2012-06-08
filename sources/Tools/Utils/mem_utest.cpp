@@ -119,7 +119,7 @@ static bool
 uTestPools()
 {
 
-    FixedPool< sizeof( MyPoolObj)> *pool = new FixedPool< sizeof( MyPoolObj)>();
+    TypedPool< MyPoolObj> *pool = new TypedPool< MyPoolObj>();
     MyPoolObj *p1 = new ( pool) MyPoolObj();
     MyPoolObj *p2 = new ( pool) MyPoolObj();
     bool called_destructor1 = false;

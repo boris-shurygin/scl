@@ -26,8 +26,8 @@ namespace Mem
      *
      * @ingroup Mem
      */    
-    template < class ClientType, template <size_t my_size> class AllocationPolicy = UseDefaultFixedPool>
-    class PoolObj: public AllocationPolicy< sizeof(ClientType)>
+    template < class ClientType, template < class T> class AllocationPolicy = UseDefaultFixedPool>
+    class PoolObj: public AllocationPolicy< ClientType>
     {
 #ifdef CHECK_DELETE
         bool to_be_deleted;

@@ -59,7 +59,7 @@ class Edge:
                        EDGE_LISTS_NUM >, // Lists number                      
     public Marked,
     public Numbered,
-    public PoolObj
+    public PoolObj<Edge, UseCustomFixedPool>
 {
 public:
     /** Get edge's unique ID */

@@ -156,8 +156,8 @@ class AGraph: public Graph
     /** Pools' creation routine */
     void createPools()
     {
-        node_pool = new FixedPool< ANode>();
-        edge_pool = new FixedPool< AEdge>();
+        node_pool = new TypedPool< ANode>();
+        edge_pool = new TypedPool< AEdge>();
     }
     /** Constructor */
     AGraph( bool create_pools): Graph( false)

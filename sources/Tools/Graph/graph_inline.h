@@ -11,13 +11,13 @@
 #define GRAPH_INLINE_H
 
 /** Delete node from memory pool */
-inline void Graph::deleteNode( void *n)
+inline void Graph::deleteNode( Node *n)
 {
     node_pool->destroy( n);
 }
 
 /** Delete edge from memory pool */
-inline void Graph::deleteEdge( void *e)
+inline void Graph::deleteEdge( Edge *e)
 {
     edge_pool->destroy( e);
 }

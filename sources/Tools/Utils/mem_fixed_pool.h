@@ -218,9 +218,9 @@ namespace Mem
     /* Allocate new memory block */
     template < size_t size> 
     void* 
-    FixedPool< size>::allocate( size_t size)
+    FixedPool< size>::allocate( size_t sz)
     {
-        MEM_ASSERTD( sizeof( Data) == size,
+        MEM_ASSERTD( sizeof( size) == sz,
                      "Allocation size doesn't match FixedPool's template parameter size");
         void *ptr = NULL;
         /* If we don't have a free chunk */
@@ -321,7 +321,7 @@ namespace Mem
         ptr->toBeDeleted();
 #endif
         /* 3. Call destructor */
-        ptr->~Data();
+        ptr->~Type();
         
         /* 4. Free memory */
         deallocate( ptr);
@@ -330,7 +330,7 @@ namespace Mem
     /**
      * Default pool for a typed objects
      */
-    template < class T> class DefaultPool: public Single< TypedPool< T>>
+    template < class T> class DefaultPool: public Single< TypedPool< T> >
     {
     
     };

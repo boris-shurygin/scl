@@ -26,6 +26,7 @@ namespace MemImpl
      */
     class DebugInfo
     {
+    public:
 #ifdef MEM_CHECK_POOL                
         inline Pool* pool() const;      /**< Get pointer to pool */
         inline void setPool( Pool* pl); /**< Set pointer to pool */

@@ -9,37 +9,52 @@
 
 using namespace Mem;
 
-/**
- * Default operator 'new' is disabled
- */
-void *
-PoolObj::operator new( size_t size)
+class Graph;
+
+class Node
 {
-    ASSERT( 0);
-    return NULL;
+public:
+    Node (Graph *g);
+};
+
+class Graph
+{
+public:
+    void registerNode( Node* n)
+    {
+        node = n;
+    }
+private:
+    Node *node;
+};
+
+Node::Node( Graph *g)
+{
+    g->registerNode( this);
 }
-/**
- * Default operator 'delete' is disabled
- */
-void 
-PoolObj::operator delete( void *ptr)
+
+class AGraph;
+
+class ANode:public Node, public PoolObj<ANode>
 {
-    ASSERT( 0);
+public:
+    ANode( AGraph *);
+public:
+    int a;
+};
+
+class AGraph: public Graph
+{
+
+};
+
+ANode::ANode( AGraph *g): Node( g)
+{
+
 }
-/**
- * Default operator 'new[]' is disabled
- */
-void *
-PoolObj::operator new[]( size_t size)
+
+void foo()
 {
-    ASSERT( 0);
-    return NULL;
-}
-/**
- * Default operator 'delete[]' is disabled
- */
-void 
-PoolObj::operator delete[]( void *ptr)
-{
-    ASSERT( 0);
+    AGraph a;
+    ANode *n = new ANode( &a);
 }

@@ -133,13 +133,13 @@ public:
      *  Delete node. Substitution for node's operator delete, which shouldn't
      *  be called directly since Node is a pool-residing object
      */
-    inline void deleteNode( void *n);
+    inline void deleteNode( Node *n);
 
     /** 
      *  Delete node. Substitution for edges's operator delete, which shouldn't
      *  be called directly since Edge is a pool-residing object
      */
-    inline void deleteEdge( void *e);
+    inline void deleteEdge( Edge *e);
     
     /** Remove node from node list of graph */
     inline void detachNode( Node* node);
@@ -180,9 +180,9 @@ protected:
     inline Pool *edgePool() const;
 
     /** Memory pool for nodes */
-    Pool *node_pool;
+    TypedPool<Node> *node_pool;
     /** Memory pool for edges */
-    Pool *edge_pool;
+    TypedPool<Edge> *edge_pool;
 private:
     /**
      * Implementation of node creation

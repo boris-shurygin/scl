@@ -68,7 +68,8 @@ public:
     /** Get a pointer to client object */
     static T* ptr();
 
-private:/* Uniqueness ensurance */
+protected:
+    /* Uniqueness ensurance */
     /** Private constructor */
     Single();
     /** Private copy constructor */
@@ -77,6 +78,7 @@ private:/* Uniqueness ensurance */
     Single& operator = ( const Single&);
     /** Private destructor */
     ~Single();
+private:
     /**
      * @brief Pointer to client object.
      * 

@@ -26,6 +26,13 @@ namespace Mem
      */
     class ObjAllocPolicy
     {
+    public:
+        /** Default constructor */
+        ObjAllocPolicy(){};
+
+        /** Destructor */
+        virtual ~ObjAllocPolicy(){};
+    private:
         /** Copy constructor disabled*/
         ObjAllocPolicy( ObjAllocPolicy &obj){};
         /** Assignment disabled */
@@ -54,29 +61,29 @@ namespace Mem
     /**
      * Object allocation policy that uses default fixed pool to allocate memory
      */
-    template < size_t my_size> class UseDefaultFixedPool: public ObjAllocPolicy
+    template < class T> class UseDefaultFixedPool: public ObjAllocPolicy
     {
         public:
         /** Default operator 'new' is disabled */
         void *operator new( size_t size)
         {
-             MEM_ASSERTD( my_size == size, "Size passed as new parameter must be equal to the one that"
+             MEM_ASSERTD( sizeof( T) == size, "Size passed as new parameter must be equal to the one that"
                                            "was selected for the object with specialization of PoolObj");
-             return DefaultPool<my_size>::ptr()->allocate( size);
+             return DefaultPool< T>::ptr()->allocate( size);
         }
         /** Default operator 'delete' is disabled */
         void operator delete( void *ptr, size_t size)
         {
-            MEM_ASSERTD( my_size == size, "Size passed as new parameter must be equal to the one that"
+            MEM_ASSERTD( sizeof( T) == size, "Size passed as new parameter must be equal to the one that"
                                           "was selected for the object with specialization of PoolObj");
-            DefaultPool<my_size>::ptr()->deallocate( ptr);
+            DefaultPool< T>::ptr()->deallocate( ptr);
         }
     };
        
     /**
-     * Object allocation policy that uses default generic pool to allocate memory, my_size parameter is ignored
+     * Object allocation policy that uses default generic pool to allocate memory, T parameter is ignored
      */
-    template < size_t my_size> class UseGenericPool: public ObjAllocPolicy
+    template < class T> class UseGenericPool: public ObjAllocPolicy
     {
         public:
         /** Default operator 'new' is disabled */
@@ -94,16 +101,16 @@ namespace Mem
     /**
      * Object allocation policy that defines placement new/delete to operate on user-defined pool
      */
-    template < size_t my_size> class UseCustomFixedPool: public ObjAllocPolicy
+    template < class T> class UseCustomFixedPool: public ObjAllocPolicy
     {
         public:
         /**
          * Placement new
          */
         inline void *
-        operator new ( size_t size, FixedPool< my_size>* pool)
+        operator new ( size_t size, Pool* pool)
         {
-            return pool->allocate( size);
+            return static_cast< FixedPool< sizeof( T)>*>(pool)->allocate( size);
         }
         /**
          * Operator 'delete' corresponding to placement new
@@ -111,9 +118,9 @@ namespace Mem
          *          It is needed for freeing memory in case of exceptions in constructor
          */
         inline void
-        operator delete( void *ptr, FixedPool< my_size>* pool)
+        operator delete( void *ptr, Pool* pool)
         {
-            pool->deallocate( ptr);
+             static_cast< FixedPool< sizeof( T)>*>(pool)->deallocate( ptr);
         }
     };
 };

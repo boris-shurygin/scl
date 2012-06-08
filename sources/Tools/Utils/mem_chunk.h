@@ -93,8 +93,8 @@ namespace MemImpl
             e->setBusy( false);
 #endif
 #ifdef USE_MEM_EVENTS        
-            e->setAllocEvent( 0);
-            e->setDeallocEvent( 0);
+            e->debugInfo().setAllocEvent( 0);
+            e->debugInfo().setDeallocEvent( 0);
 #endif 
         }
         MEM_ASSERTD( e->nextFree() == UNDEF_POS, "Chunk size constant and undefined value do not match");
@@ -185,7 +185,7 @@ namespace MemImpl
         e->setBusy( true);
 #endif
 #ifdef USE_MEM_EVENTS        
-        e->setAllocEvent( Mem::MemMgr::instance()->allocEvent());
+        e->debugInfo().setAllocEvent( Mem::MemMgr::instance()->allocEvent());
 #endif        
         void *res = e->dataMem();
         free_entry = e->nextFree();
@@ -204,7 +204,7 @@ namespace MemImpl
         e->setBusy( false);
 #endif
 #ifdef USE_MEM_EVENTS        
-        e->setDeallocEvent( Mem::MemMgr::instance()->deallocEvent());
+        e->debugInfo().setDeallocEvent( Mem::MemMgr::instance()->deallocEvent());
 #endif 
         e->setNextFree( free_entry);
         free_entry = e->pos();
