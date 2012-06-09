@@ -1,4 +1,4 @@
-Graph library. Written to be internal representation of graphs in SCL (Simple Compiler) tool.
+GraphImpl library. Written to be internal representation of GraphImpls in SCL (Simple Compiler) tool.
 Copyright (C) 2012  Boris Shurygin
 
 This program is free software; you can redistribute it and/or

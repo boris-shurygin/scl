@@ -1,13 +1,13 @@
 /**
  * @file: predecls.h
- * Predeclarations for interface of Graph library
+ * Predeclarations for interface of GraphImpl library
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
-#ifndef GRAPH_PREDECLS_H
-#define GRAPH_PREDECLS_H
+#ifndef GraphImpl_PREDECLS_H
+#define GraphImpl_PREDECLS_H
 
 #include "../Utils/utils_iface.h"
 
@@ -16,15 +16,15 @@ using namespace Utils;
 using namespace Mem;
 
 /**
- * Debug assert for graph library
+ * Debug assert for GraphImpl library
  * @ingroup GraphBase
  */
 #if !defined(GRAPH_ASSERTD)
-#    define GRAPH_ASSERTD(cond, what) ASSERT_XD(cond, "Graph", what)
+#    define GRAPH_ASSERTD(cond, what) ASSERT_XD(cond, "GraphImpl", what)
 #endif
 
 /**
- * Directions type in graph
+ * Directions type in GraphImpl
  * @ingroup GraphBase
  */
 enum GraphDir
@@ -33,7 +33,7 @@ enum GraphDir
     GRAPH_DIR_UP = 0,
     /** Downward direction */
     GRAPH_DIR_DOWN = 1,
-    /** Number of directions in graph */
+    /** Number of directions in GraphImpl */
     GRAPH_DIRS_NUM = 2
 };
 
@@ -44,21 +44,21 @@ enum GraphDir
 inline GraphDir
 RevDir( GraphDir dir)
 {
-    GRAPH_ASSERTD( GRAPH_DIRS_NUM == 2, "Graph implementation is suited for two directions only");
+    GRAPH_ASSERTD( GRAPH_DIRS_NUM == 2, "GraphImpl implementation is suited for two directions only");
 #ifdef DIR_INVERTION_LONG_VERSION
     return ( dir == GRAPH_DIR_UP)? GRAPH_DIR_DOWN: GRAPH_DIR_UP; 
 #else
-    return (GraphDir)!dir;
+    return (GraphDir)(dir ^ GRAPH_DIR_UP);
 #endif
 }
 
 /**
- * Number type used for numbering nodes and edges in graph
+ * Number type used for numbering nodes and edges in GraphImpl
  * @ingroup GraphBase
  */
 typedef UInt32 GraphNum;
 /**
- * Node/edge ID type
+ * NodeImpl/edge ID type
  * @ingroup GraphBase
  */
 typedef UInt64 GraphUid;
@@ -67,23 +67,17 @@ typedef UInt64 GraphUid;
  * Maximum number of nodes
  * @ingroup GraphBase
  */
-const GraphNum GRAPH_MAX_NODE_NUM = ( GraphNum)( -1);
+const GraphNum GraphImpl_MAX_NODE_NUM = ( GraphNum)( -1);
 /**
  * Maximum number of edges
  * @ingroup GraphBase
  */
-const GraphNum GRAPH_MAX_EDGE_NUM = ( GraphNum)( -1);
+const GraphNum GraphImpl_MAX_EDGE_NUM = ( GraphNum)( -1);
 
-/**
- * Indentation for XML writing
- * @ingroup GraphBase
- */
-const int IndentSize = 4;
-
-/* Predeclarations of graph-related classes */
-class Graph;
-class Node;
-class Edge;
+/* Predeclarations of GraphImpl-related classes */
+class GraphImpl;
+class NodeImpl;
+class EdgeImpl;
 
 #include "marker.h"
 #include "num.h"

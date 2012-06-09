@@ -21,8 +21,8 @@ int main(int argc, char **argv)
     if ( !uTestUtils())
         return -1;
 
-    /** Test graph package */
-    if ( !uTestGraph())
+    /** Test GraphImpl package */
+    if ( !uTestGraphImpl())
         return -1;
     
     MemMgr::deinit();

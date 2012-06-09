@@ -1,6 +1,6 @@
 /**
- * @file: graph_utest.cpp 
- * Implementation of testing of Graph library
+ * @file: GraphImpl_utest.cpp 
+ * Implementation of testing of GraphImpl library
  */
 /*
  * Copyright (C) 2012  Boris Shurygin
@@ -9,17 +9,17 @@
 #include <vector>
 
  /**
-  * TODO: Check graph's data structures being consistent with node and edge functionality
+  * TODO: Check GraphImpl's data structures being consistent with node and edge functionality
   */
-bool uTestGraphOwn()
+bool uTestGraphImplOwn()
 {
     {
-        AGraph graph( true);
-        ANode *dummy = graph.newNode();
-        graph.deleteNode( dummy);
-        ANode *pred = graph.newNode();
-        ANode *succ = graph.newNode();
-        AEdge *edge = graph.newEdge( pred, succ);
+        AGraph GraphImpl( true);
+        ANode *dummy = GraphImpl.newNode();
+        GraphImpl.deleteNode( dummy);
+        ANode *pred = GraphImpl.newNode();
+        ANode *succ = GraphImpl.newNode();
+        AEdge *edge = GraphImpl.newEdge( pred, succ);
         
         /** Check node insertion */
         ANode *new_node = edge->insertNode();
@@ -37,29 +37,29 @@ bool uTestGraphOwn()
 
     /** Test iterators */
     {
-        AGraph graph( true);
-        ANode *node1 = graph.newNode();
-        ANode *node2 = graph.newNode();
-        ANode *node3 = graph.newNode();
-        AEdge *edge1 = graph.newEdge( node1, node2);
-        AEdge *edge2 = graph.newEdge( node2, node3);
+        AGraph GraphImpl( true);
+        ANode *node1 = GraphImpl.newNode();
+        ANode *node2 = GraphImpl.newNode();
+        ANode *node3 = GraphImpl.newNode();
+        AEdge *edge1 = GraphImpl.newEdge( node1, node2);
+        AEdge *edge2 = GraphImpl.newEdge( node2, node3);
         
-        for ( Node::Succ succ_iter = node2->succsBegin(),
+        for ( NodeImpl::Succ succ_iter = node2->succsBegin(),
                          succ_iter_end = node2->succsEnd();
               succ_iter != succ_iter_end;
               ++succ_iter )
         {
             assert( areEqP( *succ_iter, edge2));
         }
-        for ( Node::Pred pred_iter = node2->predsBegin(),
+        for ( NodeImpl::Pred pred_iter = node2->predsBegin(),
                          pred_iter_end = node2->predsEnd();
               pred_iter != pred_iter_end;
               pred_iter++ )
         {
             assert( areEqP( *pred_iter, edge1));
         }
-        Node::EdgeIter edge_iter = node2->edgesBegin();
-        Node::EdgeIter edge_iter_end = node2->edgesEnd();
+        NodeImpl::EdgeIter edge_iter = node2->edgesBegin();
+        NodeImpl::EdgeIter edge_iter_end = node2->edgesEnd();
         assert( edge_iter != edge_iter_end);
         assert( areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
         if ( areEqP( *edge_iter, edge1))
@@ -90,7 +90,7 @@ bool uTestGraphOwn()
     return true;
 }
 /**
- * TODO: Check consistency of Node and Edge classes interoperation
+ * TODO: Check consistency of NodeImpl and EdgeImpl classes interoperation
  */
 bool uTestNodeEdge()
 {
@@ -108,16 +108,16 @@ bool uTestNodeEdge()
  */
 bool uTestMarkers()
 {
-    AGraph graph( true);
-    ANode *dummy = graph.newNode();
-    graph.deleteNode( dummy);
-    ANode *pred = graph.newNode();
-    ANode *succ = graph.newNode();
-    AEdge *edge = graph.newEdge( pred, succ);
-    Marker m = graph.newMarker();
-    Marker m2 = graph.newMarker();
+    AGraph GraphImpl( true);
+    ANode *dummy = GraphImpl.newNode();
+    GraphImpl.deleteNode( dummy);
+    ANode *pred = GraphImpl.newNode();
+    ANode *succ = GraphImpl.newNode();
+    AEdge *edge = GraphImpl.newEdge( pred, succ);
+    Marker m = GraphImpl.newMarker();
+    Marker m2 = GraphImpl.newMarker();
 
-    Marker m_array[ MAX_GRAPH_MARKERS];
+    Marker m_array[ MAX_GraphImpl_MARKERS];
     
     assert( !pred->isMarked( m));
     assert( !succ->isMarked( m));
@@ -139,26 +139,26 @@ bool uTestMarkers()
     assert( edge->isMarked( m2));
     assert( !edge->isMarked( m));
     
-    graph.freeMarker( m);
-    graph.freeMarker( m2);
+    GraphImpl.freeMarker( m);
+    GraphImpl.freeMarker( m2);
     
-    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        m_array [ i] = graph.newMarker();
+        m_array [ i] = GraphImpl.newMarker();
     }
-    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        graph.freeMarker( m_array[ i]);
+        GraphImpl.freeMarker( m_array[ i]);
     }
-    m = graph.newMarker();
-    graph.freeMarker( m);
+    m = GraphImpl.newMarker();
+    GraphImpl.freeMarker( m);
     
     ANode *n;
-    for (  n = graph.firstNode(); isNotNullP( n);)
+    for (  n = GraphImpl.firstNode(); isNotNullP( n);)
     {
         ANode *tmp = n;
         n = n->nextNode();
-        graph.deleteNode( tmp);
+        GraphImpl.deleteNode( tmp);
     }
     return true;
 }
@@ -234,45 +234,45 @@ static bool uTestNumerations()
 }
 
 /**
- * Create graph and save it to XML
+ * Create GraphImpl and save it to XML
  */
 bool uTestSave()
 {
-    AGraph graph( true);
+    AGraph GraphImpl( true);
 
     /** 
-     *  Check basic operation of graph library
+     *  Check basic operation of GraphImpl library
      */
     std::vector<ANode *> nodes;
 
     /** Create nodes and edges */
     for ( int i =0; i<20; i++)
     {
-        nodes.push_back( graph.newNode());
+        nodes.push_back( GraphImpl.newNode());
         if ( i > 0)
         {
-            graph.newEdge( nodes[ i - 1], nodes[ i]);
+            GraphImpl.newEdge( nodes[ i - 1], nodes[ i]);
         }
         if ( i > 1 && i % 2 == 0)
         {
-            graph.newEdge( nodes[ i - 2], nodes[ i]);
+            GraphImpl.newEdge( nodes[ i - 2], nodes[ i]);
         }
     }
-    graph.newEdge( nodes[ 8], nodes[ 4]);
-    graph.deleteNode( nodes[ 8]);
-    graph.debugPrint();
+    GraphImpl.newEdge( nodes[ 8], nodes[ 4]);
+    GraphImpl.deleteNode( nodes[ 8]);
+    GraphImpl.debugPrint();
     return true;
 }
 
 /**
- * Unit tests for Graph library
+ * Unit tests for GraphImpl library
  */
-bool uTestGraph()
+bool uTestGraphImpl()
 {
     /**
-     * Check graph's data structures consistency
+     * Check GraphImpl's data structures consistency
      */
-     if ( !uTestGraphOwn())
+     if ( !uTestGraphImplOwn())
          return false;
     /**
      * Check node-edge consistency

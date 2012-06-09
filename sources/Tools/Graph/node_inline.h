@@ -1,26 +1,26 @@
 /**
  * @file: node_inline.h
- * Implementation of Node and related classes' inline routines
+ * Implementation of NodeImpl and related classes' inline routines
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
 #ifndef NODE_INLINE_H
 #define NODE_INLINE_H
 
-/** We can't create nodes separately, do it through newNode method of graph */
-inline Node::Node( Graph *_graph_p, GraphUid _id): uid(_id), graph_p( _graph_p)
+/** We can't create nodes separately, do it through newNode method of GraphImpl */
+inline NodeImpl::NodeImpl( GraphImpl *_GraphImpl_p, GraphUid _id): uid(_id), GraphImpl_p( _GraphImpl_p)
 {
     first_edge[ GRAPH_DIR_UP] = NULL;
     first_edge[ GRAPH_DIR_DOWN] = NULL;
 }
 
 /**
- * Detach myself from graph's node list
+ * Detach myself from GraphImpl's node list
  */
-inline void Node::detachFromGraph()
+inline void NodeImpl::detachFromGraph()
 {
     detach();
 }
@@ -28,30 +28,30 @@ inline void Node::detachFromGraph()
 /**
  * Get node's unique ID
  */
-inline GraphUid Node::id() const
+inline GraphUid NodeImpl::id() const
 {
     return uid;
 }
 
 /**
- * Get node's corresponding graph
+ * Get node's corresponding GraphImpl
  */
-inline Graph * Node::graph() const
+inline GraphImpl * NodeImpl::graph() const
 {
-    return graph_p;
+    return GraphImpl_p;
 }
 /**
- * Next node in graph's list
+ * Next node in GraphImpl's list
  */
-inline Node* Node::nextNode()
+inline NodeImpl* NodeImpl::nextNode()
 {
     return next();
 }
 
 /**
- * Prev node in graph's list
+ * Prev node in GraphImpl's list
  */
-inline Node* Node::prevNode()
+inline NodeImpl* NodeImpl::prevNode()
 {
     return prev();
 }
@@ -59,7 +59,7 @@ inline Node* Node::prevNode()
 /**
  * Add predecessor edge
  */
-inline void Node::AddPred( Edge *edge)
+inline void NodeImpl::AddPred( EdgeImpl *edge)
 {
     AddEdgeInDir( edge, GRAPH_DIR_UP);
 }
@@ -67,28 +67,28 @@ inline void Node::AddPred( Edge *edge)
 /**
  * Add successor edge
  */
-inline void Node::AddSucc( Edge *edge) 
+inline void NodeImpl::AddSucc( EdgeImpl *edge) 
 {
     AddEdgeInDir( edge, GRAPH_DIR_DOWN);
 }
 /**
  * First edge in given direction
  */
-inline Edge* Node::firstEdgeInDir( GraphDir dir)
+inline EdgeImpl* NodeImpl::firstEdgeInDir( GraphDir dir)
 {
     return first_edge[ dir];
 }
 /** 
  * First successor edge
  */
-inline Edge* Node::firstSucc()
+inline EdgeImpl* NodeImpl::firstSucc()
 {
     return firstEdgeInDir( GRAPH_DIR_DOWN);
 }
 /** 
  * First predecessor edge
  */
-inline Edge* Node::firstPred()
+inline EdgeImpl* NodeImpl::firstPred()
 {
     return firstEdgeInDir( GRAPH_DIR_UP);
 }
@@ -96,7 +96,7 @@ inline Edge* Node::firstPred()
 /**
  * delete predecessor edge
  */
-inline void Node::deletePred( Edge* edge)
+inline void NodeImpl::deletePred( EdgeImpl* edge)
 {
     deleteEdgeInDir( GRAPH_DIR_UP, edge);
 }
@@ -104,7 +104,7 @@ inline void Node::deletePred( Edge* edge)
 /**
  * delete successor edge
  */
-inline void Node::deleteSucc( Edge* edge)
+inline void NodeImpl::deleteSucc( EdgeImpl* edge)
 {
     deleteEdgeInDir( GRAPH_DIR_DOWN, edge);
 }
@@ -112,7 +112,7 @@ inline void Node::deleteSucc( Edge* edge)
 /**
  * Create iterator for first succ
  */
-inline Node::Succ Node::succsBegin()
+inline NodeImpl::Succ NodeImpl::succsBegin()
 {
     return Succ( this);
 }
@@ -120,21 +120,21 @@ inline Node::Succ Node::succsBegin()
 /**
  * Create iterator pointing to succ end
  */
-inline Node::Succ Node::succsEnd()
+inline NodeImpl::Succ NodeImpl::succsEnd()
 {
     return Succ();
 }
 /**
  * Create iterator for first succ
  */
-inline Node::Pred Node::predsBegin()
+inline NodeImpl::Pred NodeImpl::predsBegin()
 {
     return Pred( this);
 }
 /**
  * Create iterator pointing to succ end
  */
-inline Node::Pred Node::predsEnd()
+inline NodeImpl::Pred NodeImpl::predsEnd()
 {
     return Pred();
 }
@@ -142,14 +142,14 @@ inline Node::Pred Node::predsEnd()
 /**
  * Create iterator for first succ
  */
-inline Node::EdgeIter Node::edgesBegin()
+inline NodeImpl::EdgeIter NodeImpl::edgesBegin()
 {
     return EdgeIter( this);
 }
 /**
  * Create iterator pointing to succ end
  */
-inline Node::EdgeIter Node::edgesEnd()
+inline NodeImpl::EdgeIter NodeImpl::edgesEnd()
 {
     return EdgeIter();
 }
@@ -158,7 +158,7 @@ inline Node::EdgeIter Node::edgesEnd()
  * Add an edge to this node in specified direction
  */
 inline void
-Node::AddEdgeInDir( Edge *edge, GraphDir dir)
+NodeImpl::AddEdgeInDir( EdgeImpl *edge, GraphDir dir)
 {
     assert( isNotNullP( edge));
     GRAPH_ASSERTD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
@@ -173,7 +173,7 @@ Node::AddEdgeInDir( Edge *edge, GraphDir dir)
  * delete edge pointed by iterator in specidied direction
  */
 inline void
-Node::deleteEdgeInDir( GraphDir dir, Edge* edge)
+NodeImpl::deleteEdgeInDir( GraphDir dir, EdgeImpl* edge)
 {
     assert( isNotNullP( edge));
     if( first_edge[ dir] == edge)
@@ -191,7 +191,7 @@ inline EdgeIterIface< EdgeIterImpl>::EdgeIterIface()
 
 /** Constructor from node: iterator points on first edge, i.e. 'begin' iterator */
 template < class EdgeIterImpl>
-inline EdgeIterIface< EdgeIterImpl>::EdgeIterIface( Node *n):
+inline EdgeIterIface< EdgeIterImpl>::EdgeIterIface( NodeImpl *n):
     impl( n)
 {
 
@@ -223,7 +223,7 @@ EdgeIterIface< EdgeIterImpl>::operator++( int)
 
 /** Dereferenece operator*/
 template < class EdgeIterImpl>
-inline Edge * 
+inline EdgeImpl * 
 EdgeIterIface< EdgeIterImpl>::operator*()
 {
     return impl.edge();
@@ -245,17 +245,17 @@ EdgeIterIface< EdgeIterImpl>::operator!=(const EdgeIterIface< EdgeIterImpl>& o) 
     return !(*this == o);
 }
 
-/** Get Edge */
+/** Get EdgeImpl */
 template < class EdgeIterImpl>
-inline Edge *
+inline EdgeImpl *
 EdgeIterIface< EdgeIterImpl>::edge() const
 {
     return impl.edge();
 }
 
-/** Get Edge */
+/** Get EdgeImpl */
 template < class EdgeIterImpl>
-inline Node *
+inline NodeImpl *
 EdgeIterIface< EdgeIterImpl>::node() const
 {
     return impl.node();
@@ -266,7 +266,7 @@ template < class EdgeIterImpl>
 inline EdgeIterIface< EdgeIterImpl> & 
 EdgeIterIface< EdgeIterImpl>::operator++()
 {
-    GRAPH_ASSERTD( isNotNullP( impl.edge()), "Edge iterator is at end ( NULL in edge pointer)");
+    GRAPH_ASSERTD( isNotNullP( impl.edge()), "EdgeImpl iterator is at end ( NULL in edge pointer)");
     impl.nextEdge();
     return *this;
 }
@@ -274,7 +274,7 @@ EdgeIterIface< EdgeIterImpl>::operator++()
 /** Next pred */
 inline void PredIterImpl::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "Edge iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     edge_p = edge_p->nextPred();
 }
 
@@ -282,14 +282,14 @@ inline void PredIterImpl::nextEdge()
 /** Next succ */
 inline void SuccIterImpl::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "Edge iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     edge_p = edge_p->nextSucc();
 }
 
 /** Next edge in undirected edges traversal */
 inline void UnDirIterImpl::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "Edge iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     
     if ( is_pred && isNullP( edge_p->nextPred()))
     {
@@ -308,19 +308,19 @@ inline void UnDirIterImpl::nextEdge()
 }
 
 /** Get node on the end of edge */
-inline Node * SuccIterImpl::node() const
+inline NodeImpl * SuccIterImpl::node() const
 {
     return edge()->succ();
 }
 
 /** Get node on the end of edge */
-inline Node * PredIterImpl::node() const
+inline NodeImpl * PredIterImpl::node() const
 {
     return edge()->pred();
 }
 
 /** Get node in UnDir traversal of node's edges */
-inline Node * UnDirIterImpl::node() const
+inline NodeImpl * UnDirIterImpl::node() const
 {
     if ( is_pred)
     {
@@ -332,20 +332,20 @@ inline Node * UnDirIterImpl::node() const
 }
 
 /** Constructor gets first succ */
-inline SuccIterImpl::SuccIterImpl( Node *n)
+inline SuccIterImpl::SuccIterImpl( NodeImpl *n)
 {
     edge_p = n->firstSucc();
 }
 
 /** Constructor gets first pred */
-inline PredIterImpl::PredIterImpl( Node *n)
+inline PredIterImpl::PredIterImpl( NodeImpl *n)
 {
     edge_p = n->firstPred();
 }
 
 
 /** Constructor gets first edge for undirected edges iteration */
-inline UnDirIterImpl::UnDirIterImpl( Node *n)
+inline UnDirIterImpl::UnDirIterImpl( NodeImpl *n)
 {
     edge_p = n->firstPred();
     is_pred = true;

@@ -1,46 +1,46 @@
 /**
  * @file: node.cpp
- * Node class implementation
+ * NodeImpl class implementation
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 /** 
- * Destructor. Corrects list of nodes in corresponding graph and deletes adjacent edges
+ * Destructor. Corrects list of nodes in corresponding GraphImpl and deletes adjacent edges
  */
 #include "graph_iface.h"
 
-Node::~Node()
+NodeImpl::~NodeImpl()
 {
-    Edge *edge;
-    //out("Deleted Node");
+    EdgeImpl *edge;
+    //out("Deleted NodeImpl");
 
     /** delete incidient edges */
     for ( edge = firstSucc(); isNotNullP( edge);)
     {
-        Edge* next = edge->nextSucc();
-        //edge->detachFromNode( GRAPH_DIR_DOWN);// Edge is detached from succ node
-        graph()->deleteEdge( edge);
+        EdgeImpl* next = edge->nextSucc();
+        //edge->detachFromNode( GRAPH_DIR_DOWN);// EdgeImpl is detached from succ node
+        GraphImpl()->deleteEdge( edge);
         edge = next;
     }
     for ( edge = firstPred(); isNotNullP( edge);)
     {
-        Edge* next = edge->nextPred();
-        //edge->detachFromNode( GRAPH_DIR_UP);// Edge is detached from pred node
-        graph()->deleteEdge( edge);
+        EdgeImpl* next = edge->nextPred();
+        //edge->detachFromNode( GRAPH_DIR_UP);// EdgeImpl is detached from pred node
+        GraphImpl()->deleteEdge( edge);
         edge = next;
     }
     
-    /** delete myself from graph */
-    graph_p->detachNode( this);
+    /** delete myself from GraphImpl */
+    GraphImpl_p->detachNode( this);
 }
 
 /**
  * Print node in Dot format to stdout
  */
 void
-Node::debugPrint()
+NodeImpl::debugPrint()
 {
     out("%llu;", id());
 }

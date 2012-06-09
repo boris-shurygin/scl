@@ -63,7 +63,7 @@
  * @sa Nums
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 /** 
@@ -99,22 +99,22 @@ typedef enum MarkerErrorType_e
  * How many markers are allowed simultaneously
  * @ingroup Mark
  */
-const short int MAX_GRAPH_MARKERS = 10;
+const short int MAX_GraphImpl_MARKERS = 10;
 /**
  * Clean value of markers
  * @ingroup Mark
  */
-const MarkerValue GRAPH_MARKER_CLEAN = 0;
+const MarkerValue GraphImpl_MARKER_CLEAN = 0;
 /**
  * First value of markers
  * @ingroup Mark
  */
-const MarkerValue GRAPH_MARKER_FIRST = 1;
+const MarkerValue GraphImpl_MARKER_FIRST = 1;
 /**
  * Last value of markers 
  * @ingroup Mark
  */
-const MarkerValue GRAPH_MARKER_LAST = ( MarkerValue)( (int)-1);
+const MarkerValue GraphImpl_MARKER_LAST = ( MarkerValue)( (int)-1);
 
 /**
  * Marker description
@@ -141,7 +141,7 @@ private:
  * Default constructor
  */
 inline Marker::Marker(): 
-    index( MAX_GRAPH_MARKERS), value( GRAPH_MARKER_CLEAN)
+    index( MAX_GraphImpl_MARKERS), value( GraphImpl_MARKER_CLEAN)
 {
 
 }
@@ -170,7 +170,7 @@ public:
     inline void clear( MarkerIndex i);
 private:
     /** Markers */
-    MarkerValue markers[ MAX_GRAPH_MARKERS];
+    MarkerValue markers[ MAX_GraphImpl_MARKERS];
 };
 
     
@@ -182,9 +182,9 @@ inline Marked::Marked()
     MarkerIndex i;
 
     /** Initialize markers */
-    for ( i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        markers [ i] = GRAPH_MARKER_CLEAN;
+        markers [ i] = GraphImpl_MARKER_CLEAN;
     }
 }
 
@@ -220,7 +220,7 @@ inline bool Marked::unmark( Marker marker)
 {
     if ( markers[ marker.index] == marker.value)
     {
-        markers[ marker.index] = GRAPH_MARKER_CLEAN;
+        markers[ marker.index] = GraphImpl_MARKER_CLEAN;
         return true;
     }
     return false;
@@ -231,7 +231,7 @@ inline bool Marked::unmark( Marker marker)
  */
 inline void Marked::clear( MarkerIndex i)
 {
-       markers[ i] = GRAPH_MARKER_CLEAN;
+       markers[ i] = GraphImpl_MARKER_CLEAN;
 }
 
 /**
@@ -277,10 +277,10 @@ private:
     inline MarkerValue findNextFreeValue();
 
     /** Marker values for each index */
-    MarkerValue markers[ MAX_GRAPH_MARKERS];
+    MarkerValue markers[ MAX_GraphImpl_MARKERS];
     
     /** Usage flags for each index */
-    bool is_used[ MAX_GRAPH_MARKERS];
+    bool is_used[ MAX_GraphImpl_MARKERS];
     
     /** Last free value */
     MarkerValue last;
@@ -294,7 +294,7 @@ MarkerManager::findFreeIndex()
 {
     MarkerIndex i = 0;
     /** Search for free marker index */
-    for ( i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
         if ( !is_used [ i])
         {
@@ -311,9 +311,9 @@ MarkerManager::findFreeIndex()
 inline MarkerValue 
 MarkerManager::nextValue()
 {
-    if ( last == GRAPH_MARKER_LAST)
+    if ( last == GraphImpl_MARKER_LAST)
     {
-        last = GRAPH_MARKER_FIRST;
+        last = GraphImpl_MARKER_FIRST;
     } else
     {
         last++;
@@ -328,7 +328,7 @@ inline bool
 MarkerManager::isValueBusy( MarkerValue val)
 {
     /** Check all markers */
-    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
         if ( is_used [ i] && markers[ i] == val)
             return true;
@@ -349,10 +349,10 @@ MarkerManager::findNextFreeValue()
     while( isValueBusy( res))
     {
         /** 
-         * If we reached checked GRAPH_MARKER_LAST twice,
+         * If we reached checked GraphImpl_MARKER_LAST twice,
          * then we are in infinite loop and for some reason we don't free our markers
          */
-        if ( res == GRAPH_MARKER_LAST)
+        if ( res == GraphImpl_MARKER_LAST)
         {
             assert< MarkerErrorType> ( !reached_limit, 
                                        M_ERROR_OUT_OF_VALUES);
@@ -370,7 +370,7 @@ MarkerManager::findNextFreeValue()
 inline void 
 MarkerManager::clearUnusedMarkers( Marked *m_obj)
 {
-    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
         if ( !is_used [ i])
             m_obj->clear( i);
@@ -385,12 +385,12 @@ inline MarkerManager::MarkerManager()
     MarkerIndex i;
 
     /** Initialize markers */
-    for ( i = 0; i < MAX_GRAPH_MARKERS; i++)
+    for ( i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        markers [ i] = GRAPH_MARKER_CLEAN;
+        markers [ i] = GraphImpl_MARKER_CLEAN;
         is_used [ i] = false;
     }
-    last = GRAPH_MARKER_FIRST;
+    last = GraphImpl_MARKER_FIRST;
 }
 
 /**

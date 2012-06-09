@@ -10,6 +10,6 @@
 bool uTestUtils();
 
 /**
- * Graph library unit testing
+ * GraphImpl library unit testing
  */
-bool uTestGraph();
+bool uTestGraphImpl();

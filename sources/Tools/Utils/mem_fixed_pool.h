@@ -3,7 +3,7 @@
  * Implementation of memory pool with fixed entry size
  */
 /*
- * Utils library in Showgraph tool
+ * Utils library in ShowGraphImpl tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
@@ -54,7 +54,7 @@ namespace Mem
      * To decrease memory usage overhead the numbers in entries are effectively one byte long.
      * Thats two byte per entry overhead if we don't align entries on 8, 16, 32 or 64 bytes.
      * Thus memory overhead is significant if we store small objects in such a pool but for 
-     * a list unit this overhead is about 25% and for graph's node or edge it is 6.2%.
+     * a list unit this overhead is about 25% and for GraphImpl's node or edge it is 6.2%.
      *
      * When project is built in debug mode the pools keep track of every entry's allocation
      * and deallocation ID. This allows programmer to put in a breakpoint if a memory leak

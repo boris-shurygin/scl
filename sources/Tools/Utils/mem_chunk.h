@@ -3,7 +3,7 @@
  * Implementation of memory chunk
  */
 /*
- * Utils/Mem library in Showgraph tool
+ * Utils/Mem library in ShowGraphImpl tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once

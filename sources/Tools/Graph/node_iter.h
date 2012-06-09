@@ -3,7 +3,7 @@
  * Declaration of iterators for node's adjacent edges traversal and related classes
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
@@ -16,13 +16,13 @@ class IterImplBase
 {
 public:
     /** Get edge */
-    inline Edge* edge() const { return edge_p;}
+    inline EdgeImpl* edge() const { return edge_p;}
     /** Set edge */
-    inline void setEdge( Edge *e){ edge_p = e;}
+    inline void setEdge( EdgeImpl *e){ edge_p = e;}
     /** Default constructor */
     inline IterImplBase(): edge_p( NULL) {}
 protected:
-    Edge *edge_p;
+    EdgeImpl *edge_p;
 };
 
 /** Parameter for iterator template specialization (pred traversal) */
@@ -30,9 +30,9 @@ class PredIterImpl: public IterImplBase
 {
 public:
     inline void nextEdge();       /**< Move on to the next pred */
-    inline Node *node() const;    /**< Get node */
+    inline NodeImpl *node() const;    /**< Get node */
     inline PredIterImpl(){};      /**< Default constructor */
-    inline PredIterImpl( Node *n);/**< Configures iterator with node's first pred */
+    inline PredIterImpl( NodeImpl *n);/**< Configures iterator with node's first pred */
     inline bool operator==(const PredIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p;
@@ -43,9 +43,9 @@ class SuccIterImpl: public IterImplBase
 {
 public:
     inline void nextEdge();       /**< Move on to the next succ */
-    inline Node *node() const;    /**< Get node */
+    inline NodeImpl *node() const;    /**< Get node */
     inline SuccIterImpl(){};      /**< Default constructor */
-    inline SuccIterImpl( Node *n);/**< Configures iterator with node's first succ */
+    inline SuccIterImpl( NodeImpl *n);/**< Configures iterator with node's first succ */
     inline bool operator==(const SuccIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p;
@@ -57,9 +57,9 @@ class UnDirIterImpl: public IterImplBase
 {
 public:
     inline void nextEdge();        /**< Move on to the next edge */
-    inline Node *node() const;     /**< Get node */
+    inline NodeImpl *node() const;     /**< Get node */
     inline UnDirIterImpl():is_pred( false){};      /**< Default consturctor */
-    inline UnDirIterImpl( Node *n);/**< Configures iterator with node's first edge */
+    inline UnDirIterImpl( NodeImpl *n);/**< Configures iterator with node's first edge */
     inline bool operator==(const UnDirIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p 
@@ -86,19 +86,19 @@ public:
     /** Postincrement operator */
     inline EdgeIterIface operator++( int);
     /** Dereferenece operator*/
-    inline Edge * operator*();
+    inline EdgeImpl * operator*();
     /** Comparison operator */
     inline bool operator==(const EdgeIterIface& o) const; 
     /** Not equals operator */
     inline bool operator!=(const EdgeIterIface& o) const;
-    /** Get Edge */
-    inline Edge *edge() const;
+    /** Get EdgeImpl */
+    inline EdgeImpl *edge() const;
     /** Get node on the end of edge */
-    inline Node *node() const;
+    inline NodeImpl *node() const;
 private:
     /** Constructor from node */
-    inline EdgeIterIface( Node *e);
-    friend class Node;
+    inline EdgeIterIface( NodeImpl *e);
+    friend class NodeImpl;
 
     /** Parameter-dependent implementation */
     EdgeIterImpl impl;

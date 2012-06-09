@@ -1,9 +1,9 @@
 /**
- * @file: graph.cpp
- * Graph class implementation
+ * @file: GraphImpl.cpp
+ * GraphImpl class implementation
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 #include "graph_iface.h"
@@ -11,74 +11,56 @@
 /**
  * Constructor.
  */
-Graph::Graph( bool create_pools):
+GraphImpl::GraphImpl():
     node_next_id( 0),
     edge_next_id( 0),
     node_num( 0),
     edge_num( 0),
     first_node( NULL),
-    first_edge( NULL),
-    node_pool( NULL),
-    edge_pool( NULL)
+    first_edge( NULL)
 {
-    if ( create_pools)
-        createPools();
+
 }
 
 /**
  * Destructor - removes all nodes
  */
-Graph::~Graph()
+GraphImpl::~GraphImpl()
 {
-    for ( Node *node = firstNode();
+    for ( NodeImpl *node = firstNode();
           isNotNullP( node);
           )
     {
-        Node* next = node->nextNode();
+        NodeImpl* next = node->nextNode();
         deleteNode( node);
         node = next;
     }
-    destroyPools();
 }
 
-/** Pools' creation routine */
-void Graph::createPools()
+/** NodeImpl/EdgeImpl creation routines can be overloaded by derived class */
+NodeImpl * 
+GraphImpl::createNode( GraphUid _id)
 {
-    node_pool = new FixedPool< Node>();
-    edge_pool = new FixedPool< Edge>();
+    return new ( node_pool) NodeImpl ( this, _id);
 }
 
-/** Pools' destruction routine */
-void Graph::destroyPools()
+EdgeImpl * 
+GraphImpl::createEdge( GraphUid _id, NodeImpl *_pred, NodeImpl* _succ)
 {
-    delete node_pool;
-    delete edge_pool;
-}
-
-/** Node/Edge creation routines can be overloaded by derived class */
-Node * 
-Graph::createNode( GraphUid _id)
-{
-    return new ( node_pool) Node ( this, _id);
-}
-
-Edge * 
-Graph::createEdge( GraphUid _id, Node *_pred, Node* _succ)
-{
-    return new ( edge_pool) Edge( this, _id, _pred, _succ);
+    return new ( edge_pool) EdgeImpl( this, _id, _pred, _succ);
 }
 
 /**
- * Print graph to stdout in DOT format.
+ * Print GraphImpl to stdout in DOT format.
  * Note: Iterates through nodes and edges separately instead
  *       of iterating through nodes and at iterating through edges of each node
  */
 void 
-Graph::debugPrint()
+GraphImpl::debugPrint()
 {
-    Node *n;
-    Edge *e;
-    out( "digraph{");
+    NodeImpl *n;
+    EdgeImpl *e;
+    out( "diGraphImpl{");
     /** Print nodes */
     for (  n = firstNode(); isNotNullP( n); n = n->nextNode())
     {
@@ -96,10 +78,10 @@ Graph::debugPrint()
  * Implementation for numerations cleanup
  */
 void 
-Graph::clearNumerationsInObjects()
+GraphImpl::clearNumerationsInObjects()
 {
-    Node *n;
-    Edge *e;
+    NodeImpl *n;
+    EdgeImpl *e;
     /** Clean markers in nodes */
     for ( n = firstNode(); isNotNullP( n); n = n->nextNode())
     {
@@ -116,10 +98,10 @@ Graph::clearNumerationsInObjects()
  * Implementation for markers cleanup
  */
 void 
-Graph::clearMarkersInObjects()
+GraphImpl::clearMarkersInObjects()
 {
-    Node *n;
-    Edge *e;
+    NodeImpl *n;
+    EdgeImpl *e;
     /** Clean markers in nodes */
     for (  n = firstNode(); isNotNullP( n); n = n->nextNode())
     {

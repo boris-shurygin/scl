@@ -8,7 +8,7 @@
  * Numerations can be used to assign numbers to objects.
  *
  * @par
- * In application to graphs a numeration is a mapping of graph's nodes and/or edges to 
+ * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()
@@ -73,7 +73,7 @@
  * @sa Mark
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 /**
@@ -145,7 +145,7 @@ const GraphNum NUMBER_MAX = (( GraphNum) -1) - 1;
  * @brief Numeration description. 
  *
  * @par
- * In application to graphs a numeration is a mapping of graph's nodes and/or edges to 
+ * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()

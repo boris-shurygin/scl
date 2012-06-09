@@ -1,21 +1,21 @@
 /**
  * @file: edge.cpp 
- * Edge class implementation
+ * EdgeImpl class implementation
  */
 /*
- * Graph library, internal representation of graphs in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
  * Copyright (C) 2012  Boris Shurygin
  */
 #include "graph_iface.h"
 
 /**
- * Edge destructor.
- * delete edge from graph's list of edges
+ * EdgeImpl destructor.
+ * delete edge from GraphImpl's list of edges
  */
-Edge::~Edge()
+EdgeImpl::~EdgeImpl()
 {
     //out("Deleted edge");
-    graph_p->detachEdge( this);
+    GraphImpl_p->detachEdge( this);
     detachFromNode( GRAPH_DIR_UP);
     detachFromNode( GRAPH_DIR_DOWN);
 }
@@ -24,11 +24,11 @@ Edge::~Edge()
  * Print edge in DOT format to stdout
  */
 void
-Edge::debugPrint()
+EdgeImpl::debugPrint()
 {
     /**
      * Check that edge is printable
-     * TODO: Implements graph states and in 'in process' state print node as '?'
+     * TODO: Implements GraphImpl states and in 'in process' state print node as '?'
      *       Examples of such prints: 4->? ?->3 ?->?
      */
     assert( isNotNullP( pred()));
@@ -37,11 +37,11 @@ Edge::debugPrint()
     out("%llu->%llu;", pred()->id(), succ()->id());
 }
 
-/** Node checking routine */
-bool Edge::checkNodes( Node* _pred, Node* _succ)
+/** NodeImpl checking routine */
+bool EdgeImpl::checkNodes( NodeImpl* _pred, NodeImpl* _succ)
 {
     return isNotNullP( _pred)
            && isNotNullP( _succ)
-           && areEqP( this->graph(), _pred->graph())
-           && areEqP( _pred->graph(), _succ->graph());
+           && areEqP( this->GraphImpl(), _pred->GraphImpl())
+           && areEqP( _pred->GraphImpl(), _succ->GraphImpl());
 }

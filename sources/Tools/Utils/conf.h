@@ -6,7 +6,7 @@
  * @ingroup Utils
  */
 /*
- * Utils library in Showgraph tool
+ * Utils library in ShowGraphImpl tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef CONF_H
@@ -206,7 +206,7 @@ public:
      Conf conf;
 
      // Configuring possible options and their type
-     conf.addOption( new Option( OPT_STRING, "f", "file", "input graph description file name"));
+     conf.addOption( new Option( OPT_STRING, "f", "file", "input GraphImpl description file name"));
      conf.addOption( new Option( OPT_STRING, "o", "output", "output image file name"));
      conf.readArgs( argc, argv);
 
