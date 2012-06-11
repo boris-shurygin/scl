@@ -17,7 +17,7 @@ enum EdgeListType
 {
     EDGE_LIST_PREDS,
     EDGE_LIST_SUCCS,
-    EDGE_LIST_GraphImpl,
+    EDGE_LIST_GRAPH,
     EDGE_LISTS_NUM
 };
 
@@ -58,8 +58,7 @@ class EdgeImpl:
                        MListItem< EDGE_LISTS_NUM>, // base class: pure multi-list item
                        EDGE_LISTS_NUM >, // Lists number                      
     public Marked,
-    public Numbered,
-    public PoolObj<EdgeImpl, UseCustomFixedPool>
+    public Numbered
 {
 public:
     /** Get edge's unique ID */
@@ -93,24 +92,16 @@ public:
     inline NodeImpl *succ() const;/**< Get successor node of edge   */
 
     /** Return next edge of the GraphImpl */
-    inline EdgeImpl* nextEdge();
+    inline EdgeImpl* nextEdge() const;
 
     /** Return next edge of the same node in given direction  */
-    inline EdgeImpl* nextEdgeInDir( GraphDir dir);
-    inline EdgeImpl* nextSucc();/**< Next successor */
-    inline EdgeImpl* nextPred();/**< Next predecessor */
+    inline EdgeImpl* nextEdgeInDir( GraphDir dir) const;
+    inline EdgeImpl* nextSucc() const;/**< Next successor */
+    inline EdgeImpl* nextPred() const;/**< Next predecessor */
     
     /** Print edge in dot fomat to stdout */
     virtual void debugPrint();
 
-    /**
-     * Insert a node on this edge
-     *
-     * Creates a node on edge and a new edge from new node to former successor of original edge.
-     * Original edge goes to new node.
-     * Return new node.
-     */
-    virtual NodeImpl *insertNode();
 private:
     /** GraphImpl part */
     GraphUid uid; //Unique ID
@@ -128,14 +119,7 @@ protected:
     friend class NodeImpl;
 
     /** Constructors are made private, only nodes and GraphImpl can create edges */
-    EdgeImpl( GraphImpl *_graph_p, GraphUid _id, NodeImpl *_pred, NodeImpl* _succ):
-        uid(_id), graph_p(_graph_p)
-    {
-        GRAPH_ASSERTD( checkNodes( _pred, _succ),
-                       "Predecessor and sucessor used in edge construction belong to different GraphImpls");
-        setPred( _pred);
-        setSucc( _succ);
-    }
+    inline EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ);
 
     /**
      * Detach edge from a node.
@@ -146,9 +130,9 @@ protected:
     /**
      * Remove myself from GraphImpl's list of edges
      */
-    inline void detachFromgraph()
+    inline void detachFromGraph()
     {
-        detach( EDGE_LIST_GraphImpl);
+        detach( EDGE_LIST_GRAPH);
     }
 };
 
@@ -157,8 +141,25 @@ template < class G, class N, class E> class Edge:
     public EdgeImpl,
     public PoolObj<E, UseCustomFixedPool>
 {
+public:    
 
+    Edge( G* g, N* pred, N* succ): EdgeImpl( g, pred, succ){};
+
+    /** Insert node on this edge */
+    inline N *insertNode();
+
+    /** Get node in specified direction  */
+    inline N *node( GraphDir dir) const;
+    inline N *pred() const;/**< Get predecessor node of edge */
+    inline N *succ() const;/**< Get successor node of edge   */
+
+    /** Return next edge of the GraphImpl */
+    inline E* nextEdge() const;
+
+    /** Return next edge of the same node in given direction  */
+    inline E* nextEdgeInDir( GraphDir dir) const;
+    inline E* nextSucc() const;/**< Next successor */
+    inline E* nextPred() const;/**< Next predecessor */
 };
-
 
 #endif

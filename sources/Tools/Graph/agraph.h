@@ -25,14 +25,14 @@ class AGraph;
  *
  * @ingroup AGr
  */
-class ANode: public NodeImpl
+class ANode: public Node< AGraph, ANode, AEdge>
 {
     int dummy;
-    /** We can't create nodes separately, do it through newNode method of GraphImpl */
-    ANode( AGraph *GraphImpl_p, GraphUid _id);
-    friend class AGraph;
 public:
-        /** Get next GraphImpl's node */
+
+    ANode( AGraph* g): Node< AGraph, ANode, AEdge>( g){};
+
+    /** Get next GraphImpl's node */
     inline ANode* nextNode()
     {
         return static_cast< ANode*>( NodeImpl::nextNode());
@@ -62,17 +62,18 @@ public:
  *
  * @ingroup AGr
  */
-class AEdge: public EdgeImpl
+class AEdge: public Edge< AGraph, ANode, AEdge>
 {
     int dummy;
 
-    /** Constructors are made private, only nodes and GraphImpl can create edges */
-    AEdge( AGraph *GraphImpl_p, GraphUid _id, ANode *_pred, ANode* _succ);
-        
-    friend class AGraph;
-    friend class ANode;
 public:
-        /** Get node in given direction */
+    
+    AEdge( AGraph *g, ANode *pred, ANode *succ): Edge< AGraph, ANode, AEdge>( g, pred, succ)
+    {
+        
+    }
+
+    /** Get node in given direction */
     inline ANode *node( GraphDir dir) const
     {
         return static_cast< ANode *>( EdgeImpl::node( dir));
@@ -87,11 +88,6 @@ public:
     {
         return node( GRAPH_DIR_DOWN);
     }  
-    /** insert node on this edge */
-    virtual ANode *insertNode()
-    {
-        return static_cast< ANode *>( EdgeImpl::insertNode());
-    }
     /** Next edge in GraphImpl's list */
     inline AEdge* nextEdge()
     {
@@ -123,26 +119,8 @@ class AGraph: public Graph< AGraph, ANode, AEdge>
 {
     int dummy; //Dummy class member
 
-
-    /** NodeImpl creation overload */
-    NodeImpl * createNode( GraphUid _id);
-    /** EdgeImpl creation overload */
-    EdgeImpl * createEdge( GraphUid _id, NodeImpl *_pred, NodeImpl* _succ);
-
-    public:
+public:
             
-    /** New GraphImplical node */
-    ANode* newNode()
-    {
-        return static_cast< ANode*>( GraphImpl::newNode());
-    }
-
-    /** New GraphImplical edge */
-    AEdge* newEdge( ANode* pred, ANode* succ)
-    {
-        return static_cast< AEdge *>( GraphImpl::newEdge( pred, succ));
-    }
-
     /** Get GraphImpl's first edge */
     inline AEdge* firstEdge() 
     {
@@ -153,28 +131,8 @@ class AGraph: public Graph< AGraph, ANode, AEdge>
     {
         return static_cast< ANode *>( GraphImpl::firstNode());
     }
-    
-    /** Constructor */
-    AGraph( bool create_pools)
-    {
-
-    }
 };
 
-/** NodeImpl constructor */
-inline ANode::ANode( AGraph *GraphImpl_p, GraphUid _id):
-        NodeImpl( GraphImpl_p, _id)
-{
-
-}
-
-/** EdgeImpl constructor */
-inline AEdge::AEdge( AGraph *GraphImpl_p, GraphUid _id, ANode *_pred, ANode* _succ):
-        EdgeImpl( GraphImpl_p, _id, _pred, _succ)
-{
-
-}
-        
 /** Get first edge in given direction */
 inline AEdge*
 ANode::firstEdgeInDir( GraphDir dir)

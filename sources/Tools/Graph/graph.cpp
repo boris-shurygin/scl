@@ -23,31 +23,11 @@ GraphImpl::GraphImpl():
 }
 
 /**
- * Destructor - removes all nodes
+ * Destructor - doesn't remove all nodes since GraphImpl is not really the owner of nodes and edge
  */
 GraphImpl::~GraphImpl()
 {
-    for ( NodeImpl *node = firstNode();
-          isNotNullP( node);
-          )
-    {
-        NodeImpl* next = node->nextNode();
-        deleteNode( node);
-        node = next;
-    }
-}
 
-/** NodeImpl/EdgeImpl creation routines can be overloaded by derived class */
-NodeImpl * 
-GraphImpl::createNode( GraphUid _id)
-{
-    return new ( node_pool) NodeImpl ( this, _id);
-}
-
-EdgeImpl * 
-GraphImpl::createEdge( GraphUid _id, NodeImpl *_pred, NodeImpl* _succ)
-{
-    return new ( edge_pool) EdgeImpl( this, _id, _pred, _succ);
 }
 
 /**

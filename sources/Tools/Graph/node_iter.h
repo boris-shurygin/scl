@@ -12,40 +12,40 @@
 
 
 /** Baseclass for implementing iterator template parameters */
-class IterImplBase
+template < class N, class E> class IterImplBase
 {
 public:
     /** Get edge */
-    inline EdgeImpl* edge() const { return edge_p;}
+    inline E* edge() const { return edge_p;}
     /** Set edge */
-    inline void setEdge( EdgeImpl *e){ edge_p = e;}
+    inline void setEdge( E *e){ edge_p = e;}
     /** Default constructor */
     inline IterImplBase(): edge_p( NULL) {}
 protected:
-    EdgeImpl *edge_p;
+    E *edge_p;
 };
 
 /** Parameter for iterator template specialization (pred traversal) */
-class PredIterImpl: public IterImplBase
+template < class N, class E> class PredIterImpl: public IterImplBase< N, E>
 {
 public:
     inline void nextEdge();       /**< Move on to the next pred */
-    inline NodeImpl *node() const;    /**< Get node */
+    inline N *node() const;       /**< Get node */
     inline PredIterImpl(){};      /**< Default constructor */
-    inline PredIterImpl( NodeImpl *n);/**< Configures iterator with node's first pred */
+    inline PredIterImpl( N *n);   /**< Configures iterator with node's first pred */
     inline bool operator==(const PredIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p;
     }
 };
 /** Parameter for iterator template specialization (succ traversal) */
-class SuccIterImpl: public IterImplBase
+template < class N, class E> class SuccIterImpl: public IterImplBase< N, E>
 {
 public:
     inline void nextEdge();       /**< Move on to the next succ */
-    inline NodeImpl *node() const;    /**< Get node */
+    inline N *node() const;       /**< Get node */
     inline SuccIterImpl(){};      /**< Default constructor */
-    inline SuccIterImpl( NodeImpl *n);/**< Configures iterator with node's first succ */
+    inline SuccIterImpl( N *n);   /**< Configures iterator with node's first succ */
     inline bool operator==(const SuccIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p;
@@ -53,13 +53,13 @@ public:
 };
 
 /** Parameter for iterator template specialization (undirected traversal) */
-class UnDirIterImpl: public IterImplBase
+template < class N, class E> class UnDirIterImpl: public IterImplBase< N, E>
 {
 public:
     inline void nextEdge();        /**< Move on to the next edge */
-    inline NodeImpl *node() const;     /**< Get node */
+    inline N *node() const;     /**< Get node */
     inline UnDirIterImpl():is_pred( false){};      /**< Default consturctor */
-    inline UnDirIterImpl( NodeImpl *n);/**< Configures iterator with node's first edge */
+    inline UnDirIterImpl( N *n);/**< Configures iterator with node's first edge */
     inline bool operator==(const UnDirIterImpl& o) const /**< Comparison operator */
     { 
         return edge_p == o.edge_p 
@@ -72,9 +72,11 @@ private:
 /**
  * Convinience template for iterating through node's adjacent edges
  */
-template < class EdgeIterImpl> class EdgeIterIface
+template < class N, class E, template < class n_class, class e_class> class EdgeIterImpl> class EdgeIterIface
 {   
 public:
+    /** Constructor from node */
+    inline EdgeIterIface( N *n);
     /** Default constructor */
     inline EdgeIterIface();
     /** Copy constructor */
@@ -86,22 +88,22 @@ public:
     /** Postincrement operator */
     inline EdgeIterIface operator++( int);
     /** Dereferenece operator*/
-    inline EdgeImpl * operator*();
+    inline E * operator*();
     /** Comparison operator */
     inline bool operator==(const EdgeIterIface& o) const; 
     /** Not equals operator */
     inline bool operator!=(const EdgeIterIface& o) const;
     /** Get EdgeImpl */
-    inline EdgeImpl *edge() const;
+    inline E *edge() const;
     /** Get node on the end of edge */
-    inline NodeImpl *node() const;
+    inline N *node() const;
+
 private:
-    /** Constructor from node */
-    inline EdgeIterIface( NodeImpl *e);
-    friend class NodeImpl;
+
+    friend typename N;
 
     /** Parameter-dependent implementation */
-    EdgeIterImpl impl;
+    EdgeIterImpl< N, E> impl;
 };
 
 #endif

@@ -28,13 +28,13 @@ namespace Mem
     {
     public:
         
-        GenericPool();  /**< Create pool with default parameters */
-        ~GenericPool(); /**< Destroy the pool                    */
+        inline GenericPool();  /**< Create pool with default parameters */
+        inline ~GenericPool(); /**< Destroy the pool                    */
                 
-        void* allocate( size_t size); /**< Allocate new memory block */
-        void deallocate( void *ptr);  /**< Free memory block         */
+        inline void* allocate( size_t size); /**< Allocate new memory block */
+        inline void deallocate( void *ptr);  /**< Free memory block         */
 
-        PoolType type() const; /**< Type of the pool */
+        inline PoolType type() const; /**< Type of the pool */
     private:        
         /** Number of used entries */
         EntryNum entry_count;

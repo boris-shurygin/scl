@@ -10,31 +10,19 @@
 #ifndef GraphImpl_INLINE_H
 #define GraphImpl_INLINE_H
 
-/** Delete node from memory pool */
-inline void GraphImpl::deleteNode( NodeImpl *n)
-{
-    node_pool->destroy( n);
-}
-
-/** Delete edge from memory pool */
-inline void GraphImpl::deleteEdge( EdgeImpl *e)
-{
-    edge_pool->destroy( e);
-}
-
 /**
  * Remove node from node list of GraphImpl
  */
 inline void GraphImpl::detachNode( NodeImpl* node)
 {
     assert( isNotNullP( node));
-    assert( node->GraphImpl() == this);
+    assert( node->graph() == this);
 
     if( first_node == node)
     {
        first_node = node->nextNode();
     }
-    node->detachFromGraphImpl();
+    node->detachFromGraph();
     node_num--;
 }
 
@@ -44,13 +32,13 @@ inline void GraphImpl::detachNode( NodeImpl* node)
 inline void GraphImpl::detachEdge( EdgeImpl * edge)
 {
     assert( isNotNullP( edge));
-    assert( edge->GraphImpl() == this);
+    assert( edge->graph() == this);
 
     if( first_edge == edge)
     {
        first_edge = edge->nextEdge();
     }
-    edge->detachFromGraphImpl();
+    edge->detachFromGraph();
     edge_num--;
 }
 
@@ -85,80 +73,104 @@ inline NodeImpl* GraphImpl::firstNode()
     return first_node;
 }
 
-/** Get pool of nodes */
-inline Pool *GraphImpl::nodePool() const
-{
-    return node_pool;
-}
-/** Get pool of edges */
-inline Pool *GraphImpl::edgePool() const
-{
-    return edge_pool;
-}
-
 /**
- * Creation node in GraphImpl implementation
+ * Add node to the graph
  */
-inline NodeImpl * 
-GraphImpl::newNodeImpl( GraphUid id)
+inline void 
+GraphImpl::addNode( NodeImpl *node_p)
 {
-    /**
-     * Check that we have available node id 
-     */
-    assert( edge_next_id < GraphImpl_MAX_NODE_NUM);
-    
-    /** Create node */
-    NodeImpl *node_p = this->createNode( id);
+    /** Check that we have available node id */
+    GRAPH_ASSERTD( node_next_id < GRAPH_MAX_NODE_NUM, "We're out of node identificators");
     
     /** Add node to GraphImpl's list of nodes */
     node_p->attach( first_node);
     first_node = node_p;
     
-    node_num++;
-    
-    /** Make sure that next automatically assigned id will be greater than given id */
-    if ( node_next_id <= id)
-        node_next_id = id + 1;
-    return node_p;
+    ++node_num;
+    ++node_next_id;
 }
 
 /**
- * Creation node in GraphImpl
+ * Add edge to the graph
  */
-inline NodeImpl * 
-GraphImpl::newNode()
-{
-    NodeImpl * node_p = newNodeImpl( node_next_id);
-    return node_p;
-}
-
-/**
- * Create edge between two nodes.
- * We do not support creation of edge with undefined endpoints
- */
-inline EdgeImpl * 
-GraphImpl::newEdgeImpl( NodeImpl * pred, NodeImpl * succ)
+inline void 
+GraphImpl::addEdge( EdgeImpl *edge_p)
 {
     /**
      * Check that we have available edge id 
      */
-    assert( edge_next_id < GraphImpl_MAX_NODE_NUM);
-    EdgeImpl *edge_p = this->createEdge( edge_next_id++, pred, succ);
-    edge_p->attach( EDGE_LIST_GraphImpl, first_edge);
+    GRAPH_ASSERTD( edge_next_id < GRAPH_MAX_EDGE_NUM, "We're out of edge identificators");
+    edge_p->attach( EDGE_LIST_GRAPH, first_edge);
     first_edge = edge_p;
-    edge_num++;
-    return edge_p;
+    ++edge_num;
+    ++edge_next_id;
 }
 
-/**
- * Create edge between two nodes.
- * We do not support creation of edge with undefined endpoints
- */
-inline EdgeImpl * 
-GraphImpl::newEdge( NodeImpl * pred, NodeImpl * succ)
+/* Constructor */
+template < class G, class N, class E> Graph< G, N, E>::Graph()
 {
-    EdgeImpl *edge_p = newEdgeImpl( pred, succ);
-    return edge_p;
+
+};
+
+/** NodeImpl creation overload */
+template < class G, class N, class E> 
+    N * Graph< G, N, E>::newNode()
+{
+    N* node = new ( &node_pool) N( static_cast< G*>(this));
+    addNode( node);
+    return node;
+}
+
+/** EdgeImpl creation overload */
+template < class G, class N, class E> 
+    E * Graph< G, N, E>::newEdge( N *pred, N* succ)
+{
+    E *edge = new ( &edge_pool) E( static_cast< G*>(this), pred, succ);
+    addEdge( edge);
+    return edge;
+} 
+
+/** Delete node from memory pool */
+template < class G, class N, class E> 
+    void Graph< G, N, E>::deleteNode( N *n)
+{
+    node_pool.destroy( n);
+}
+
+/** Delete edge from memory pool */
+template < class G, class N, class E> 
+    void Graph< G, N, E>::deleteEdge( E *e)
+{
+    edge_pool.destroy( e);
+}
+
+/** Get first edge */
+template < class G, class N, class E>
+E*
+Graph< G, N, E>::firstEdge()
+{
+    return static_cast< E*>( GraphImpl::firstEdge());
+}
+
+/** Get first node */
+template < class G, class N, class E>
+N*
+Graph< G, N, E>::firstNode()
+{
+    return static_cast< N*>( GraphImpl::firstNode());
+}
+
+
+template < class G, class N, class E> 
+Graph< G, N, E>::~Graph()
+{
+    for ( N *node = firstNode();
+            isNotNullP( node);)
+    {
+        N* next = node->nextNode();
+        deleteNode( node);
+        node = next;
+    }
 }
 
 #endif /** GraphImpl_INLINE_H */

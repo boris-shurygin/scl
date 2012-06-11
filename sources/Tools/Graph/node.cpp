@@ -13,27 +13,11 @@
 
 NodeImpl::~NodeImpl()
 {
-    EdgeImpl *edge;
-    //out("Deleted NodeImpl");
+    GRAPH_ASSERTD( isNullP(firstSucc()), "Deleted node still has successor edge(s)");
+    GRAPH_ASSERTD( isNullP(firstPred()), "Deleted node still has successor edge(s)");
 
-    /** delete incidient edges */
-    for ( edge = firstSucc(); isNotNullP( edge);)
-    {
-        EdgeImpl* next = edge->nextSucc();
-        //edge->detachFromNode( GRAPH_DIR_DOWN);// EdgeImpl is detached from succ node
-        GraphImpl()->deleteEdge( edge);
-        edge = next;
-    }
-    for ( edge = firstPred(); isNotNullP( edge);)
-    {
-        EdgeImpl* next = edge->nextPred();
-        //edge->detachFromNode( GRAPH_DIR_UP);// EdgeImpl is detached from pred node
-        GraphImpl()->deleteEdge( edge);
-        edge = next;
-    }
-    
     /** delete myself from GraphImpl */
-    GraphImpl_p->detachNode( this);
+    graph()->detachNode( this);
 }
 
 /**

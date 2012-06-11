@@ -14,12 +14,12 @@
 bool uTestGraphImplOwn()
 {
     {
-        AGraph GraphImpl( true);
-        ANode *dummy = GraphImpl.newNode();
-        GraphImpl.deleteNode( dummy);
-        ANode *pred = GraphImpl.newNode();
-        ANode *succ = GraphImpl.newNode();
-        AEdge *edge = GraphImpl.newEdge( pred, succ);
+        AGraph graph;
+        ANode *dummy = graph.newNode();
+        graph.deleteNode( dummy);
+        ANode *pred = graph.newNode();
+        ANode *succ = graph.newNode();
+        AEdge *edge = graph.newEdge( pred, succ);
         
         /** Check node insertion */
         ANode *new_node = edge->insertNode();
@@ -37,29 +37,29 @@ bool uTestGraphImplOwn()
 
     /** Test iterators */
     {
-        AGraph GraphImpl( true);
-        ANode *node1 = GraphImpl.newNode();
-        ANode *node2 = GraphImpl.newNode();
-        ANode *node3 = GraphImpl.newNode();
-        AEdge *edge1 = GraphImpl.newEdge( node1, node2);
-        AEdge *edge2 = GraphImpl.newEdge( node2, node3);
+        AGraph graph;
+        ANode *node1 = graph.newNode();
+        ANode *node2 = graph.newNode();
+        ANode *node3 = graph.newNode();
+        AEdge *edge1 = graph.newEdge( node1, node2);
+        AEdge *edge2 = graph.newEdge( node2, node3);
         
-        for ( NodeImpl::Succ succ_iter = node2->succsBegin(),
+        for ( ANode::Succ succ_iter = node2->succsBegin(),
                          succ_iter_end = node2->succsEnd();
               succ_iter != succ_iter_end;
               ++succ_iter )
         {
             assert( areEqP( *succ_iter, edge2));
         }
-        for ( NodeImpl::Pred pred_iter = node2->predsBegin(),
+        for ( ANode::Pred pred_iter = node2->predsBegin(),
                          pred_iter_end = node2->predsEnd();
               pred_iter != pred_iter_end;
               pred_iter++ )
         {
             assert( areEqP( *pred_iter, edge1));
         }
-        NodeImpl::EdgeIter edge_iter = node2->edgesBegin();
-        NodeImpl::EdgeIter edge_iter_end = node2->edgesEnd();
+        ANode::EdgeIter edge_iter = node2->edgesBegin();
+        ANode::EdgeIter edge_iter_end = node2->edgesEnd();
         assert( edge_iter != edge_iter_end);
         assert( areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
         if ( areEqP( *edge_iter, edge1))
@@ -108,14 +108,14 @@ bool uTestNodeEdge()
  */
 bool uTestMarkers()
 {
-    AGraph GraphImpl( true);
-    ANode *dummy = GraphImpl.newNode();
-    GraphImpl.deleteNode( dummy);
-    ANode *pred = GraphImpl.newNode();
-    ANode *succ = GraphImpl.newNode();
-    AEdge *edge = GraphImpl.newEdge( pred, succ);
-    Marker m = GraphImpl.newMarker();
-    Marker m2 = GraphImpl.newMarker();
+    AGraph graph;
+    ANode *dummy = graph.newNode();
+    graph.deleteNode( dummy);
+    ANode *pred = graph.newNode();
+    ANode *succ = graph.newNode();
+    AEdge *edge = graph.newEdge( pred, succ);
+    Marker m = graph.newMarker();
+    Marker m2 = graph.newMarker();
 
     Marker m_array[ MAX_GraphImpl_MARKERS];
     
@@ -139,26 +139,26 @@ bool uTestMarkers()
     assert( edge->isMarked( m2));
     assert( !edge->isMarked( m));
     
-    GraphImpl.freeMarker( m);
-    GraphImpl.freeMarker( m2);
+    graph.freeMarker( m);
+    graph.freeMarker( m2);
     
     for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        m_array [ i] = GraphImpl.newMarker();
+        m_array [ i] = graph.newMarker();
     }
     for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
     {
-        GraphImpl.freeMarker( m_array[ i]);
+        graph.freeMarker( m_array[ i]);
     }
-    m = GraphImpl.newMarker();
-    GraphImpl.freeMarker( m);
+    m = graph.newMarker();
+    graph.freeMarker( m);
     
     ANode *n;
-    for (  n = GraphImpl.firstNode(); isNotNullP( n);)
+    for (  n = graph.firstNode(); isNotNullP( n);)
     {
         ANode *tmp = n;
         n = n->nextNode();
-        GraphImpl.deleteNode( tmp);
+        graph.deleteNode( tmp);
     }
     return true;
 }
@@ -238,29 +238,29 @@ static bool uTestNumerations()
  */
 bool uTestSave()
 {
-    AGraph GraphImpl( true);
+    AGraph graph;
 
     /** 
-     *  Check basic operation of GraphImpl library
+     *  Check basic operation of graph library
      */
     std::vector<ANode *> nodes;
 
     /** Create nodes and edges */
     for ( int i =0; i<20; i++)
     {
-        nodes.push_back( GraphImpl.newNode());
+        nodes.push_back( graph.newNode());
         if ( i > 0)
         {
-            GraphImpl.newEdge( nodes[ i - 1], nodes[ i]);
+            graph.newEdge( nodes[ i - 1], nodes[ i]);
         }
         if ( i > 1 && i % 2 == 0)
         {
-            GraphImpl.newEdge( nodes[ i - 2], nodes[ i]);
+            graph.newEdge( nodes[ i - 2], nodes[ i]);
         }
     }
-    GraphImpl.newEdge( nodes[ 8], nodes[ 4]);
-    GraphImpl.deleteNode( nodes[ 8]);
-    GraphImpl.debugPrint();
+    graph.newEdge( nodes[ 8], nodes[ 4]);
+    graph.deleteNode( nodes[ 8]);
+    graph.debugPrint();
     return true;
 }
 

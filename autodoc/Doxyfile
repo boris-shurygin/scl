@@ -176,7 +176,7 @@ TAB_SIZE               = 8
 # as commands in the documentation. An alias has the form "name=value".
 # For example adding "sideeffect=\par Side Effects:\n" will allow you to
 # put the command \sideeffect (or @sideeffect) in the documentation, which
-# will result in a user-defined paraGraphImpl with heading "Side Effects:".
+# will result in a user-defined paraGraph with heading "Side Effects:".
 # You can put \n's in the value part of an alias to insert newlines.
 
 ALIASES                =
@@ -1328,7 +1328,7 @@ PERL_PATH              = /usr/bin/perl
 # or super classes. Setting the tag to NO turns the diagrams off. Note that
 # this option is superseded by the HAVE_DOT option below. This is only a
 # fallback. It is recommended to install and use dot, since it yields more
-# powerful GraphImpls.
+# powerful Graphs.
 
 CLASS_DIAGRAMS         = YES
 
@@ -1341,14 +1341,14 @@ CLASS_DIAGRAMS         = YES
 
 MSCGEN_PATH            =
 
-# If set to YES, the inheritance and collaboration GraphImpls will hide
+# If set to YES, the inheritance and collaboration Graphs will hide
 # inheritance and usage relations if the target is undocumented
 # or is not a class.
 
 HIDE_UNDOC_RELATIONS   = YES
 
 # If you set the HAVE_DOT tag to YES then doxygen will assume the dot tool is
-# available from the path. This tool is part of GraphImplviz, a GraphImpl visualization
+# available from the path. This tool is part of Graphviz, a Graph visualization
 # toolkit from AT&T and Lucent Bell Labs. The other options in this section
 # have no effect if this option is set to NO (the default)
 
@@ -1365,7 +1365,7 @@ HAVE_DOT               = NO
 
 DOT_FONTNAME           = FreeSans
 
-# The DOT_FONTSIZE tag can be used to set the size of the font of dot GraphImpls.
+# The DOT_FONTSIZE tag can be used to set the size of the font of dot Graphs.
 # The default size is 10pt.
 
 DOT_FONTSIZE           = 10
@@ -1377,24 +1377,24 @@ DOT_FONTSIZE           = 10
 
 DOT_FONTPATH           =
 
-# If the CLASS_GraphImpl and HAVE_DOT tags are set to YES then doxygen
-# will generate a GraphImpl for each documented class showing the direct and
+# If the CLASS_Graph and HAVE_DOT tags are set to YES then doxygen
+# will generate a Graph for each documented class showing the direct and
 # indirect inheritance relations. Setting this tag to YES will force the
 # the CLASS_DIAGRAMS tag to NO.
 
-CLASS_GraphImpl            = YES
+CLASS_Graph            = YES
 
-# If the COLLABORATION_GraphImpl and HAVE_DOT tags are set to YES then doxygen
-# will generate a GraphImpl for each documented class showing the direct and
+# If the COLLABORATION_Graph and HAVE_DOT tags are set to YES then doxygen
+# will generate a Graph for each documented class showing the direct and
 # indirect implementation dependencies (inheritance, containment, and
 # class references variables) of the class with other documented classes.
 
-COLLABORATION_GraphImpl    = YES
+COLLABORATION_Graph    = YES
 
-# If the GROUP_GraphImplS and HAVE_DOT tags are set to YES then doxygen
-# will generate a GraphImpl for groups, showing the direct groups dependencies
+# If the GROUP_GraphS and HAVE_DOT tags are set to YES then doxygen
+# will generate a Graph for groups, showing the direct groups dependencies
 
-GROUP_GraphImplS           = YES
+GROUP_GraphS           = YES
 
 # If the UML_LOOK tag is set to YES doxygen will generate inheritance and
 # collaboration diagrams in a style similar to the OMG's Unified Modeling
@@ -1402,52 +1402,52 @@ GROUP_GraphImplS           = YES
 
 UML_LOOK               = NO
 
-# If set to YES, the inheritance and collaboration GraphImpls will show the
+# If set to YES, the inheritance and collaboration Graphs will show the
 # relations between templates and their instances.
 
 TEMPLATE_RELATIONS     = NO
 
-# If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_GraphImpl, and HAVE_DOT
-# tags are set to YES then doxygen will generate a GraphImpl for each documented
+# If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDE_Graph, and HAVE_DOT
+# tags are set to YES then doxygen will generate a Graph for each documented
 # file showing the direct and indirect include dependencies of the file with
 # other documented files.
 
-INCLUDE_GraphImpl          = YES
+INCLUDE_Graph          = YES
 
-# If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDED_BY_GraphImpl, and
-# HAVE_DOT tags are set to YES then doxygen will generate a GraphImpl for each
+# If the ENABLE_PREPROCESSING, SEARCH_INCLUDES, INCLUDED_BY_Graph, and
+# HAVE_DOT tags are set to YES then doxygen will generate a Graph for each
 # documented header file showing the documented files that directly or
 # indirectly include this file.
 
-INCLUDED_BY_GraphImpl      = YES
+INCLUDED_BY_Graph      = YES
 
-# If the CALL_GraphImpl and HAVE_DOT options are set to YES then
-# doxygen will generate a call dependency GraphImpl for every global function
+# If the CALL_Graph and HAVE_DOT options are set to YES then
+# doxygen will generate a call dependency Graph for every global function
 # or class method. Note that enabling this option will significantly increase
-# the time of a run. So in most cases it will be better to enable call GraphImpls
-# for selected functions only using the \callGraphImpl command.
+# the time of a run. So in most cases it will be better to enable call Graphs
+# for selected functions only using the \callGraph command.
 
-CALL_GraphImpl             = NO
+CALL_Graph             = NO
 
-# If the CALLER_GraphImpl and HAVE_DOT tags are set to YES then
-# doxygen will generate a caller dependency GraphImpl for every global function
+# If the CALLER_Graph and HAVE_DOT tags are set to YES then
+# doxygen will generate a caller dependency Graph for every global function
 # or class method. Note that enabling this option will significantly increase
 # the time of a run. So in most cases it will be better to enable caller
-# GraphImpls for selected functions only using the \callerGraphImpl command.
+# Graphs for selected functions only using the \callerGraph command.
 
-CALLER_GraphImpl           = NO
+CALLER_Graph           = NO
 
-# If the GraphImplICAL_HIERARCHY and HAVE_DOT tags are set to YES then doxygen
-# will GraphImplical hierarchy of all classes instead of a textual one.
+# If the GraphICAL_HIERARCHY and HAVE_DOT tags are set to YES then doxygen
+# will Graphical hierarchy of all classes instead of a textual one.
 
-GraphImplICAL_HIERARCHY    = YES
+GraphICAL_HIERARCHY    = YES
 
-# If the DIRECTORY_GraphImpl, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES
+# If the DIRECTORY_Graph, SHOW_DIRECTORIES and HAVE_DOT tags are set to YES
 # then doxygen will show the dependencies a directory has on other directories
-# in a GraphImplical way. The dependency relations are determined by the #include
+# in a Graphical way. The dependency relations are determined by the #include
 # relations between the files in the directories.
 
-DIRECTORY_GraphImpl        = YES
+DIRECTORY_Graph        = YES
 
 # The DOT_IMAGE_FORMAT tag can be used to set the image format of the images
 # generated by dot. Possible values are png, jpg, or gif
@@ -1466,31 +1466,31 @@ DOT_PATH               =
 
 DOTFILE_DIRS           =
 
-# The DOT_GraphImpl_MAX_NODES tag can be used to set the maximum number of
-# nodes that will be shown in the GraphImpl. If the number of nodes in a GraphImpl
-# becomes larger than this value, doxygen will truncate the GraphImpl, which is
+# The DOT_Graph_MAX_NODES tag can be used to set the maximum number of
+# nodes that will be shown in the Graph. If the number of nodes in a Graph
+# becomes larger than this value, doxygen will truncate the Graph, which is
 # visualized by representing a node as a red box. Note that doxygen if the
-# number of direct children of the root node in a GraphImpl is already larger than
-# DOT_GraphImpl_MAX_NODES then the GraphImpl will not be shown at all. Also note
-# that the size of a GraphImpl can be further restricted by MAX_DOT_GraphImpl_DEPTH.
+# number of direct children of the root node in a Graph is already larger than
+# DOT_Graph_MAX_NODES then the Graph will not be shown at all. Also note
+# that the size of a Graph can be further restricted by MAX_DOT_Graph_DEPTH.
 
-DOT_GraphImpl_MAX_NODES    = 50
+DOT_Graph_MAX_NODES    = 50
 
-# The MAX_DOT_GraphImpl_DEPTH tag can be used to set the maximum depth of the
-# GraphImpls generated by dot. A depth value of 3 means that only nodes reachable
+# The MAX_DOT_Graph_DEPTH tag can be used to set the maximum depth of the
+# Graphs generated by dot. A depth value of 3 means that only nodes reachable
 # from the root by following a path via at most 3 edges will be shown. Nodes
 # that lay further from the root node will be omitted. Note that setting this
 # option to 1 or 2 may greatly reduce the computation time needed for large
-# code bases. Also note that the size of a GraphImpl can be further restricted by
-# DOT_GraphImpl_MAX_NODES. Using a depth of 0 means no depth restriction.
+# code bases. Also note that the size of a Graph can be further restricted by
+# DOT_Graph_MAX_NODES. Using a depth of 0 means no depth restriction.
 
-MAX_DOT_GraphImpl_DEPTH    = 0
+MAX_DOT_Graph_DEPTH    = 0
 
 # Set the DOT_TRANSPARENT tag to YES to generate images with a transparent
 # background. This is disabled by default, because dot on Windows does not
 # seem to support this out of the box. Warning: Depending on the platform used,
 # enabling this option may lead to badly anti-aliased labels on the edges of
-# a GraphImpl (i.e. they become hard to read).
+# a Graph (i.e. they become hard to read).
 
 DOT_TRANSPARENT        = NO
 
@@ -1503,12 +1503,12 @@ DOT_MULTI_TARGETS      = NO
 
 # If the GENERATE_LEGEND tag is set to YES (the default) Doxygen will
 # generate a legend page explaining the meaning of the various boxes and
-# arrows in the dot generated GraphImpls.
+# arrows in the dot generated Graphs.
 
 GENERATE_LEGEND        = YES
 
 # If the DOT_CLEANUP tag is set to YES (the default) Doxygen will
 # remove the intermediate dot files that are used to generate
-# the various GraphImpls.
+# the various Graphs.
 
 DOT_CLEANUP            = YES

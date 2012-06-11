@@ -48,7 +48,7 @@ RevDir( GraphDir dir)
 #ifdef DIR_INVERTION_LONG_VERSION
     return ( dir == GRAPH_DIR_UP)? GRAPH_DIR_DOWN: GRAPH_DIR_UP; 
 #else
-    return (GraphDir)(dir ^ GRAPH_DIR_UP);
+    return (GraphDir)(dir ^ GRAPH_DIR_DOWN);
 #endif
 }
 
@@ -67,12 +67,12 @@ typedef UInt64 GraphUid;
  * Maximum number of nodes
  * @ingroup GraphBase
  */
-const GraphNum GraphImpl_MAX_NODE_NUM = ( GraphNum)( -1);
+const GraphNum GRAPH_MAX_NODE_NUM = ( GraphNum)( -1);
 /**
  * Maximum number of edges
  * @ingroup GraphBase
  */
-const GraphNum GraphImpl_MAX_EDGE_NUM = ( GraphNum)( -1);
+const GraphNum GRAPH_MAX_EDGE_NUM = ( GraphNum)( -1);
 
 /* Predeclarations of GraphImpl-related classes */
 class GraphImpl;

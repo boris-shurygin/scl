@@ -220,7 +220,7 @@ namespace Mem
     void* 
     FixedPool< size>::allocate( size_t sz)
     {
-        MEM_ASSERTD( sizeof( size) == sz,
+        MEM_ASSERTD( size == sz,
                      "Allocation size doesn't match FixedPool's template parameter size");
         void *ptr = NULL;
         /* If we don't have a free chunk */
@@ -254,7 +254,7 @@ namespace Mem
         /* 2. Check entry count */
         MEM_ASSERTD( entry_count > 0, "Trying deallocate entry of an empty pool"); 
 
-        MemImpl::FixedEntry< size> *e =(MemImpl::FixedEntry< size> *) ptr;
+        MemImpl::FixedEntry< size> *e =static_cast< MemImpl::FixedEntry< size> *>( MemImpl::Entry< size>::getEntryPtr( ptr));
         
         /* 3. Get chunk of the deallocated entry */
         MemImpl::Chunk< size> *chunk = entryChunk( e);

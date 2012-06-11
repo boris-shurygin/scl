@@ -10,6 +10,6 @@
 #ifndef TOOLS_IFFACE_H
 #define TOOLS_IFFACE_H
 
-#include "GraphImpl/graph_iface.h"
+#include "Graph/graph_iface.h"
 
 #endif /** TOOLS_IFFACE_H */

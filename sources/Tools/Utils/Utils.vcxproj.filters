@@ -75,6 +75,7 @@
     <ClInclude Include="mem_alloc_policy.h">
       <Filter>mem</Filter>
     </ClInclude>
+    <ClInclude Include="techniques.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">

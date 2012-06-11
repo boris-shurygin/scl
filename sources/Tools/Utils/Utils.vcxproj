@@ -57,6 +57,7 @@
     <ClInclude Include="mem_generic_pool.h" />
     <ClInclude Include="host.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="techniques.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="list.h" />
     <ClInclude Include="mem.h" />

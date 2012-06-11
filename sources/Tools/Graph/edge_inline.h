@@ -9,6 +9,16 @@
 #ifndef EDGE_INLINE_H
 #define EDGE_INLINE_H
 
+/** Constructor implementation */
+inline EdgeImpl::EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ):
+    uid( _graph_p->edge_next_id), graph_p(_graph_p)
+{
+    GRAPH_ASSERTD( checkNodes( _pred, _succ),
+                    "Predecessor and sucessor used in edge construction belong to different GraphImpls");
+    setPred( _pred);
+    setSucc( _succ);
+}
+
 /**
  * Low level correction of node's edge list in corresponding direction
  */
@@ -18,7 +28,7 @@ EdgeImpl::detachFromNode( GraphDir dir)
     if ( isNotNullP( node( dir)))
     {
         NodeImpl *n = node( dir);
-        n->deleteEdgeInDir( RevDir( dir), (EdgeImpl* )this);
+        n->deleteEdgeInDir( RevDir( dir), this);
         detach( RevDir( dir));
         nodes[ dir] = 0;
     }
@@ -36,8 +46,7 @@ EdgeImpl::setNode( NodeImpl *n, GraphDir dir)
     nodes[ dir] = n;
     if ( n != NULL)
     {
-        n->AddEdgeInDir( (EdgeImpl *)this, 
-            ((dir == GRAPH_DIR_UP)? GRAPH_DIR_DOWN : GRAPH_DIR_UP));
+        n->AddEdgeInDir( this, RevDir( dir));
     }
 }
 
@@ -97,15 +106,15 @@ inline NodeImpl *EdgeImpl::succ() const
 /**
  * Return next edge of the GraphImpl
  */
-inline EdgeImpl* EdgeImpl::nextEdge()
+inline EdgeImpl* EdgeImpl::nextEdge() const
 {
-    return next( EDGE_LIST_GraphImpl);
+    return next( EDGE_LIST_GRAPH);
 }
 
 /**
  * Return next edge of the same node in given direction
  */
-inline EdgeImpl* EdgeImpl::nextEdgeInDir( GraphDir dir)
+inline EdgeImpl* EdgeImpl::nextEdgeInDir( GraphDir dir) const
 {
     GRAPH_ASSERTD( dir < GRAPH_DIRS_NUM, "Wrong direction parameter");
     GRAPH_ASSERTD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
@@ -118,7 +127,7 @@ inline EdgeImpl* EdgeImpl::nextEdgeInDir( GraphDir dir)
 /**
  * Next successor
  */
-inline EdgeImpl* EdgeImpl::nextSucc()
+inline EdgeImpl* EdgeImpl::nextSucc() const
 {
     return nextEdgeInDir( GRAPH_DIR_DOWN);
 }
@@ -126,7 +135,7 @@ inline EdgeImpl* EdgeImpl::nextSucc()
 /**
  * Next predecessor
  */
-inline EdgeImpl* EdgeImpl::nextPred()
+inline EdgeImpl* EdgeImpl::nextPred() const
 {
     return nextEdgeInDir( GRAPH_DIR_UP);
 }
@@ -138,16 +147,71 @@ inline EdgeImpl* EdgeImpl::nextPred()
  * Original edge goes to new node. 
  * Return new node.
  */
-inline NodeImpl *
-EdgeImpl::insertNode()
+template < class G, class N, class E> 
+N * 
+Edge< G, N, E>::insertNode()
 {
-    NodeImpl *tmp_succ = succ();
-    NodeImpl *new_node = graph()->newNode();
+    N *tmp_succ = succ();
+    N *new_node = static_cast< G*>(graph())->newNode();
     detachFromNode( GRAPH_DIR_DOWN);
     setSucc( new_node);
-    graph()->newEdge( new_node, tmp_succ);
+    static_cast< G*>(graph())->newEdge( new_node, tmp_succ);
     return new_node;
 }
 
+/** Get node in specified direction  */
+template < class G, class N, class E> 
+inline N * 
+Edge< G, N, E>::node( GraphDir dir) const
+{
+    return static_cast< N*>( EdgeImpl::node( dir));
+}
+    
+/** Get predecessor node of edge */
+template < class G, class N, class E> 
+N * 
+Edge< G, N, E>::pred() const
+{
+    return static_cast< N*>( EdgeImpl::pred());
+}
 
+/** Get successor node of edge   */
+template < class G, class N, class E> 
+N * 
+Edge< G, N, E>::succ() const
+{
+return static_cast< N*>( EdgeImpl::succ());
+}
+
+/** Return next edge of the GraphImpl */
+template < class G, class N, class E> 
+E * 
+Edge< G, N, E>::nextEdge() const
+{
+    return static_cast< E*>( EdgeImpl::nextEdge());
+}
+
+/** Return next edge of the same node in given direction  */
+template < class G, class N, class E> 
+E * 
+Edge< G, N, E>::nextEdgeInDir( GraphDir dir) const
+{
+    return static_cast< E*>( EdgeImpl::nextEdgeInDir( dir));
+}
+
+/** Next successor */
+template < class G, class N, class E> 
+E * 
+Edge< G, N, E>::nextSucc() const
+{
+    return static_cast< E*>( EdgeImpl::nextSucc());
+}
+
+/** Next predecessor */
+template < class G, class N, class E> 
+E * 
+Edge< G, N, E>::nextPred() const
+{
+    return static_cast< E*>( EdgeImpl::nextPred());
+}
 #endif

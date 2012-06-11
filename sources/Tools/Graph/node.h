@@ -88,8 +88,8 @@ public:
     
     inline GraphUid id() const;  /**< Get node's unique ID           */
     inline GraphImpl * graph() const;/**< Get node's corresponding GraphImpl */
-    inline NodeImpl* nextNode();     /**< Next node in GraphImpl's list      */
-    inline NodeImpl* prevNode();     /**< Prev node in GraphImpl's list      */
+    inline NodeImpl* nextNode() const;     /**< Next node in GraphImpl's list      */
+    inline NodeImpl* prevNode() const;     /**< Prev node in GraphImpl's list      */
     
     /** Add edge to node in specified direction */
     inline void AddEdgeInDir( EdgeImpl *edge, GraphDir dir);
@@ -98,10 +98,10 @@ public:
     inline void AddSucc( EdgeImpl *edge); /**< Add successor edge   */
  
     /** Get first edge in given direction */
-    inline EdgeImpl* firstEdgeInDir( GraphDir dir);
+    inline EdgeImpl* firstEdgeInDir( GraphDir dir) const;
     
-    inline EdgeImpl* firstSucc(); /**< Get first successor edge    */
-    inline EdgeImpl* firstPred(); /**< Get first predecessor edge  */
+    inline EdgeImpl* firstSucc() const; /**< Get first successor edge    */
+    inline EdgeImpl* firstPred() const; /**< Get first predecessor edge  */
      
     /** Deletion of edge in specified direction */
     void deleteEdgeInDir( GraphDir dir, EdgeImpl* edge);
@@ -111,44 +111,56 @@ public:
     
     virtual void debugPrint(); /**< Print node in DOT format to stdout */
 
-    /* Iterator types */
-    typedef EdgeIterIface< SuccIterImpl> Succ;      /**< Iterator for successors       */
-    typedef EdgeIterIface< PredIterImpl> Pred;      /**< Iterator for predecessors     */
-    typedef EdgeIterIface< UnDirIterImpl> EdgeIter; /**< Undirected iterator for edges */
-     
-    inline Succ succsBegin(); /**< Create iterator for first succ       */
-    inline Succ succsEnd();   /**< Create iterator pointing to succ end */
-    
-    inline Pred predsBegin(); /**< Create iterator for first succ       */
-    inline Pred predsEnd();   /**< Create iterator pointing to succ end */
-
-    inline EdgeIter edgesBegin(); /**< Create iterator for first succ       */
-    inline EdgeIter edgesEnd();   /**< Create iterator pointing to succ end */
-
 protected:
     /** We can't create nodes separately, do it through newNode method of GraphImpl */
-    inline NodeImpl( GraphImpl *_GraphImpl_p, GraphUid _id);
+    inline NodeImpl( GraphImpl *_graph_p);
 private:
     /** GraphImpl class controls nodes */
     friend class GraphImpl;    
     
     /** Detach this node from GraphImpl's node list */
-    inline void detachFromGraphImpl();
+    inline void detachFromGraph();
 
     /* Connection with inclusive GraphImpl */
-    GraphUid uid;   /**< Unique id        */
-    GraphImpl * GraphImpl_p;/**< Pointer to GraphImpl */
+    GraphUid uid;       /**< Unique id        */
+    GraphImpl * graph_p;/**< Pointer to GraphImpl */
 
     /** First edges in GraphImpl's directions */
     EdgeImpl *first_edge[ GRAPH_DIRS_NUM];
 };
 
+
+
 template < class G, class N, class E> class Node: 
     public NodeImpl,
-    public PoolObj<N, UseCustomFixedPool>
+    public PoolObj< N, UseCustomFixedPool>
 {
+public:
+    
+    inline Node( G* g): NodeImpl( g){};
+    virtual ~Node();
+
+    inline G * graph()  const;/**< Get node's corresponding GraphImpl */
+    inline N* nextNode() const;     /**< Next node in GraphImpl's list      */
+    inline N* prevNode() const;     /**< Prev node in GraphImpl's list      */
+    
+    inline E* firstSucc() const; /**< Get first successor edge    */
+    inline E* firstPred() const; /**< Get first predecessor edge  */
+
+    /* Iterator types */
+    typedef EdgeIterIface< N, E, SuccIterImpl> Succ;      /**< Iterator for successors       */
+    typedef EdgeIterIface< N, E, PredIterImpl> Pred;      /**< Iterator for predecessors     */
+    typedef EdgeIterIface< N, E, UnDirIterImpl> EdgeIter; /**< Undirected iterator for edges */
+     
+    inline typename Succ succsBegin(); /**< Create iterator for first succ       */
+    inline typename Succ succsEnd();   /**< Create iterator pointing to succ end */
+    
+    inline typename Pred predsBegin(); /**< Create iterator for first succ       */
+    inline typename Pred predsEnd();   /**< Create iterator pointing to succ end */
+
+    inline typename EdgeIter edgesBegin(); /**< Create iterator for first succ       */
+    inline typename EdgeIter edgesEnd();   /**< Create iterator pointing to succ end */
 
 };
     
-
 #endif /* NODE_H */

@@ -42,11 +42,40 @@ bool uTestSingle()
     return true;
 }
 
+namespace UTestFinal
+{
+    class Base: Final< Base>
+    {
+
+    };
+
+    class Derived: public Base
+    {};
+}
+
+/**
+ * Various tests
+ */
+bool uTestMisc()
+{
+    // We can create objects of the class Base
+    UTestFinal::Base b;
+    
+    // This should trigger compiler error saying that the 
+    // FinalHook<Base>() constructor is not accessible from Derived 
+    // UTestFinal::Derived *d = new UTestFinal::Derived(); // <-- compilation error (C2248 in MSVC 10) 
+    return true;
+}
+
 /**
  * Test Utils package
  */
 bool uTestUtils()
 {
+    /** Various tests of auxiliary routines */
+    if ( !uTestMisc())
+        return false;
+    
     /** test options parser */
     if ( !uTestConf())
         return false;

@@ -11,11 +11,11 @@
 
 /**
  * @class GraphImpl
- * @brief Basic representation of GraphImpl
+ * @brief Basic representation of graph
  * @ingroup GraphBase
  *
  * @par 
- * The GraphImpl class represents GraphImpl as a whole. As one can expect GraphImpl has @ref NodeImpl "nodes"
+ * The GraphImpl class represents graph as a whole. As one can expect GraphImpl has @ref NodeImpl "nodes"
  * and @ref EdgeImpl edges which impement the directed GraphImpl data structure. For traversing nodes
  * and edges they are linked in two lists. One can traverse these lists using firstNode() and firstEdge()
  * routines with calling NodeImpl::nextNode() EdgeImpl::nextEdge() in a loop.
@@ -115,15 +115,6 @@ public:
     /** Destructor */
     virtual ~GraphImpl();
 
-    /** Create new node in GraphImpl */
-    inline NodeImpl * newNode();
-
-    /**
-     * Create edge between two nodes.
-     * We do not support creation of edge with undefined endpoints
-     */
-    inline EdgeImpl * newEdge( NodeImpl * pred, NodeImpl * succ);
-    
     /** Remove node from node list of GraphImpl */
     inline void detachNode( NodeImpl* node);
 
@@ -145,41 +136,43 @@ public:
     /** Print GraphImpl to stdout in DOT format */
     virtual void debugPrint();
 
+    /** Add existing node */
+    inline void addNode( NodeImpl *n);
+    
+    /** Add existing edge */
+    inline void addEdge( EdgeImpl *e);
 private:
-    /**
-     * Implementation of node creation
-     */
-    inline NodeImpl * newNodeImpl( GraphUid id);
-    /**
-     * Implementation of edge creation
-     */
-    inline EdgeImpl * newEdgeImpl( NodeImpl * pred, NodeImpl * succ);
-
+    
     /** Clear unused markers from marked objects */
-    void clearMarkersInObjects();
+    virtual void clearMarkersInObjects();
 
     /** Clear unused numerations from numbered objects */
-    void clearNumerationsInObjects();
+    virtual void clearNumerationsInObjects();
 
     /** First node */
     NodeImpl* first_node;
     /** Number of nodes */
     GraphNum node_num;
-    
+    /** First edge pointer */
+    EdgeImpl* first_edge;
+    /** Number of edge in graph */
+    GraphNum edge_num; 
+
+protected:
     /** 
      *  Id of next node. Incremented each time you create a node,
      *  needed for nodes to have unique id. In DEBUG mode node id is not reused.
      */
     GraphUid node_next_id;
 
-    /* List of edges and its iterator */
-    EdgeImpl* first_edge;
-    GraphNum edge_num;
-    
-    /** Id of next edge. Incremented each time you create an edge,
+    /**
+     * Id of next edge. Incremented each time you create an edge,
      *  needed for edges to have unique id. In DEBUG mode edge id is not reused.
      */
     GraphUid edge_next_id;
+
+    friend EdgeImpl::EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ);
+    friend NodeImpl::NodeImpl( GraphImpl *_graph_p);
 };
 
 
@@ -190,11 +183,26 @@ public:
     /** Deafult constructor */
     Graph();
 
-    /** Node creation routine. Uses node's default constructor */
-    inline N * createNode( GraphUid _id);
-    /** Edge creation routine. Uses edge's default constructor */
-    inline E * createEdge( GraphUid _id, N *_pred, N* _succ);
+    /** Destructor */
+    ~Graph();
 
+    /** Delete node from memory pool */
+    inline void deleteNode( N *n);
+    
+    /** Delete edge from memory pool */
+    inline void deleteEdge( E *e);
+
+    /** Create new node in GraphImpl */
+    inline N *newNode();
+
+    /** Create edge between two nodes */
+    inline E *newEdge( N *pred, N *succ);
+
+    /** Get first edge */
+    inline E* firstEdge();
+
+    /** Get first node */
+    inline N* firstNode();
 private:
     /** Get pool of nodes */
     inline TypedPool<N> &nodePool() const;
@@ -207,22 +215,4 @@ private:
     TypedPool<E> edge_pool;
 };
 
-
-template < class G, class N, class E> Graph< G, N, E>::Graph()
-{
-
-};
-
-/** NodeImpl creation overload */
-template < class G, class N, class E> 
-    N * Graph< G, N, E>::createNode( GraphUid _id)
-{
-    return new ( &node_pool) ANode( this, _id);
-}
-/** EdgeImpl creation overload */
-template < class G, class N, class E> 
-    E * Graph< G, N, E>::createEdge( GraphUid _id, N *_pred, N* _succ)
-{
-    return new ( &edge_pool) AEdge( this, _id, static_cast<ANode*>( _pred), static_cast< ANode *>(_succ));
-} 
 #endif /* GRAPH_H*/
