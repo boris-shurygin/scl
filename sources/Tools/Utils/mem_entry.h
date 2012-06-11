@@ -27,12 +27,14 @@ namespace MemImpl
     class DebugInfo
     {
     public:
+        inline DebugInfo();
 #ifdef MEM_CHECK_POOL                
         inline Pool* pool() const;      /**< Get pointer to pool */
         inline void setPool( Pool* pl); /**< Set pointer to pool */
 #endif        
 
 #ifdef USE_REF_COUNTERS
+        inline void resetCount();          /**< Set number of references to zero */
         inline RefNumber refCount() const; /**< Get the number of references */
         inline void incRefCount();         /**< Increase reference count */
         inline void decRefCount();         /**< Decrease reference count */
@@ -65,7 +67,19 @@ namespace MemImpl
 #endif 
     };
 
+    inline DebugInfo::DebugInfo():
+        ref_count( 0),
+        _pool( 0)
+    {
+    
+    }
+
 #ifdef USE_REF_COUNTERS
+    /** Set ref count to zero */
+    inline void DebugInfo::resetCount()
+    {
+        ref_count = 0;
+    }
     /** Get the number of references */
     inline RefNumber DebugInfo::refCount() const
     {
@@ -79,7 +93,7 @@ namespace MemImpl
     /** Decrease reference count */
     inline void DebugInfo::decRefCount()
     {
-        assertd( ref_count > 0);
+        MEM_ASSERTD( ref_count > 0, "Ref counter is null before decrement attempt");
         ref_count--;
     }
 #endif

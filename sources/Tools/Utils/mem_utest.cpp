@@ -10,9 +10,8 @@
 
 using namespace Mem;
 
-#ifdef TEST_SMART_POINTERS
 /** Test object class */
-class TestObj: public Obj
+class TestObj: public PoolObj< TestObj> // Configured to use default fixed pool
 {
     
 public:    
@@ -23,7 +22,7 @@ public:
 /**
  * Reference to object
  */
-typedef Ref< TestObj> ObjRef;
+typedef Ptr< TestObj> ObjPtr;
 
 /**
  * Test smart pointers
@@ -31,49 +30,38 @@ typedef Ref< TestObj> ObjRef;
 static bool
 uTestRef()
 {
+    DefaultPool< TestObj>::init();
+
     /** Test smart pointers behaviour */
-    ObjRef ref = new TestObj(); /** Test constructor from pointer */
-    ObjRef ref2; /** Test default constructor */
+    ObjPtr ref = new TestObj(); /** Test constructor from pointer */
+    ObjPtr ref2; /** Test default constructor */
+    ObjPtr ref3; /** Test default constructor */
 
     /** Test operator bool() */
-    ASSERT( !ref2 && ref);
-    ASSERT( ref2 == NULL && ref != NULL);
+    ASSERTD( !ref2 && ref);
+    ASSERTD( ref2 == NULL && ref != NULL);
     /** Test copy constructor */
     ref2 = ref;
-    ASSERT( ref2 && ref);
+    ASSERTD( ref2 && ref);
     /** Test operator == ( ref) */
-    ASSERT( ref == ref2);
+    ASSERTD( ref == ref2);
 
     /** Test operator -> */
     ref->a = 2;
+
 #ifdef USE_REF_COUNTERS
-    ASSERT_X( ref->refCount() == 2, "reference utest", "incorrect reference counter");
-#endif    
-    bool catched = false;
+    ASSERT_XD( ref.refCount() == 2, "reference utest", "incorrect reference counter");
+#endif
 
-    /** Test exception generation */
-    try
-    {
-            delete ref;
-    } catch( int a)
-    {
-            catched = true;
-            ref2->a = a;
-    }
-    ASSERT_X( catched, "reference utest", "Exception is not catched");
+    ref2.setNull();
+    ref3 = ref;
+    
+    ref = 0;
 
-    /** Test ref to pointer conversion and Obj destructor */
-    delete ref2;
+    ref3.destroy();
+    DefaultPool< TestObj>::deinit();
     return true;
 }
-#else
-static bool
-uTestRef()
-{
-    return true;
-}
-
-#endif /* TEST_SMART_POINTERS */
 
 /** Sample object used as a baseclass for more complicated pool-stored objects */
 class PoolBase

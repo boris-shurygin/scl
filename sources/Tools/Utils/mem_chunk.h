@@ -81,6 +81,10 @@ namespace MemImpl
     {
         FixedEntry< size> *e = NULL;
         
+        /*
+         * This loop basicly does new ( mem_ptr)[MAX_CHUNK_ENTRIES_NUM] for entries 
+         * should be rewritten in explicit manner, with operator new overriding for Entry class
+         */
         for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
         {
             e = ( FixedEntry< size> *)( (UInt8 *) this 
@@ -96,6 +100,9 @@ namespace MemImpl
             e->debugInfo().setAllocEvent( 0);
             e->debugInfo().setDeallocEvent( 0);
 #endif 
+#ifdef USE_REF_COUNTERS
+            e->debugInfo().resetCount();
+#endif
         }
         MEM_ASSERTD( e->nextFree() == UNDEF_POS, "Chunk size constant and undefined value do not match");
         free_entry = 0;

@@ -316,14 +316,10 @@ namespace Mem
         /* 1. Check null pointer( in DEBUG mode) */
         MEM_ASSERTD( isNotNullP( ptr), "Destruction tried on NULL pointer");
                
-#ifdef CHECK_DELETE
-        /* 2. Mark for deletion */
-        ptr->toBeDeleted();
-#endif
-        /* 3. Call destructor */
+        /* 2. Call destructor */
         ptr->~Type();
         
-        /* 4. Free memory */
+        /* 3. Free memory */
         deallocate( ptr);
     }
 

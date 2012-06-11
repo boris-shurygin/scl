@@ -29,31 +29,9 @@ namespace Mem
     template < class ClientType, template < class T> class AllocationPolicy = UseDefaultFixedPool>
     class PoolObj: public AllocationPolicy< ClientType>
     {
-#ifdef CHECK_DELETE
-        bool to_be_deleted;
-#endif  
-        public:
-#ifdef CHECK_DELETE
-        /** Default constructor */
-        PoolObj(): to_be_deleted( false){};
-
-        /** Mark for deletion */
-        inline void toBeDeleted()
-        {
-            MEM_ASSERTD( !to_be_deleted, "Tried to mark object for deletion more than once");
-            to_be_deleted = true;
-        }
-#else
-        /** Default constructor */
-        inline PoolObj(){};
-#endif
+    public:
         /** Destructor is to be called by 'destroy' routine of pool class */
-        virtual ~PoolObj()
-        {
-#ifdef CHECK_DELETE
-            MEM_ASSERTD( to_be_deleted, "Deleted pool object not through pool interface. Probably operator delete used.");
-#endif        
-        }
+        virtual ~PoolObj(){};
     };
 };
 
