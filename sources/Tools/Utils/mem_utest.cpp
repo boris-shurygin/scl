@@ -57,6 +57,8 @@ uTestRef()
     ref3 = ref;
     
     ref = 0;
+    
+    MEM_ASSERTD( isNullP( ref), "ref pointer should be null at this point");
 
     ref3.destroy();
     DefaultPool< TestObj>::deinit();

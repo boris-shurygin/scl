@@ -44,7 +44,7 @@ EdgeImpl::setNode( NodeImpl *n, GraphDir dir)
 {
     assert( isNotNullP( n));
     nodes[ dir] = n;
-    if ( n != NULL)
+    if ( isNotNullP( n))
     {
         n->AddEdgeInDir( this, RevDir( dir));
     }

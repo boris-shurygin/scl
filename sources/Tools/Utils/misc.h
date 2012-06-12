@@ -18,6 +18,7 @@ inline bool isNotNullP( const void *pointer)
 {
     return pointer != NULL;
 }
+
 /**
  * Check if pointer is null
  * @ingroup Misc

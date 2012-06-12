@@ -110,7 +110,8 @@ namespace Mem
     Ptr< PtrObj>::Ptr( const Ptr< PtrObj>& orig): ptr( orig.ptr)
     {
 #ifdef USE_REF_COUNTERS
-        MemImpl::getDebugInfo( ptr)->incRefCount();
+        if ( ptr != 0)
+            MemImpl::getDebugInfo( ptr)->incRefCount();
 #endif
     }
 
@@ -119,20 +120,20 @@ namespace Mem
     inline Ptr< PtrObj> &
     Ptr< PtrObj>::operator=( const Ptr< PtrObj>& orig)
     {
+#ifdef USE_REF_COUNTERS
         /* Self assignment check */
         if ( this != &orig)
         {
-#ifdef USE_REF_COUNTERS
             /** Decrement object's ref count */
             if ( ptr != 0)
                 MemImpl::getDebugInfo( ptr)->decRefCount();
-#endif  
-         ptr = orig.ptr;
-#ifdef USE_REF_COUNTERS
+            ptr = orig.ptr;
             if ( ptr != 0)
                 MemImpl::getDebugInfo( ptr)->incRefCount();
-#endif  
         }
+#else
+        ptr = orig.ptr;
+#endif  
         return *this;
     }
     /**
@@ -214,17 +215,17 @@ namespace Mem
     template < class PtrObj>
     inline Ptr< PtrObj>::operator PtrObj*()
     {
-                    PtrObj *ret_val = ptr;
+        PtrObj *ret_val = ptr;
         MEM_ASSERTD( ret_val != NULL, "Convertion of null pointer to plain pointer"
                                       " is prohibited. Use isNull() method");
+#ifdef USE_REF_COUNTERS
         /** Decrement object's ref count */
         if ( ptr != 0)
         {
-#ifdef USE_REF_COUNTERS
             MemImpl::getDebugInfo( ptr)->decRefCount();    
-#endif
             ptr = 0;
         }
+#endif
         return ret_val;
     }
 
@@ -239,7 +240,7 @@ namespace Mem
             MemImpl::DebugInfo *info = MemImpl::getDebugInfo( ptr);
             info->decRefCount();
             
-            MEM_ASSERTD( info->refCount() == 0, "Counter should be zero at destruction moment. Indicate hanging pointers");
+            MEM_ASSERTD( info->refCount() == 0, "Counter should be zero at destruction moment. Indicates hanging pointers");
         }
 #endif
         delete ptr;
@@ -280,4 +281,25 @@ namespace Mem
     }
 #endif
 };
+
+
+/**
+ * Check if smart pointer is not null
+ * @ingroup Misc
+ */
+template< class T> bool isNullP( const Mem::Ptr< T> ptr)
+{
+    return ptr.isNull();
+}
+
+
+/**
+ * Check if smart pointer is not null
+ * @ingroup Misc
+ */
+template< class T> bool isNotNullP( const Mem::Ptr< T> ptr)
+{
+    return ptr.isNotNull();
+}
+
 #endif /* MEM_REF_H */
