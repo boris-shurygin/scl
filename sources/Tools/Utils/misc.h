@@ -68,6 +68,10 @@ template<class Value> inline Value abs( Value val)
 
 /**
  * Conversion of string to signed 32-bit integer with success check
+ * @ingroup Misc
+ *
+ * @param str string to convert
+ * @param ok  pointer to bool, used for error check 
  */
 inline Int32 convStr2Int32( std::string str, bool *ok = NULL)
 {
@@ -88,6 +92,10 @@ inline Int32 convStr2Int32( std::string str, bool *ok = NULL)
 
 /**
  * Conversion of string to signed 64-bit integer with success check
+ * @ingroup Misc
+ *
+ * @param str string to convert
+ * @param ok  pointer to bool, used for error check 
  */
 inline Int64 convStr2Int64( std::string str, bool *ok = NULL)
 {
@@ -108,6 +116,10 @@ inline Int64 convStr2Int64( std::string str, bool *ok = NULL)
 
 /**
  * Conversion of string to double with success check
+ * @ingroup Misc
+ *
+ * @param str string to convert
+ * @param ok  pointer to bool, used for error check 
  */
 inline Double convStr2Double( std::string str, bool *ok = NULL)
 {
