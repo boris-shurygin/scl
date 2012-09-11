@@ -21,6 +21,7 @@ template <class FinalType> class Final;
  */
 template <class FinalType> class FinalHook
 {
+public:
     /** Private constructor */
     FinalHook(){};
 
@@ -28,8 +29,8 @@ template <class FinalType> class FinalHook
      * Decaration of friends so that we could
      * access the constructor from specified classes
      */
-    friend typename FinalType;
-    friend typename Final< FinalType>;
+    //friend FinalType;
+    //friend Final< FinalType>;
 };
 
 /**

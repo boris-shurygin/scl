@@ -78,21 +78,11 @@
     <ClCompile Include="lib.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Graph\Graph.vcxproj">
+    <ProjectReference Include="..\Graph\Graph.vcxproj">
       <Project>{04d4eead-2118-4889-9d9d-620c7c46f8ed}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
-    <ProjectReference Include="Utils\Utils.vcxproj">
+    <ProjectReference Include="..\Utils\Utils.vcxproj">
       <Project>{21e81e7e-0e8b-4cbb-bbfb-9319cca98ec4}</Project>
-      <Private>true</Private>
-      <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

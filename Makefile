@@ -4,14 +4,14 @@
 # @author Boris Shurygin
 #
 # Main targets are:
-#   all - build gui and console versinos of Showgraph in debug and release modes
-#   debug (not yet implemented) - build debug vesion of ShowGraph (both gui and console)
-#   release - build release version of ShowGraph
+#   all - build SCL in debug and release modes
+#   debug (not yet implemented) - build debug vesion of SCL
+#   release - build release version of SCL
 #   doc - run doxygen to generate documentation from source code
 #
 #   targets are buit in two steps:
 #     1. Generate additional .cpp files by QT tools ( MOC and RCC)
-#     2. Compile all .cpp to .o and link them with Qt libs
+#     2. Compile all .cpp to .o and link them
 #
 
 
@@ -33,73 +33,41 @@ export DOXYGEN = doxygen
 export BIN_DIR := bin
 export OBJECT_DIR := objects
 export SOURCES := sources
-export MOC_DIR = $(OBJECT_DIR)/mocs
 export DEBUG_OBJECTS_DIR := $(OBJECT_DIR)/debug
 export RELEASE_OBJECTS_DIR := $(OBJECT_DIR)/release
-export QT_DIR = /usr/local/Trolltech/Qt-4.7.0
-
-#QT tools
-export MOC = $(QT_DIR)/bin/moc
-export RCC = $(QT_DIR)/bin/rcc
 	
 HEADERS:= $(wildcard $(SOURCES)/*/*.h $(SOURCES)/Core/*/*.h)
-MOC_HEADERS:= $(patsubst $(SOURCES)/%,$(MOC_DIR)/%,$(HEADERS))
-MOCS= $(MOC_HEADERS:.h=.moc)
 
-RESOURCES:=$(wildcard $(SOURCES)/*/*.qrc)
-QRC:= $(patsubst $(SOURCES)/%,$(MOC_DIR)/%,$(RESOURCES))
-RCCS=$(QRC:.qrc=.rcc)
-	
 #
 # All targets
 #
-all: release debug unittest
-	
-#showgraphcl showgraphd showgraphcld
+all: release debug
 
+#	
 #Debug targets
-debug: showgraphd showgraphcld
+#
+debug: utestd
 
-showgraphd: gen showgraphd_impl
+utestd: gen utestd_impl
 
-showgraphcld: gen showgraphcld_impl
-
-showgraphd_impl showgraphcld_impl:
+utestd_impl:
 	$(MAKE) -f $(MAKEFILE_IMPL) $@
 
+#
+# Additional generation target (if ever needed)
+#
+gen:
+
+#
 # Release targets
-release: showgraph showgraphcl
+#
+release: utest
 
-# Unit Test
-unittest:
+utest: gen utest_impl
 
-showgraph: gen showgraph_impl
-
-showgraphcl: gen showgraphcl_impl
-
-showgraph_impl showgraphcl_impl:
+utest_impl:
 	$(MAKE) -f $(MAKEFILE_IMPL) $@
 
-#
-# This part generates new CPP files from headers that have Q_OBJECT usage
-#
-# run QT meta-object compiler on headers to generate additional .cpp files.
-# list of created files can be found in NEW_MOCS variable later
-gen: $(MOCS) $(RCCS)
-
-# rule for moc run
-$(MOC_DIR)/%.moc: $(SOURCES)/%.h
-	@echo [moc] $*.h
-	@$(MKDIR) -p $(dir $@)
-	@$(TOUCH) $@
-	@(! $(GREP) -q Q_OBJECT $< || $(MOC) $< -o $(SOURCES)/$*_moc.cpp)
-# rule for resource compiler
-$(MOC_DIR)/%.rcc: $(SOURCES)/%.qrc
-	@echo [rcc] $*.qrc
-	@$(MKDIR) -p $(dir $@)
-	@$(TOUCH) $@
-	@$(RCC) $< -o $(<:.qrc=.cpp)
-	
 #
 # Documentation
 #

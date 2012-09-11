@@ -152,14 +152,14 @@ public:
     typedef EdgeIterIface< N, E, PredIterImpl> Pred;      /**< Iterator for predecessors     */
     typedef EdgeIterIface< N, E, UnDirIterImpl> EdgeIter; /**< Undirected iterator for edges */
      
-    inline typename Succ succsBegin(); /**< Create iterator for first succ       */
-    inline typename Succ succsEnd();   /**< Create iterator pointing to succ end */
+    inline Succ succsBegin(); /**< Create iterator for first succ       */
+    inline Succ succsEnd();   /**< Create iterator pointing to succ end */
     
-    inline typename Pred predsBegin(); /**< Create iterator for first succ       */
-    inline typename Pred predsEnd();   /**< Create iterator pointing to succ end */
+    inline Pred predsBegin(); /**< Create iterator for first succ       */
+    inline Pred predsEnd();   /**< Create iterator pointing to succ end */
 
-    inline typename EdgeIter edgesBegin(); /**< Create iterator for first succ       */
-    inline typename EdgeIter edgesEnd();   /**< Create iterator pointing to succ end */
+    inline EdgeIter edgesBegin(); /**< Create iterator for first succ       */
+    inline EdgeIter edgesEnd();   /**< Create iterator pointing to succ end */
 
 };
     

@@ -342,7 +342,7 @@ EdgeIterIface< N, E, EdgeIterImpl>::operator++()
 template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 {
     GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
-    edge_p = edge_p->nextPred();
+    this->edge_p = this->edge_p->nextPred();
 }
 
 
@@ -350,26 +350,26 @@ template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 template < class N, class E> void SuccIterImpl< N, E>::nextEdge()
 {
     GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
-    edge_p = edge_p->nextSucc();
+    this->edge_p = this->edge_p->nextSucc();
 }
 
 /** Next edge in undirected edges traversal */
 template < class N, class E> void UnDirIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     
-    if ( is_pred && isNullP( edge_p->nextPred()))
+    if ( this->is_pred && isNullP( this->edge_p->nextPred()))
     {
-        is_pred = false;
-        edge_p = edge_p->succ()->firstSucc();
+        this->is_pred = false;
+        this->edge_p = this->edge_p->succ()->firstSucc();
     } else
     {
-        if ( is_pred)
+        if ( this->is_pred)
         {
-            edge_p = edge_p->nextPred();
+            this->edge_p = this->edge_p->nextPred();
         } else
         {
-            edge_p = edge_p->nextSucc();
+            this->edge_p = this->edge_p->nextSucc();
         }
     }
 }
@@ -377,49 +377,49 @@ template < class N, class E> void UnDirIterImpl< N, E>::nextEdge()
 /** Get node on the end of edge */
 template < class N, class E> N * SuccIterImpl< N, E>::node() const
 {
-    return edge()->succ();
+    return this->edge()->succ();
 }
 
 /** Get node on the end of edge */
 template < class N, class E> N * PredIterImpl< N, E>::node() const
 {
-    return edge()->pred();
+    return this->edge()->pred();
 }
 
 /** Get node in UnDir traversal of node's edges */
 template < class N, class E> N * UnDirIterImpl< N, E>::node() const
 {
-    if ( is_pred)
+    if ( this->is_pred)
     {
-        return edge()->pred();
+        return this->edge()->pred();
     } else
     {
-        return edge()->succ();
+        return this->edge()->succ();
     }    
 }
 
 /** Constructor gets first succ */
 template < class N, class E> SuccIterImpl< N, E>::SuccIterImpl( N *n)
 {
-    edge_p = n->firstSucc();
+    this->edge_p = n->firstSucc();
 }
 
 /** Constructor gets first pred */
 template < class N, class E> PredIterImpl< N, E>::PredIterImpl( N *n)
 {
-    edge_p = n->firstPred();
+    this->edge_p = n->firstPred();
 }
 
 
 /** Constructor gets first edge for undirected edges iteration */
 template < class N, class E> UnDirIterImpl< N, E>::UnDirIterImpl( N *n)
 {
-    edge_p = n->firstPred();
-    is_pred = true;
-    if ( isNullP( edge_p)) 
+    this->edge_p = n->firstPred();
+    this->is_pred = true;
+    if ( isNullP( this->edge_p)) 
     {
-        is_pred = false;
-        edge_p = n->firstSucc();
+        this->is_pred = false;
+        this->edge_p = n->firstSucc();
     } 
 }
 

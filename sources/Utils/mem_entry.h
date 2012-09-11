@@ -67,9 +67,23 @@ namespace MemImpl
 #endif 
     };
 
-    inline DebugInfo::DebugInfo():
-        ref_count( 0),
+    inline DebugInfo::DebugInfo()
+#ifdef USE_REF_COUNTERS 
+#  ifdef        MEM_CHECK_POOL
+        :
+#  endif
+#endif
+#ifdef USE_REF_COUNTERS
+    ref_count( 0)
+#endif
+#ifdef USE_REF_COUNTERS 
+#  ifdef        MEM_CHECK_POOL
+        ,
+#  endif
+#endif
+#ifdef MEM_CHECK_POOL
         _pool( 0)
+#endif
     {
     
     }
@@ -188,11 +202,12 @@ namespace MemImpl
     Entry< size>::getEntryPtr( void *data_ptr)
     {
         MEM_ASSERTD( isNotNullP( data_ptr), "Data pointer can't be null");
-        size_t offset = offsetof( Entry< size>, data);
+        size_t offset = (size_t)&((Entry<size> *)0)->data;//offsetof( Entry< size>, data);
         void *entry_ptr =  (UInt8 *)data_ptr - offset;
         return ( Entry< size> *)entry_ptr;
     }
-    
+
+#ifdef USE_DEBUG_INFO
     /** Routine for getting pointer to debug info by pointer to data */
     inline DebugInfo *getDebugInfo( void *data_ptr)
     {
@@ -201,7 +216,7 @@ namespace MemImpl
 
         return Entry<8>::getEntryPtr( data_ptr)->debugInfoP(); // Entry size shouldn't matter
     }
-
+#endif
     /**
      * Private constructor to prevent direct creation of such objects
      */

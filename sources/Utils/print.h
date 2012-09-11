@@ -5,9 +5,6 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include <cstdio>
-#include <cstdarg>
-
 namespace PrintUtils
 {
     /** Print to file */

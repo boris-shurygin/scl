@@ -44,7 +44,7 @@ bool uTestConf()
 
     /** Check options values */
     assert( conf->unknownOptsNum() == 2); // Check number of unknown arguments
-    assert( !(conf->option( "output")->string().compare("file")));
+    assert( !(conf->option( "output")->stringVal().compare("file")));
     Option *int_opt = conf->option( "integer");
     assert( int_opt->isDefined());
     assert( int_opt->intVal()== 80);

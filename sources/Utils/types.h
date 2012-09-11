@@ -50,7 +50,7 @@ typedef int Int32;                /* 32 bit signed */
 typedef unsigned int UInt32;      /* 32 bit unsigned */
 typedef float Float;              /* Single-precision floating point value */
 typedef double Double;            /* Double-precision floating point value */
-#if defined(OS_WIN) && !defined(CC_GNU)
+#if defined(OS_WIN32) && !defined(CC_GNU)
 #  define INT64_C(c) c ## i64    /* signed 64 bit constant */
 #  define UINT64_C(c) c ## ui64   /* unsigned 64 bit constant */
 typedef __int64 Int64;            /* 64 bit signed */

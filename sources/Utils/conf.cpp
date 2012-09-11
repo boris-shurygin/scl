@@ -44,7 +44,7 @@ Option::printWithValue( ostream &stream)
             break;
         case OPT_INT:    stream << intVal();       break;
         case OPT_FLOAT:  stream << floatVal();     break;
-        case OPT_STRING: stream << this->string(); break;
+        case OPT_STRING: stream << this->stringVal(); break;
         default:
             break;
     }

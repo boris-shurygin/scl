@@ -75,7 +75,7 @@ namespace Mem
         ~FixedPool();
                 
         /** Allocate new memory block */
-        void* allocate( size_t size);
+        void* allocate( size_t alloc_size);
         /** Free memory block */
         void deallocate( void *ptr);
         /** Type of the pool */

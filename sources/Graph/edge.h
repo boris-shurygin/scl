@@ -144,6 +144,7 @@ template < class G, class N, class E> class Edge:
 public:    
 
     Edge( G* g, N* pred, N* succ): EdgeImpl( g, pred, succ){};
+    ~Edge(){};
 
     /** Insert node on this edge */
     inline N *insertNode();

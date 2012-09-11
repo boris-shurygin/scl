@@ -42,6 +42,7 @@ bool uTestSingle()
     return true;
 }
 
+#if 0
 namespace UTestFinal
 {
     class Base: Final< Base>
@@ -52,18 +53,21 @@ namespace UTestFinal
     class Derived: public Base
     {};
 }
+#endif
 
 /**
  * Various tests
  */
 bool uTestMisc()
 {
+#if 0 
     // We can create objects of the class Base
     UTestFinal::Base b;
     
     // This should trigger compiler error saying that the 
     // FinalHook<Base>() constructor is not accessible from Derived 
-    // UTestFinal::Derived *d = new UTestFinal::Derived(); // <-- compilation error (C2248 in MSVC 10) 
+    UTestFinal::Derived *d = new UTestFinal::Derived(); // <-- compilation error (C2248 in MSVC 10) 
+#endif
     return true;
 }
 

@@ -32,21 +32,17 @@ namespace Mem
 
         /** Destructor */
         virtual ~ObjAllocPolicy(){};
-    private:
-        /** Copy constructor disabled*/
-        ObjAllocPolicy( ObjAllocPolicy &obj){};
-        /** Assignment disabled */
-        ObjAllocPolicy& operator = ( const ObjAllocPolicy& obj){ return *this;};
-        /** Default operator 'new' is disabled */
+
+        /** Default operator 'new' */
         void *operator new ( size_t size){};
-        /** Default operator 'delete' is disabled */
+        /** Default operator 'delete' */
         void operator delete( void *ptr){};
         
-        /** Default operator 'new' is disabled */
+        /** Default operator 'new' */
         void *operator new[] ( size_t size){};
-        /** Default operator 'delete' is disabled */
+        /** Default operator 'delete' */
         void operator delete[] ( void *ptr){};
-        
+
         /** Placement new */
         inline void *operator new ( size_t size, Pool* pool){};
         /**
@@ -55,6 +51,11 @@ namespace Mem
          *          It is needed for freeing memory in case of exceptions in constructor
          */
         inline void operator delete( void *ptr, Pool* pool){};
+    private:
+        /** Copy constructor disabled*/
+        ObjAllocPolicy( ObjAllocPolicy &obj){};
+        /** Assignment disabled */
+        ObjAllocPolicy& operator = ( const ObjAllocPolicy& obj){ return *this;};
     };
 
 
@@ -71,11 +72,9 @@ namespace Mem
                                            "was selected for the object with specialization of PoolObj");
              return DefaultPool< T>::ptr()->allocate( size);
         }
-        /** Default operator 'delete' is disabled */
-        void operator delete( void *ptr, size_t size)
+        /** Operator 'delete' deallocationg from default pool */
+        void operator delete( void *ptr)
         {
-            MEM_ASSERTD( sizeof( T) == size, "Size passed as new parameter must be equal to the one that"
-                                          "was selected for the object with specialization of PoolObj");
             DefaultPool< T>::ptr()->deallocate( ptr);
         }
     };
@@ -86,13 +85,13 @@ namespace Mem
     template < class T> class UseGenericPool: public ObjAllocPolicy
     {
         public:
-        /** Default operator 'new' is disabled */
+        /** Operator 'new' */
         void *operator new( size_t size)
         {
              return DefaultGenericPool::ptr()->allocate( size);
         }
-        /** Default operator 'delete' is disabled */
-        void operator delete( void *ptr, size_t size)
+        /** Operator 'delete' */
+        void operator delete( void *ptr)
         {
             DefaultGenericPool::ptr()->deallocate( ptr);
         }
@@ -122,6 +121,9 @@ namespace Mem
         {
              static_cast< FixedPool< sizeof( T)>*>(pool)->deallocate( ptr);
         }
+
+        /** Default operator 'delete' */
+        void operator delete( void *ptr){};
     };
 };
 

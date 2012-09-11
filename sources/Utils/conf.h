@@ -163,7 +163,7 @@ public:
         string_val = val;
     }
     /** Get string value of option */
-    inline string string() const
+    inline string stringVal() const
     {
         ASSERTD( _type == OPT_STRING);
         return string_val;

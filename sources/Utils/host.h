@@ -20,7 +20,9 @@
 #include <string>
 #include <map>
 #include <list>
-using namespace std;
+#include <cstdio>
+#include <cstdarg>
 
+using namespace std;
 
 #endif /* UTILS_HOST_H */

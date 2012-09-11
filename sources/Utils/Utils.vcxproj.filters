@@ -90,5 +90,16 @@
     <Filter Include="raw_list">
       <UniqueIdentifier>{595145e2-e4bf-4158-88d8-9f75b6a0b014}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Make">
+      <UniqueIdentifier>{da3817da-acd0-4b20-8505-51bfd704224c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Makefile-impl">
+      <Filter>Make</Filter>
+    </None>
+    <None Include="..\..\..\Makefile">
+      <Filter>Make</Filter>
+    </None>
   </ItemGroup>
 </Project>

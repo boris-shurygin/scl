@@ -144,7 +144,12 @@ inline void LogControl::log( LogId id, char *mess, ...)
         /* Fill buffer with formatted string */
         va_list args;
         va_start( args, mess);
+
+ #if defined (OS_WIN32) && !defined(CC_GNU) /* Windows */
         vsnprintf_s( buf, max_buf_size - 1, mess, args);
+#else /* Linux */
+        vsnprintf( buf, max_buf_size - 1, mess, args);
+#endif
         va_end( args);
 
         /* Print string to stream */

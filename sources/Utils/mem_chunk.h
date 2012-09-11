@@ -66,7 +66,7 @@ namespace MemImpl
         /** For some reason GCC asks for it :( */
         inline void operator delete( void* mem);
         /** Placement new */
-        inline void *operator new ( size_t size, void* mem);
+        inline void *operator new ( size_t alloc_size, void* mem);
         /**
          * Operator 'delete' corresponding to placement new
          * WARNING: Compiler won't call this for deletion. 
@@ -111,7 +111,7 @@ namespace MemImpl
     /** Placement new */
     template < size_t size> 
     void*
-    Chunk< size>::operator new ( size_t size, void* mem)
+    Chunk< size>::operator new ( size_t alloc_size, void* mem)
     {
         return mem;
     }

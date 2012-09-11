@@ -35,7 +35,7 @@ public:
     inline PredIterImpl( N *n);   /**< Configures iterator with node's first pred */
     inline bool operator==(const PredIterImpl& o) const /**< Comparison operator */
     { 
-        return edge_p == o.edge_p;
+        return this->edge_p == o.edge_p;
     }
 };
 /** Parameter for iterator template specialization (succ traversal) */
@@ -48,7 +48,7 @@ public:
     inline SuccIterImpl( N *n);   /**< Configures iterator with node's first succ */
     inline bool operator==(const SuccIterImpl& o) const /**< Comparison operator */
     { 
-        return edge_p == o.edge_p;
+        return this->edge_p == o.edge_p;
     }
 };
 
@@ -62,8 +62,8 @@ public:
     inline UnDirIterImpl( N *n);/**< Configures iterator with node's first edge */
     inline bool operator==(const UnDirIterImpl& o) const /**< Comparison operator */
     { 
-        return edge_p == o.edge_p 
-               && is_pred == o.is_pred;
+        return this->edge_p == o.edge_p 
+               && this->is_pred == o.is_pred;
     }
 private:
     bool is_pred;
@@ -97,10 +97,6 @@ public:
     inline E *edge() const;
     /** Get node on the end of edge */
     inline N *node() const;
-
-private:
-
-    friend typename N;
 
     /** Parameter-dependent implementation */
     EdgeIterImpl< N, E> impl;
