@@ -211,7 +211,7 @@ namespace MemImpl
     /** Routine for getting pointer to debug info by pointer to data */
     inline DebugInfo *getDebugInfo( void *data_ptr)
     {
-        MEM_ASSERTD( offsetof( Entry<8>, data) == offsetof( Entry<63>, data),
+        MEM_ASSERTD( ((size_t)&((Entry<8> *)0)->data) == ((size_t)&((Entry<63> *)0)->data),
                      "Debug info offsets should be equal for every possible entry size");
 
         return Entry<8>::getEntryPtr( data_ptr)->debugInfoP(); // Entry size shouldn't matter
@@ -256,7 +256,7 @@ namespace MemImpl
     /** Set busy flag */
     template< size_t size>
     void
-    Entry< size>::setBusy( bool busy = true)
+    Entry< size>::setBusy( bool busy)
     {
         is_busy = busy;
     }

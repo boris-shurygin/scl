@@ -106,7 +106,7 @@ void LogControl::enable( LogId id)
         
         if ( !already_opened)
         {
-            fb[ id].open ( fname[ id], ios::out);
+            fb[ id].open ( fname[ id].c_str(), ios::out);
             stream[ id] = new ostream(&fb[ id]);
             unique_name[ id] = true;
         }

@@ -341,7 +341,7 @@ EdgeIterIface< N, E, EdgeIterImpl>::operator++()
 /** Next pred */
 template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     this->edge_p = this->edge_p->nextPred();
 }
 
@@ -349,7 +349,7 @@ template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 /** Next succ */
 template < class N, class E> void SuccIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     this->edge_p = this->edge_p->nextSucc();
 }
 

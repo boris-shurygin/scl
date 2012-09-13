@@ -48,12 +48,12 @@ RELEASE_DEPS = $(RELEASE_SRC_NAMES:.cpp=.d)
 utestd_impl: $(DEBUG_OBJS)
 	@echo [linking] utestd
 	@$(MKDIR) -p $(BIN_DIR)
-	$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/scld $(DEBUG_OBJS) $(DEBUG_LIBS)
+	$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/utestd $(DEBUG_OBJS) $(DEBUG_LIBS)
 
 utest_impl: $(RELEASE_OBJS)
 	@echo [linking] utest
 	@$(MKDIR) -p $(BIN_DIR)
-	$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/scl $(RELEASE_OBJS) $(RELEASE_LIBS)
+	$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/utest $(RELEASE_OBJS) $(RELEASE_LIBS)
 
 #
 # Rules that run CPP compiler

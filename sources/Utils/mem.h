@@ -110,10 +110,10 @@ namespace Mem
 };
 
 #include "mem_mgr.h"          /** Memory manager */
-#include "mem_ref.h"          /** Memory reference */
 #include "mem_chunk.h"        /** Memory chunk class */
 #include "mem_pool.h"         /** Memory pool */
 #include "mem_entry.h"        /** Memory entry class */
+#include "mem_ref.h"          /** Memory reference */
 #include "mem_fixed_pool.h"   /** Memory pool */
 #include "mem_generic_pool.h" /** Memory pool */
 #include "mem_alloc_policy.h" /** Allocation policies */
