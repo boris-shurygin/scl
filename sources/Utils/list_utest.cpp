@@ -1,5 +1,5 @@
 /**
- * @file: conf_utest.cpp 
+ * @file: list_utest.cpp 
  * Implementation of testing for lists 
  */
 /*
@@ -7,20 +7,28 @@
  */
 #include "utils_iface.h"
 
-/** Define the lists we use */
-enum ListTypes
+static const int LIST_TEST_NUM_NODES = 100000;
+
+
+/** Define the  lists we use */
+enum TestListType
 {
     LIST_ONE,
     LIST_TWO,
+    LIST_THREE,
     LISTS_NUM
 };
+
+static const TestListType TEST_LIST_ID = LIST_THREE; 
+
 /** Derive class of linked objects */
-class classA: public MListIface< classA, MListItem<LISTS_NUM>, LISTS_NUM>
+class ClassAList: public MListIface< ClassAList, LISTS_NUM>
 {
 
 };
+
 /** Derive class from A */
-class B: public MListIface< B, classA, LISTS_NUM>
+class B: public ClassAList
 {
 
 };
@@ -50,6 +58,75 @@ static bool uTestMList()
     return true;
 }
 
+
+struct MyMListDummy: public MListIface<MyMListDummy, LISTS_NUM>
+{
+public:
+    long long i;
+    long long j;
+    MyMListDummy( MyMListDummy* ptr): MListIface<MyMListDummy, LISTS_NUM>( TEST_LIST_ID, ptr){};
+};
+
+struct MySListDummy: public SListIface<MySListDummy>
+{
+public:
+    long long i;
+    long long j;
+    MySListDummy( MySListDummy* ptr): SListIface<MySListDummy>( ptr){};
+};
+
+class TListAList{};
+class TListBList{};
+
+class TListA: public ListItem< TListA, TListAList>
+{
+    int a;
+};
+
+class TListB: public TListA, public ListItem< TListB, TListBList>
+{
+    typedef ListItem< TListB, TListBList> List;
+public:
+    int i;
+
+    TListB( TListB* ptr): ListItem< TListB, TListBList>( ptr){};
+
+    TListB *nextB(){ return static_cast< TListB *>( List::next() );}
+    TListB *prevB(){ return static_cast< TListB *>( List::prev() );}
+};
+
+/**
+ * Test tagged list
+ */
+static bool 
+uTestTagList()
+{
+    TListB *list = NULL;
+    TListB *list_temp = NULL;
+
+    /* Create */
+    for ( int i = 0; i < LIST_TEST_NUM_NODES; i++)
+    {
+        list = new TListB( list);
+    }
+    /* Iterate and access data */
+    list_temp = list;
+    while ( isNotNullP( list_temp))
+    {
+        list_temp->i = 10;
+        list_temp = list_temp->nextB();
+    }
+    /* Iterate and access data */
+    list_temp = list;
+    while ( isNotNullP( list_temp))
+    {
+        TListB *next = list_temp->nextB();
+        delete list_temp;
+        list_temp = next;
+    }
+    return true;
+}
+
 /**
  * Test list classes operation
  */
@@ -58,5 +135,9 @@ bool uTestList()
     if ( !uTestMList())
         return false;
 
+    if ( !uTestTagList())
+        return false;
+    
     return true;
 }
+

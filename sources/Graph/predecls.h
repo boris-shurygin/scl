@@ -3,11 +3,11 @@
  * Predeclarations for interface of GraphImpl library
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
-#ifndef GraphImpl_PREDECLS_H
-#define GraphImpl_PREDECLS_H
+#ifndef GRAPH_PREDECLS_H
+#define GRAPH_PREDECLS_H
 
 #include "../Utils/utils_iface.h"
 
@@ -20,7 +20,15 @@ using namespace Mem;
  * @ingroup GraphBase
  */
 #if !defined(GRAPH_ASSERTD)
-#    define GRAPH_ASSERTD(cond, what) ASSERT_XD(cond, "GraphImpl", what)
+#    define GRAPH_ASSERTD(cond) ASSERT_XD(cond, "Graph", "")
+#endif
+
+/**
+ * Debug assert for GraphImpl library
+ * @ingroup GraphBase
+ */
+#if !defined(GRAPH_ASSERTXD)
+#    define GRAPH_ASSERTXD(cond, what) ASSERT_XD(cond, "Graph", what)
 #endif
 
 /**
@@ -44,7 +52,7 @@ enum GraphDir
 inline GraphDir
 RevDir( GraphDir dir)
 {
-    GRAPH_ASSERTD( GRAPH_DIRS_NUM == 2, "GraphImpl implementation is suited for two directions only");
+    GRAPH_ASSERTXD( GRAPH_DIRS_NUM == 2, "GraphImpl implementation is suited for two directions only");
 #ifdef DIR_INVERTION_LONG_VERSION
     return ( dir == GRAPH_DIR_UP)? GRAPH_DIR_DOWN: GRAPH_DIR_UP; 
 #else

@@ -3,7 +3,7 @@
  * Implementation of memory entry
  */
 /*
- * Utils/Mem library in ShowGraphImpl tool
+ * Utils/Mem library in compiler prototype project tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once

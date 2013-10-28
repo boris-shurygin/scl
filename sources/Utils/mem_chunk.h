@@ -3,7 +3,7 @@
  * Implementation of memory chunk
  */
 /*
- * Utils/Mem library in ShowGraphImpl tool
+ * Utils/Mem library in compiler prototype project tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
@@ -34,7 +34,6 @@ namespace MemImpl
      */
     template< size_t size> class Chunk: 
         public MListIface< Chunk< size>, // List client data
-                           MListItem< CHUNK_LISTS_NUM>, // base class: pure multi-list item
                            CHUNK_LISTS_NUM > // Lists number
     {
         void *dummy_ptr; //for alignment

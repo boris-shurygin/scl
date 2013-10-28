@@ -3,7 +3,7 @@
  * EdgeImpl class definition
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef EDGE_H
@@ -55,7 +55,6 @@ enum EdgeListType
  */
 class EdgeImpl: 
     public MListIface< EdgeImpl, // List item
-                       MListItem< EDGE_LISTS_NUM>, // base class: pure multi-list item
                        EDGE_LISTS_NUM >, // Lists number                      
     public Marked,
     public Numbered

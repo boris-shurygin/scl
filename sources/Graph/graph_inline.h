@@ -1,22 +1,22 @@
 /**
- * @file: GraphImpl_inline.h
+ * @file: GRAPH_inline.h
  * Implementation of GraphImpl's inline routines
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpl in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
-#ifndef GraphImpl_INLINE_H
-#define GraphImpl_INLINE_H
+#ifndef GRAPH_INLINE_H
+#define GRAPH_INLINE_H
 
 /**
  * Remove node from node list of GraphImpl
  */
 inline void GraphImpl::detachNode( NodeImpl* node)
 {
-    assert( isNotNullP( node));
-    assert( node->graph() == this);
+    GRAPH_ASSERTD( isNotNullP( node));
+    GRAPH_ASSERTD( node->graph() == this);
 
     if( first_node == node)
     {
@@ -31,8 +31,8 @@ inline void GraphImpl::detachNode( NodeImpl* node)
  */
 inline void GraphImpl::detachEdge( EdgeImpl * edge)
 {
-    assert( isNotNullP( edge));
-    assert( edge->graph() == this);
+    GRAPH_ASSERTD( isNotNullP( edge));
+    GRAPH_ASSERTD( edge->graph() == this);
 
     if( first_edge == edge)
     {
@@ -45,7 +45,7 @@ inline void GraphImpl::detachEdge( EdgeImpl * edge)
 /**
  * Return node quantity
  */
-inline GraphNum GraphImpl::nodeCount() const
+inline GraphNum GraphImpl::numNodes() const
 {
     return node_num;
 }
@@ -53,7 +53,7 @@ inline GraphNum GraphImpl::nodeCount() const
 /**
  * Return edge quantity
  */
-inline GraphNum GraphImpl::edgeCount() const
+inline GraphNum GraphImpl::numEdges() const
 {
     return edge_num;
 }
@@ -80,7 +80,7 @@ inline void
 GraphImpl::addNode( NodeImpl *node_p)
 {
     /** Check that we have available node id */
-    GRAPH_ASSERTD( node_next_id < GRAPH_MAX_NODE_NUM, "We're out of node identificators");
+    GRAPH_ASSERTXD( node_next_id < GRAPH_MAX_NODE_NUM, "We're out of node identificators");
     
     /** Add node to GraphImpl's list of nodes */
     node_p->attach( first_node);
@@ -99,7 +99,7 @@ GraphImpl::addEdge( EdgeImpl *edge_p)
     /**
      * Check that we have available edge id 
      */
-    GRAPH_ASSERTD( edge_next_id < GRAPH_MAX_EDGE_NUM, "We're out of edge identificators");
+    GRAPH_ASSERTXD( edge_next_id < GRAPH_MAX_EDGE_NUM, "We're out of edge identificators");
     edge_p->attach( EDGE_LIST_GRAPH, first_edge);
     first_edge = edge_p;
     ++edge_num;
@@ -173,4 +173,4 @@ Graph< G, N, E>::~Graph()
     }
 }
 
-#endif /** GraphImpl_INLINE_H */
+#endif /** GRAPH_INLINE_H */

@@ -27,8 +27,7 @@ typedef Ptr< TestObj> ObjPtr;
 /**
  * Test smart pointers
  */
-static bool
-uTestRef()
+static bool uTestRef()
 {
     DefaultPool< TestObj>::init();
 
@@ -38,19 +37,19 @@ uTestRef()
     ObjPtr ref3; /** Test default constructor */
 
     /** Test operator bool() */
-    ASSERTD( !ref2 && ref);
-    ASSERTD( ref2 == NULL && ref != NULL);
+    ASSERT( !ref2 && ref);
+    ASSERT( ref2 == NULL && ref != NULL);
     /** Test copy constructor */
     ref2 = ref;
-    ASSERTD( ref2 && ref);
+    ASSERT( ref2 && ref);
     /** Test operator == ( ref) */
-    ASSERTD( ref == ref2);
+    ASSERT( ref == ref2);
 
     /** Test operator -> */
     ref->a = 2;
 
 #ifdef USE_REF_COUNTERS
-    ASSERT_XD( ref.refCount() == 2, "reference utest", "incorrect reference counter");
+    ASSERT_X( ref.refCount() == 2, "POOL_UTEST", "incorrect reference counter");
 #endif
 
     ref2.setNull();
@@ -58,7 +57,7 @@ uTestRef()
     
     ref = 0;
     
-    MEM_ASSERTD( isNullP( ref), "ref pointer should be null at this point");
+    ASSERT_X( isNullP( ref), "POOL_UTEST", "ref pointer should be null at this point");
 
     ref3.destroy();
     DefaultPool< TestObj>::deinit();
@@ -105,8 +104,7 @@ public:
 /**
  * Test memory pools
  */
-static bool
-uTestPools()
+static bool uTestPools()
 {
 
     TypedPool< MyPoolObj> *pool = new TypedPool< MyPoolObj>();

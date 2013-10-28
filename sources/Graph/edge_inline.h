@@ -3,7 +3,7 @@
  * Implementation of EdgeImpl class inline routines
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef EDGE_INLINE_H
@@ -13,7 +13,7 @@
 inline EdgeImpl::EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ):
     uid( _graph_p->edge_next_id), graph_p(_graph_p)
 {
-    GRAPH_ASSERTD( checkNodes( _pred, _succ),
+    GRAPH_ASSERTXD( checkNodes( _pred, _succ),
                     "Predecessor and sucessor used in edge construction belong to different GraphImpls");
     setPred( _pred);
     setSucc( _succ);
@@ -42,7 +42,7 @@ EdgeImpl::detachFromNode( GraphDir dir)
 inline void 
 EdgeImpl::setNode( NodeImpl *n, GraphDir dir)
 {
-    assert( isNotNullP( n));
+    GRAPH_ASSERTD( isNotNullP( n));
     nodes[ dir] = n;
     if ( isNotNullP( n))
     {
@@ -116,10 +116,10 @@ inline EdgeImpl* EdgeImpl::nextEdge() const
  */
 inline EdgeImpl* EdgeImpl::nextEdgeInDir( GraphDir dir) const
 {
-    GRAPH_ASSERTD( dir < GRAPH_DIRS_NUM, "Wrong direction parameter");
-    GRAPH_ASSERTD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
+    GRAPH_ASSERTXD( dir < GRAPH_DIRS_NUM, "Wrong direction parameter");
+    GRAPH_ASSERTXD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
                    "Enums of direction and edge lists are not having right values");
-    GRAPH_ASSERTD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
+    GRAPH_ASSERTXD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
                    "Enums of direction and edge lists are not having right values");
     return next( dir);
 }

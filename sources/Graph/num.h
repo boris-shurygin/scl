@@ -73,7 +73,7 @@
  * @sa Mark
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 /**
@@ -429,8 +429,7 @@ inline NumValue NumManager::findNextFreeValue()
          */
         if ( res == NUM_VAL_LAST)
         {
-            assert< NumErrorType> ( !reached_limit, 
-                                       NUM_ERROR_OUT_OF_VALUES);
+            GRAPH_ASSERTXD( !reached_limit, "Numerations out of values");
             clearNumerationsInObjects();
             reached_limit = true;            
         }

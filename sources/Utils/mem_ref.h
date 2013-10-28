@@ -3,7 +3,7 @@
  * Implementation of memory reference template
  */
 /*
- * Utils library in ShowGraphImpl tool
+ * Utils library in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
@@ -297,7 +297,7 @@ template< class T> bool isNullP( const Mem::Ptr< T> ptr)
  * Check if smart pointer is not null
  * @ingroup Misc
  */
-template< class T> bool isNotNullP( const Mem::Ptr< T> ptr)
+template< class T> bool isNotNullPtr( const Mem::Ptr< T> ptr)
 {
     return ptr.isNotNull();
 }

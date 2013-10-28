@@ -3,7 +3,7 @@
  * Declaration of iterators for node's adjacent edges traversal and related classes
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once

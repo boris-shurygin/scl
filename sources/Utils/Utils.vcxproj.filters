@@ -12,21 +12,11 @@
     <ClCompile Include="mem_pool.cpp">
       <Filter>mem</Filter>
     </ClCompile>
-    <ClCompile Include="conf.cpp">
-      <Filter>options</Filter>
-    </ClCompile>
-    <ClCompile Include="conf_utest.cpp">
-      <Filter>options</Filter>
-    </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>logs</Filter>
-    </ClCompile>
-    <ClCompile Include="log_utest.cpp">
-      <Filter>logs</Filter>
-    </ClCompile>
     <ClCompile Include="list_utest.cpp">
       <Filter>raw_list</Filter>
     </ClCompile>
+    <ClCompile Include="log_utest.cpp" />
+    <ClCompile Include="log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asrt.h" />
@@ -60,12 +50,6 @@
     <ClInclude Include="mem_ref.h">
       <Filter>mem</Filter>
     </ClInclude>
-    <ClInclude Include="conf.h">
-      <Filter>options</Filter>
-    </ClInclude>
-    <ClInclude Include="log.h">
-      <Filter>logs</Filter>
-    </ClInclude>
     <ClInclude Include="list.h">
       <Filter>raw_list</Filter>
     </ClInclude>
@@ -76,16 +60,11 @@
       <Filter>mem</Filter>
     </ClInclude>
     <ClInclude Include="techniques.h" />
+    <ClInclude Include="log.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">
       <UniqueIdentifier>{2d1a2479-2ad7-49bf-83de-2ead74662978}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="options">
-      <UniqueIdentifier>{91ab5be2-4fd3-4551-b4f7-0173fc104cf3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="logs">
-      <UniqueIdentifier>{6a841dfa-87dd-4419-a045-90803a699cc0}</UniqueIdentifier>
     </Filter>
     <Filter Include="raw_list">
       <UniqueIdentifier>{595145e2-e4bf-4158-88d8-9f75b6a0b014}</UniqueIdentifier>

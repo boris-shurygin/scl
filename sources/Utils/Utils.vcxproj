@@ -40,6 +40,7 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\objects\$(Configuration)\$(ProjectName)\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\objects\$(Configuration)\$(ProjectName)\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\objects\$(Configuration)\$(ProjectName)\</IntDir>
+    <IncludePath Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">E:\DISTRIBS\boost_1_51_0;$(VCInstallDir)include;$(VCInstallDir)atlmfc\include;$(WindowsSdkDir)include;$(FrameworkSDKDir)\include;</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -52,11 +53,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="asrt.h" />
-    <ClInclude Include="conf.h" />
+    <ClInclude Include="log.h" />
     <ClInclude Include="mem_alloc_policy.h" />
     <ClInclude Include="mem_generic_pool.h" />
     <ClInclude Include="host.h" />
-    <ClInclude Include="log.h" />
     <ClInclude Include="techniques.h" />
     <ClInclude Include="types.h" />
     <ClInclude Include="list.h" />
@@ -74,8 +74,6 @@
     <ClInclude Include="utils_iface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="conf.cpp" />
-    <ClCompile Include="conf_utest.cpp" />
     <ClCompile Include="list_utest.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="log_utest.cpp" />

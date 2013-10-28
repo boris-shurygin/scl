@@ -24,6 +24,10 @@ int main(int argc, char **argv)
     /** Test GraphImpl package */
     if ( !uTestGraphImpl())
         return -1;
+
+    /** Test IR package */
+    //if ( !uTestIR())
+    //    return -1;
     
     MemMgr::deinit();
     Log::deinit();

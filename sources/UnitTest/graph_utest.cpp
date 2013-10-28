@@ -117,7 +117,7 @@ bool uTestMarkers()
     Marker m = graph.newMarker();
     Marker m2 = graph.newMarker();
 
-    Marker m_array[ MAX_GraphImpl_MARKERS];
+    Marker m_array[ MAX_GRAPH_MARKERS];
     
     assert( !pred->isMarked( m));
     assert( !succ->isMarked( m));
@@ -142,11 +142,11 @@ bool uTestMarkers()
     graph.freeMarker( m);
     graph.freeMarker( m2);
     
-    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
     {
         m_array [ i] = graph.newMarker();
     }
-    for ( MarkerIndex i = 0; i < MAX_GraphImpl_MARKERS; i++)
+    for ( MarkerIndex i = 0; i < MAX_GRAPH_MARKERS; i++)
     {
         graph.freeMarker( m_array[ i]);
     }

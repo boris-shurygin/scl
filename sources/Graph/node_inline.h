@@ -3,7 +3,7 @@
  * Implementation of NodeImpl and related classes' inline routines
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once
@@ -115,10 +115,10 @@ inline void NodeImpl::deleteSucc( EdgeImpl* edge)
 inline void
 NodeImpl::AddEdgeInDir( EdgeImpl *edge, GraphDir dir)
 {
-    assert( isNotNullP( edge));
-    GRAPH_ASSERTD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
+    GRAPH_ASSERTD( isNotNullP( edge));
+    GRAPH_ASSERTXD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
                    "Enums of direction and edge lists are not having right values");
-    GRAPH_ASSERTD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
+    GRAPH_ASSERTXD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
                    "Enums of direction and edge lists are not having right values");
     edge->attach( dir, first_edge[ dir]); 
     first_edge[ dir] = edge;
@@ -130,7 +130,7 @@ NodeImpl::AddEdgeInDir( EdgeImpl *edge, GraphDir dir)
 inline void
 NodeImpl::deleteEdgeInDir( GraphDir dir, EdgeImpl* edge)
 {
-    assert( isNotNullP( edge));
+    GRAPH_ASSERTD( isNotNullP( edge));
     if( first_edge[ dir] == edge)
     {
         first_edge[ dir] = edge->nextEdgeInDir( dir);
@@ -333,7 +333,7 @@ template < class N, class E, template < class n_class, class e_class> class Edge
 inline EdgeIterIface< N, E, EdgeIterImpl> & 
 EdgeIterIface< N, E, EdgeIterImpl>::operator++()
 {
-    GRAPH_ASSERTD( isNotNullP( impl.edge()), "EdgeImpl iterator is at end ( NULL in edge pointer)");
+    GRAPH_ASSERTXD( isNotNullP( impl.edge()), "EdgeImpl iterator is at end ( NULL in edge pointer)");
     impl.nextEdge();
     return *this;
 }
@@ -341,7 +341,7 @@ EdgeIterIface< N, E, EdgeIterImpl>::operator++()
 /** Next pred */
 template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTXD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     this->edge_p = this->edge_p->nextPred();
 }
 
@@ -349,14 +349,14 @@ template < class N, class E> void PredIterImpl< N, E>::nextEdge()
 /** Next succ */
 template < class N, class E> void SuccIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTXD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     this->edge_p = this->edge_p->nextSucc();
 }
 
 /** Next edge in undirected edges traversal */
 template < class N, class E> void UnDirIterImpl< N, E>::nextEdge()
 {
-    GRAPH_ASSERTD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
+    GRAPH_ASSERTXD( isNotNullP( this->edge_p), "EdgeImpl iterator is at end ( NULL in edge_p pointer)");
     
     if ( this->is_pred && isNullP( this->edge_p->nextPred()))
     {

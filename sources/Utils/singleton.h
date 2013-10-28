@@ -97,6 +97,7 @@ Single< T>::init()
     ASSERTD( isNullP( instance_p));
     instance_p = new T();
 }
+
 /**
  * Destruction of singleton
  */

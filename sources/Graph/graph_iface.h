@@ -1,20 +1,20 @@
 /**
  * @file: graph_iface.h
- * Interface of GraphImpl library
+ * Interface of Graph library
  *
- * @defgroup GraphBase GraphImpl
+ * @defgroup GraphBase Graph
  * @ingroup Core
  *
  * @brief Representation of GraphImpls
  * 
- * GraphImpl representation is implemented through 3 tightly connected classes GraphImpl, NodeImpl and EdgeImpl.
+ * Graph representation is implemented through 3 tightly connected classes Graph, NodeImpl and EdgeImpl.
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * Graph library, internal representation of GraphImpls in compiler prototype project tool.
  * Copyright (C) 2012  Boris Shurygin
  */
-#ifndef GraphImpl_IFACE_H
-#define GraphImpl_IFACE_H
+#ifndef GRAPH_IFACE_H
+#define GRAPH_IFACE_H
 #include "predecls.h"
 
 #include "edge.h"
@@ -68,38 +68,41 @@
 #  define foreachPred(edge, node) ITERATE_NODE_PREDS(edge, node)
 #endif
 
-/* GraphImpl's edges traverse implementation */
-#define ITERATE_GraphImpl_EDGES(edge, GraphImpl) for ( edge = GraphImpl->firstEdge();\
+/* Graph's edges traverse implementation */
+#define ITERATE_GRAPH_EDGES(edge, Graph) for ( edge = Graph->firstEdge();\
                                                isNotNullP( edge);\
                                                edge = edge->nextEdge())
-/* GraphImpl's nodes traverse implementation */
-#define ITERATE_GraphImpl_NODES(node, GraphImpl) for ( node = GraphImpl->firstNode();\
+/* Graph's nodes traverse implementation */
+#define ITERATE_GRAPH_NODES(node, Graph) for ( node = Graph->firstNode();\
                                                isNotNullP( node);\
                                                node = node->nextNode())
 
 /**
- * Convenience macro for traversing edges in GraphImpl
+ * Convenience macro for traversing edges in Graph
  * @ingroup GraphBase
  * @param edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
- * @param GraphImpl GraphImpl of interest
+ * @param Graph Graph of interest
  */
 #ifndef foreachEdge
-#  define foreachEdge(edge, GraphImpl) ITERATE_GraphImpl_EDGES(edge, GraphImpl)
+#  define foreachEdge(edge, Graph) ITERATE_GRAPH_EDGES(edge, Graph)
 #endif
 
 /**
- * Convenience macro for traversing nodes in GraphImpl
+ * Convenience macro for traversing nodes in Graph
  * @ingroup GraphBase
  * @param node An object of NodeImpl type or subclass of NodeImpl which is the loop variable
- * @param GraphImpl GraphImpl of interest
+ * @param Graph Graph of interest
  */
 #ifndef foreachNode
-#  define foreachNode(node, GraphImpl) ITERATE_GraphImpl_NODES(node, GraphImpl)
+#  define foreachNode(node, Graph) ITERATE_GRAPH_NODES(node, Graph)
 #endif
 
 /* Implementation of inline functinality */
 #include "edge_inline.h"
 #include "node_inline.h"
 #include "graph_inline.h"
+
+/** Unit tests for Graph library */
+extern bool uTestGraph( void);
 
 #endif

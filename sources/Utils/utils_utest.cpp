@@ -7,36 +7,31 @@
  */
 #include "utils_iface.h"
 
-/**
- * Test logging package
- */
-bool uTestLogs();
-
 /** Sample class */
-class classA
+class A
 {
-private:
+    int a;
     /** private constructors, assignment and destructor */
-    classA(){};
-    classA( const classA&){};
-    classA& operator =( const classA&){};
-    ~classA(){};
+    A(){};
+    A( const A&){};
+    A& operator =( const A&){};
+    ~A(){};
     /** Needed for singleton creation */
-    friend class Single< classA>;
+    friend class Single< A>;
 };
 
-/** Typedef for classA encapsulated in singleton */
-typedef Single< classA> SingleA;
+/** Typedef for A encapsulated in singleton */
+typedef Single< A> SingleA;
 
 /**
  * Test simple singleton
  */
-bool uTestSingle()
+static bool uTestSingle()
 {
     SingleA::init();
 
-    classA* a1 = SingleA::instance();
-    classA* a2 = SingleA::instance();
+    A* a1 = SingleA::instance();
+    A* a2 = SingleA::instance();
     ASSERT( areEqP( a1, a2));
     SingleA::deinit();
     return true;
@@ -58,7 +53,7 @@ namespace UTestFinal
 /**
  * Various tests
  */
-bool uTestMisc()
+static bool uTestMisc()
 {
 #if 0 
     // We can create objects of the class Base
@@ -71,27 +66,18 @@ bool uTestMisc()
     return true;
 }
 
+
 /**
  * Test Utils package
  */
 bool uTestUtils()
 {
-    /** Various tests of auxiliary routines */
+    /** Various tests of auxiliary routines - REPLACED WITH BOOST UTF */
     if ( !uTestMisc())
         return false;
-    
-    /** test options parser */
-    if ( !uTestConf())
-        return false;
-
-    /** test logs */
-    if ( !uTestLogs())
-        return false;
-
-    /** test singleton */
+    /** test singleton  - REPLACED WITH BOOST UTF */
     if ( !uTestSingle())
         return false;
-
     /** Tets list classes */
     if ( !uTestList())
         return false;
@@ -102,3 +88,4 @@ bool uTestUtils()
 
     return true;
 }
+

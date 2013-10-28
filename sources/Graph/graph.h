@@ -3,7 +3,7 @@
  * GraphImpl class definition/implementation.
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef GRAPH_H
@@ -122,10 +122,10 @@ public:
     inline void detachEdge( EdgeImpl * edge);
 
     /** Return number of nodes in GraphImpl */
-    inline GraphNum nodeCount() const;
+    inline GraphNum numNodes() const;
 
     /** Return number of edges in GraphImpl */
-    inline GraphNum edgeCount() const;
+    inline GraphNum numEdges() const;
     
     /** Get first edge */
     inline EdgeImpl* firstEdge();

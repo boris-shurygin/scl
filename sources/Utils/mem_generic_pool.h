@@ -3,7 +3,7 @@
  * Implementation of generic memory pool with variable entry size
  */
 /*
- * Utils library in ShowGraphImpl tool
+ * Utils library in compiler prototype project tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once

@@ -3,7 +3,7 @@
  * Implementation of memory object base class
  */
 /*
- * Utils library in ShowGraphImpl tool
+ * Utils library in compiler prototype project tool
  * Copyright (C) 2012  Boris Shurygin
  */
 #pragma once

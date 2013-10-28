@@ -27,9 +27,9 @@ class AGraph;
  */
 class ANode: public Node< AGraph, ANode, AEdge>
 {
-    int dummy;
 public:
-
+    int dummy;
+    
     ANode( AGraph* g): Node< AGraph, ANode, AEdge>( g){};
 
     /** Get next GraphImpl's node */

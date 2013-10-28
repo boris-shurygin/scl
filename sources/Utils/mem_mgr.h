@@ -1,6 +1,6 @@
 /**
  * @file: asrt.h 
- * Definition of memory manager class. Utils library in SCL (Simple Compiler).
+ * Definition of memory manager class. Utils library in compiler prototype project.
  */
 /*
  * Copyright (C) 2012  Boris Shurygin

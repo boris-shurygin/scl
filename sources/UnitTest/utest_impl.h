@@ -3,6 +3,7 @@
  * Copyright (C) 2012  Boris Shurygin
  */
 #include "../Tools/tools_iface.h"
+#include "../ir/ir_iface.hpp"
 
 /**
  * Test Utils package

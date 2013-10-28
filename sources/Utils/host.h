@@ -1,6 +1,6 @@
 /**
  * @file: host.h 
- * Assertion related routines of Utils library for SCL (Simple Compiler)
+ * Assertion related routines of Utils library for compiler prototype project
  * @defgroup Asserts Assertions
  * @brief Assertion routines/macros
  * @ingroup Utils
@@ -19,9 +19,12 @@
 #include <sstream>
 #include <string>
 #include <map>
+#include <algorithm>
 #include <list>
+#include <vector>
 #include <cstdio>
 #include <cstdarg>
+#include <numeric>
 
 using namespace std;
 

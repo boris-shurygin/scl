@@ -1,5 +1,5 @@
 /**
- * File: print.h - Wrapper for printing routines in SCL (Simple Compiler)
+ * File: print.h - Wrapper for printing routines in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 #ifndef PRINT_H
@@ -31,6 +31,19 @@ namespace PrintUtils
         fprintf( stderr, "\n");
 #endif
     }
+
+    template<class T>
+    std::string toString(T i)
+    {
+        std::stringstream ss;
+        std::string s;
+        ss << i;
+        s = ss.str();
+
+        return s;
+    }
 };
 
+
+ 
 #endif

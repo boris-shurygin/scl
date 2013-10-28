@@ -139,5 +139,57 @@ inline Double convStr2Double( std::string str, bool *ok = NULL)
     return val;
 }
 
+template <class F> 
+double 
+time_tests(F f) // f is a function that returns its execution time
+{ 
+    std::vector<double> t; 
+
+    // Store time of 10 executions of f
+    unsigned int i;
+    for (i = 0; i < 10; ++i) 
+        t.push_back(f()); 
+
+    double total_time = std::accumulate(t.begin(), t.end(), 0.0);
+
+    // Keep running until at least 1s of results are available, or 1000 executions
+    while (i < 1000000 && total_time < 1.0) 
+    { 
+        t.push_back(f()); 
+        total_time += t.back(); 
+        ++i; 
+    } 
+    std::sort(t.begin(), t.end()); 
+    t.resize(t.size() * 9 / 10); 
+    return std::accumulate(t.begin(), t.end(), 0.0) / t.size(); 
+} 
+
+
+#define TIMED_TEST_CASE( test_name ) \
+    double \
+    time_test_##test_name() \
+    { \
+        boost::timer t; \
+        { \
+            test_name##_impl();  \
+        } \
+        return t.elapsed(); \
+    } 
+
+#define TIMED_AUTO_TEST_CASE( test_name ) \
+    void \
+    test_name##_impl(); \
+    \
+    TIMED_TEST_CASE( test_name ) \
+    \
+    BOOST_AUTO_TEST_CASE( test_name ) \
+    { \
+        double execution_time = time_test_##test_name(); \
+        boost::unit_test::unit_test_log.set_threshold_level( boost::unit_test::log_messages ); \
+        BOOST_TEST_MESSAGE(BOOST_TEST_STRINGIZE( test_name ).trim( "\"" ) << " execution time: " << execution_time << "s"); \
+        BOOST_CHECK( true ); \
+    } \
+    \
+    inline void test_name##_impl()
 
 #endif

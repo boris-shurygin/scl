@@ -3,7 +3,7 @@
  * NodeImpl class implementation
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in SCL (Simple Compiler) tool.
+ * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
 /** 
@@ -13,8 +13,8 @@
 
 NodeImpl::~NodeImpl()
 {
-    GRAPH_ASSERTD( isNullP(firstSucc()), "Deleted node still has successor edge(s)");
-    GRAPH_ASSERTD( isNullP(firstPred()), "Deleted node still has successor edge(s)");
+    GRAPH_ASSERTXD( isNullP(firstSucc()), "Deleted node still has successor edge(s)");
+    GRAPH_ASSERTXD( isNullP(firstPred()), "Deleted node still has successor edge(s)");
 
     /** delete myself from GraphImpl */
     graph()->detachNode( this);
