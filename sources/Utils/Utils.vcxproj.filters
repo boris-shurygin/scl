@@ -17,6 +17,8 @@
     </ClCompile>
     <ClCompile Include="log_utest.cpp" />
     <ClCompile Include="log.cpp" />
+    <ClCompile Include="conf.cpp" />
+    <ClCompile Include="conf_utest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asrt.h" />
@@ -61,6 +63,7 @@
     </ClInclude>
     <ClInclude Include="techniques.h" />
     <ClInclude Include="log.h" />
+    <ClInclude Include="conf.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">

@@ -15,10 +15,10 @@ namespace IR
      * @brief Module class describes one translation unit as a list of functions and global information
      * @ingroup IR
      */
-    template <class MdesType> class Module
+    template <class MDesType> class Module
     {
     public:
-        typedef Function<MdesType> Func; 
+        typedef Function<MDesType> Func; 
 
         inline Module();  //< Constructor of an empty translation unit
         inline ~Module(); //< Destructor
@@ -48,7 +48,7 @@ namespace IR
     /**
      * Constructor of an empty translation unit
      */
-    template <class MdesType> Module<MdesType>::Module():
+    template <class MDesType> Module<MDesType>::Module():
         first_function( NULL), f_id( 0)
     {
     
@@ -57,21 +57,21 @@ namespace IR
     /**
      * Module destructor
      */
-    template <class MdesType> Module<MdesType>::~Module()
+    template <class MDesType> Module<MDesType>::~Module()
     {
         // Remove function list
-        deleteList< Function<MdesType> >( first_function);
+        deleteList< Function<MDesType> >( first_function);
     }
 
     /**
      * Creates a new function and returns a reference to it. A reference to the
      * created function is also saved to the module's list of functions
      */
-    template <class MdesType>
-    Function<MdesType> *
-    Module<MdesType>::newFunction( string name)
+    template <class MDesType>
+    Function<MDesType> *
+    Module<MDesType>::newFunction( string name)
     {
-        Function<MdesType> *f = new Function<MdesType>( this, name); // Create the new function 
+        Function<MDesType> *f = new Function<MDesType>( this, name); // Create the new function 
         
         // Function list bookkeeping
         f->attach( first_function);
@@ -87,9 +87,9 @@ namespace IR
      * Creates a new function and returns a reference to it. A reference to the
      * created function is also saved to the module's list of functions
      */
-    template <class MdesType>
-    Function<MdesType> *
-    Module<MdesType>::newFunction()
+    template <class MDesType>
+    Function<MDesType> *
+    Module<MDesType>::newFunction()
     {
         //Compose a name for new function 
         string name("noname_");
@@ -99,18 +99,18 @@ namespace IR
     }
 
     /** Find function by its name string */
-    template <class MdesType>
-    Function<MdesType> *
-    Module<MdesType>::findFunctionByName( string name)
+    template <class MDesType>
+    Function<MDesType> *
+    Module<MDesType>::findFunctionByName( string name)
     {
         IR_ASSERTXD( 0, "Not implemented");
         return NULL;
     }
 
     /** Remove function from the module */
-    template <class MdesType>
+    template <class MDesType>
     void
-    Module<MdesType>::removeFunction( Func *f)
+    Module<MDesType>::removeFunction( Func *f)
     {
         /** Replace first function if needed */
         if ( f == first_function)
@@ -126,25 +126,25 @@ namespace IR
     }
         
     /** Find function with the given name, rename it and adjust the symbol table */
-    template <class MdesType>
+    template <class MDesType>
     void
-    Module<MdesType>::renameFunction( string name, string new_name)
+    Module<MDesType>::renameFunction( string name, string new_name)
     {
         IR_ASSERTXD( 0, "Not implemented");
     }
     
     /** Change function name and adjust the symbol table */
-    template <class MdesType>
+    template <class MDesType>
     void
-    Module<MdesType>::renameFunction( Func *f, string new_name)
+    Module<MDesType>::renameFunction( Func *f, string new_name)
     {
         IR_ASSERTXD( 0, "Not implemented");
     }
 
     /** Output module to stream */
-    template <class MdesType>
+    template <class MDesType>
     void
-    Module<MdesType>::toStream( ostream& os)
+    Module<MDesType>::toStream( ostream& os)
     {
         /** Output module functions consequently */
         Func* f = first_function;
@@ -155,15 +155,15 @@ namespace IR
         }
     }
 
-    template <class MdesType> 
-    std::ostream& operator<<(std::ostream& os, const Module<MdesType> &m) 
+    template <class MDesType> 
+    std::ostream& operator<<(std::ostream& os, const Module<MDesType> &m) 
     {   
        m.toStream(os);
        return os;
     } 
 
-    template <class MdesType> 
-    std::ostream& operator<<(std::ostream& os, Module<MdesType> *m) 
+    template <class MDesType> 
+    std::ostream& operator<<(std::ostream& os, Module<MDesType> *m) 
     {   
         m->toStream(os);
         return os;

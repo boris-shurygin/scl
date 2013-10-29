@@ -15,10 +15,6 @@
 #include "function.hpp"
 #include "module.hpp"
 
-#include "opt_mdes.hpp"
-
 /* Implementation of inline functionality */
 #include "oper_inline.hpp"
 #include "cf_inline.hpp"
-
-bool uTestIR();

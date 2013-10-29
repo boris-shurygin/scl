@@ -53,6 +53,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="asrt.h" />
+    <ClInclude Include="conf.h" />
     <ClInclude Include="log.h" />
     <ClInclude Include="mem_alloc_policy.h" />
     <ClInclude Include="mem_generic_pool.h" />
@@ -74,6 +75,8 @@
     <ClInclude Include="utils_iface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="conf.cpp" />
+    <ClCompile Include="conf_utest.cpp" />
     <ClCompile Include="list_utest.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="log_utest.cpp" />

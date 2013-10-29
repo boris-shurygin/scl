@@ -9,38 +9,38 @@ namespace IR
 {
     
 /** Get control source operation */
-template <class MdesType>
-Operation<MdesType> *
-CFEdge<MdesType>::srcOper() const
+template <class MDesType>
+Operation<MDesType> *
+CFEdge<MDesType>::srcOper() const
 {
     return src_oper_p;
 }
 /** Set control source operation */
-template <class MdesType>
+template <class MDesType>
 void 
-CFEdge<MdesType>::setSrcOper( Operation<MdesType> *oper)
+CFEdge<MDesType>::setSrcOper( Operation<MDesType> *oper)
 {
     src_oper_p = oper;
 }
 /** Control Flow Edge constructor */
-template <class MdesType> 
-CFEdge<MdesType>::CFEdge( CFG<MdesType> *g, CFNode<MdesType> *pred, CFNode<MdesType> *succ):
-    Edge< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >( g, pred, succ),
+template <class MDesType> 
+CFEdge<MDesType>::CFEdge( CFG<MDesType> *g, CFNode<MDesType> *pred, CFNode<MDesType> *succ):
+    Edge< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >( g, pred, succ),
     src_oper_p( NULL)
 {
     
 }
 
 /** Control Flow node constructor */
-template <class MdesType> CFNode<MdesType>::CFNode( CFG<MdesType> *g):
-    Node< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >( g), first( NULL), last( NULL)
+template <class MDesType> CFNode<MDesType>::CFNode( CFG<MDesType> *g):
+    Node< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >( g), first( NULL), last( NULL)
 {
     
 }
 
 /** Default CFG constructor */
-template <class MdesType> CFG<MdesType>::CFG():
-    Graph< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >(),
+template <class MDesType> CFG<MDesType>::CFG():
+    Graph< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >(),
     is_valid( false)
 {
     start_node = this->newNode();
@@ -48,73 +48,73 @@ template <class MdesType> CFG<MdesType>::CFG():
 }
 
 /** Set graph as valid (corresponds to operations in the function) */
-template <class MdesType>
+template <class MDesType>
 void
-CFG<MdesType>::setValid( bool valid)
+CFG<MDesType>::setValid( bool valid)
 {
     is_valid = valid;
 }
 
 // Get the start node of the CFG
-template <class MdesType>
-CFNode<MdesType> *
-CFG<MdesType>::startNode() const
+template <class MDesType>
+CFNode<MDesType> *
+CFG<MDesType>::startNode() const
 {
     return start_node;
 }
     
 // Get the stop node of the CFG
-template <class MdesType>
-CFNode<MdesType> *
-CFG<MdesType>::stopNode() const
+template <class MDesType>
+CFNode<MDesType> *
+CFG<MDesType>::stopNode() const
 {
     return stop_node;
 }
 
 /** Check if graph is valid */
-template <class MdesType>
+template <class MDesType>
 bool
-CFG<MdesType>::isValid() const
+CFG<MDesType>::isValid() const
 {
     return is_valid;
 }
 
 // Get first operation of the node
-template <class MdesType>
-Operation<MdesType> *
-CFNode<MdesType>::firstOper() const
+template <class MDesType>
+Operation<MDesType> *
+CFNode<MDesType>::firstOper() const
 {
     return first;
 }
     
 // Set first operation of the node
-template <class MdesType>
+template <class MDesType>
 void
-CFNode<MdesType>::setFirstOper( Operation<MdesType> *oper)
+CFNode<MDesType>::setFirstOper( Operation<MDesType> *oper)
 {
     first = oper;
 }
 
 // Get last operation of the node
-template <class MdesType>
-Operation<MdesType> *
-CFNode<MdesType>::lastOper() const
+template <class MDesType>
+Operation<MDesType> *
+CFNode<MDesType>::lastOper() const
 {
     return last;
 }
     
 // Set last operation of the node      
-template <class MdesType>
+template <class MDesType>
 void
-CFNode<MdesType>::setLastOper( Operation<MdesType> *oper)
+CFNode<MDesType>::setLastOper( Operation<MDesType> *oper)
 {
     last = oper;
 }
 
 // Insert given operation to the end of the node
-template <class MdesType>
+template <class MDesType>
 void
-CFNode<MdesType>::append( Operation<MdesType> *oper)
+CFNode<MDesType>::append( Operation<MDesType> *oper)
 {
     IR_ASSERTD( isNotNullP( oper));
 
@@ -133,9 +133,9 @@ CFNode<MdesType>::append( Operation<MdesType> *oper)
 }
     
 // Insert given operation in the begining of the node 
-template <class MdesType>
+template <class MDesType>
 void 
-CFNode<MdesType>::prepend( Operation<MdesType> *oper)
+CFNode<MDesType>::prepend( Operation<MDesType> *oper)
 {
     IR_ASSERTD( isNotNullP( oper));
 
@@ -154,9 +154,9 @@ CFNode<MdesType>::prepend( Operation<MdesType> *oper)
 }
 
 /** Number nodes in topological order. Nodes that are not reachable from start will have arbitrary order */
-template <class MdesType>
+template <class MDesType>
 Numeration
-CFG<MdesType>::makeTopologicalNumeration()
+CFG<MDesType>::makeTopologicalNumeration()
 {
     /**
      * The algorithm makes an RPO numeration of nodes by 
@@ -173,7 +173,7 @@ CFG<MdesType>::makeTopologicalNumeration()
      * be processed on the stack. If the edge is last unprocessed successor of some node
      * than node is considered done and a number is assigned to it.
      */
-    std::list< CFEdge< MdesType> *> stack;
+    std::list< CFEdge< MDesType> *> stack;
     
     if ( isNotNullP( this->startNode()->firstSucc()) )
     {
@@ -183,14 +183,14 @@ CFG<MdesType>::makeTopologicalNumeration()
 
         while ( stack.size() != 0)
         {
-            CFEdge< MdesType> *edge = stack.back();
+            CFEdge< MDesType> *edge = stack.back();
             
             /*
              * Add next succ to the stack, if it needs to be processed
              */
             if ( isNotNullP( edge->nextSucc()) )
             {
-                CFEdge< MdesType> *succ = edge->nextSucc();
+                CFEdge< MDesType> *succ = edge->nextSucc();
                 stack.pop_back();
                 while ( isNotNullP( succ))
                 {
@@ -217,7 +217,7 @@ CFG<MdesType>::makeTopologicalNumeration()
              */
             if ( edge->isMarked( m) && isNullP( edge->nextSucc()) )
             {
-                CFNode< MdesType> *pred = edge->pred();
+                CFNode< MDesType> *pred = edge->pred();
                 pred->setNumber( num, i);
                 IR_ASSERTD( pred->isMarked( m));
                 //cout << "RPO trav " << pred->id() << " is numbered " << i << endl;
@@ -228,10 +228,10 @@ CFG<MdesType>::makeTopologicalNumeration()
 
             /** Add all successor edges of successor node to the stack */
             bool succ_found = false;
-            CFEdge< MdesType> *succ = edge->succ()->firstSucc();
+            CFEdge< MDesType> *succ = edge->succ()->firstSucc();
             while ( isNotNullP( succ))
             {
-                CFNode< MdesType> *succ_node = succ->succ();
+                CFNode< MDesType> *succ_node = succ->succ();
                 if ( !succ_node->isMarked( m) )
                 {
                     succ_node->mark( m);
@@ -243,7 +243,7 @@ CFG<MdesType>::makeTopologicalNumeration()
             }
             if ( !succ_found)
             {
-                CFNode< MdesType> * succ = edge->succ();
+                CFNode< MDesType> * succ = edge->succ();
                 succ->setNumber( num, i);
                 IR_ASSERTD( succ->isMarked( m));
                 //cout << "RPO trav " << succ->id() << " is numbered " << i << endl;
@@ -254,7 +254,7 @@ CFG<MdesType>::makeTopologicalNumeration()
     }
 
     /* Number the rest of CFG nodes */
-    for ( CFNode< MdesType> *node = this->firstNode();
+    for ( CFNode< MDesType> *node = this->firstNode();
           isNotNullP( node);
           node = node->nextNode() )
     {
@@ -273,32 +273,32 @@ CFG<MdesType>::makeTopologicalNumeration()
 }
 
 // Check that the given node is the start node of the CFG
-template <class MdesType>
+template <class MDesType>
 bool
-CFNode<MdesType>::isStart() const
+CFNode<MDesType>::isStart() const
 {
     return areEqP( this->graph()->startNode(), this);
 }
 
 // Check that the given node is the stop node of the CFG
-template <class MdesType>
+template <class MDesType>
 bool
-CFNode<MdesType>::isStop() const
+CFNode<MDesType>::isStop() const
 {
     return areEqP( this->graph()->stopNode(), this);
 }
 
 
-template <class MdesType>
+template <class MDesType>
 void
-CFEdge< MdesType>::toStream(ostream& os)
+CFEdge< MDesType>::toStream(ostream& os)
 {
     
     os << "CF Edge " << this->id() << ": ";
 
     os << this->pred()->id() << "->" << this->succ()->id();
 
-    Operation< MdesType> *src = this->srcOper();
+    Operation< MDesType> *src = this->srcOper();
     if ( isNotNullP( src) )
     {
         os << ", src: " << src->id() << " "<< src->nameStr();
@@ -310,9 +310,9 @@ CFEdge< MdesType>::toStream(ostream& os)
 }
 
     
-template <class MdesType>
+template <class MDesType>
 void
-CFNode< MdesType>::toStream(ostream& os)
+CFNode< MDesType>::toStream(ostream& os)
 {
     /* Begin with node header */
     os << "CF Node " << this->id();
@@ -329,18 +329,18 @@ CFNode< MdesType>::toStream(ostream& os)
     os << endl;
 
     /* Iterating over predecessors */
-    for ( typename CFNode< MdesType>::Pred
+    for ( typename CFNode< MDesType>::Pred
             pred_iter = this->predsBegin(),
             pred_iter_end = this->predsEnd();
           pred_iter != pred_iter_end;
           pred_iter++ )
     {
-         CFEdge< MdesType> *edge = *pred_iter;
+         CFEdge< MDesType> *edge = *pred_iter;
          os << *edge;
     }
 
     /* Print all operations */
-    for ( Operation< MdesType> * oper = firstOper();
+    for ( Operation< MDesType> * oper = firstOper();
           isNotNullP( oper);
           oper = oper->nextOper() )
     {
@@ -351,26 +351,26 @@ CFNode< MdesType>::toStream(ostream& os)
     }
 
     /* Iterating over successors */
-    for ( typename CFNode< MdesType>::Succ
+    for ( typename CFNode< MDesType>::Succ
               succ_iter = this->succsBegin(),
               succ_iter_end = this->succsEnd();
           succ_iter != succ_iter_end;
           ++succ_iter )
     {
-         CFEdge< MdesType> *edge = *succ_iter;
+         CFEdge< MDesType> *edge = *succ_iter;
          os << *edge;        
     }
 }
 
-template <class MdesType>
+template <class MDesType>
 void
-CFG< MdesType>::toStream(ostream& os)
+CFG< MDesType>::toStream(ostream& os)
 {
     Numeration num = makeTopologicalNumeration();
-    std::vector< CFNode< MdesType> *> nodes( this->numNodes());
+    std::vector< CFNode< MDesType> *> nodes( this->numNodes());
 
     /* Fill array of node pointers */
-    for ( CFNode< MdesType> *node = this->firstNode();
+    for ( CFNode< MDesType> *node = this->firstNode();
           isNotNullP( node);
           node = node->nextNode() )
     {
@@ -383,7 +383,7 @@ CFG< MdesType>::toStream(ostream& os)
            i < this->numNodes();
            ++i)
     {
-        CFNode< MdesType> *node = nodes[ i];
+        CFNode< MDesType> *node = nodes[ i];
         os << *node << endl;
     }
 
@@ -391,7 +391,7 @@ CFG< MdesType>::toStream(ostream& os)
            i < end;
            ++i)
     {
-        CFNode< MdesType> *node = nodes[ i];
+        CFNode< MDesType> *node = nodes[ i];
         os << "unreachable " << *node << endl;
     }
     this->freeNum( num);

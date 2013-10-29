@@ -30,14 +30,14 @@ bool uTestConf()
 
     /** Create array of arguments */
     char *args[ 8];
-    args[ 0] = "string";// treated as app name
-    args[ 1] = "--output";
-    args[ 2] = "file";
-    args[ 3] = "-a";
-    args[ 4] = "--b";
-    args[ 5] = "-b";
-    args[ 6] = "-i";
-    args[ 7] = "80";
+    args[ 0] = (char *)"string";// treated as app name
+    args[ 1] = (char *)"--output";
+    args[ 2] = (char *)"file";
+    args[ 3] = (char *)"-a";
+    args[ 4] = (char *)"--b";
+    args[ 5] = (char *)"-b";
+    args[ 6] = (char *)"-i";
+    args[ 7] = (char *)"80";
 
     /** Read arguments from array and parse them */
     conf->readArgs( 8, args);

@@ -15,42 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ir_iface.hpp">
+    <ClInclude Include="opt_mdes.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oper.hpp">
+    <ClInclude Include="opt_mdes_inc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="oper_inline.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="predecls.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cf.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cf_inline.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="function.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="module.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dep_graph.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mdes.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="const.hpp">
+    <ClInclude Include="opt_iface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="oper.cpp">
+    <ClCompile Include="opt_oper_des.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="opt_utest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

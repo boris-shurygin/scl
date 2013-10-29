@@ -5,7 +5,7 @@
 #
 # Main targets are:
 #   all - build all targets in debug and release modes
-#   debug (not yet implemented) - build debug vesion of all targets
+#   debug - build debug vesion of all targets
 #   release - build release version all targets
 #   doc - run doxygen to generate documentation from source code
 #
@@ -56,14 +56,11 @@ DEBUG_CPPFLAGS = $(DEBUG_OPT_FLAGS) $(DEBUG_INCLUDE_FLAGS)
 RELEASE_CPPFLAGS = $(RELEASE_OPT_FLAGS) $(RELEASE_INCLUDE_FLAGS)
 
 # Library sets for debug and release
-DEBUG_LIB_NAMES = log4cplus 
-RELEASE_LIB_NAMES = log4cplus 
+DEBUG_LIB_NAMES = 
+RELEASE_LIB_NAMES =
 
 DEBUG_LIB_DIRS = -L/usr/lib
 RELEASE_LIB_DIRS = -L/usr/lib
-
-# Needed for unit testing targets only
-BOOST_UTF_LIB = -lboost_unit_test_framework
 
 DEBUG_LIBS = $(addprefix -l, $(DEBUG_LIB_NAMES))
 DEBUG_LIB_FLAGS =
@@ -139,12 +136,12 @@ utest: gen utest_link
 utestd_link: $(call FILTER,UnitTest Utils Graph ir/,$(DEBUG_OBJS))
 	@echo [linking] $(BIN_DIR)/utestd
 	@$(MKDIR) -p $(BIN_DIR)
-	@$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/utestd $(call FILTER,UnitTest Utils Graph ir/,$(DEBUG_OBJS)) $(DEBUG_LIB_DIRS) $(DEBUG_LIBS) $(BOOST_UTF_LIB)
+	@$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/utestd $(call FILTER,UnitTest Utils Graph ir/,$(DEBUG_OBJS)) $(DEBUG_LIB_DIRS) $(DEBUG_LIBS)
 
 utest_link: $(call FILTER,UnitTest Utils Graph ir/,$(RELEASE_OBJS))
 	@echo [linking] $(BIN_DIR)/utest
 	@$(MKDIR) -p $(BIN_DIR)
-	@$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/utest $(call FILTER,UnitTest Utils Graph ir/,$(RELEASE_OBJS)) $(RELEASE_LIB_DIRS) $(RELEASE_LIBS) $(BOOST_UTF_LIB)
+	@$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/utest $(call FILTER,UnitTest Utils Graph ir/,$(RELEASE_OBJS)) $(RELEASE_LIB_DIRS) $(RELEASE_LIBS)
 
 #
 # Generation of cpp files with flex

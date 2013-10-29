@@ -21,13 +21,13 @@ int main(int argc, char **argv)
     if ( !uTestUtils())
         return -1;
 
-    /** Test GraphImpl package */
-    if ( !uTestGraphImpl())
+    /** Test Graph package */
+    if ( !uTestGraph())
         return -1;
 
-    /** Test IR package */
-    //if ( !uTestIR())
-    //    return -1;
+    /** Test optimizer package */
+    if ( !Opt::uTest())
+        return -1;
     
     MemMgr::deinit();
     Log::deinit();

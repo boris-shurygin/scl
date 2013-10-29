@@ -3,14 +3,9 @@
  * Copyright (C) 2012  Boris Shurygin
  */
 #include "../Tools/tools_iface.h"
-#include "../ir/ir_iface.hpp"
+#include "../opt/opt_iface.hpp"
 
 /**
  * Test Utils package
  */
 bool uTestUtils();
-
-/**
- * GraphImpl library unit testing
- */
-bool uTestGraphImpl();

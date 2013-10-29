@@ -38,7 +38,7 @@ static bool uTestRef()
 
     /** Test operator bool() */
     ASSERT( !ref2 && ref);
-    ASSERT( ref2 == NULL && ref != NULL);
+    //ASSERT( ref2 == NULL && ref != NULL);
     /** Test copy constructor */
     ref2 = ref;
     ASSERT( ref2 && ref);

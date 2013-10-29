@@ -8,131 +8,131 @@
 namespace IR
 {
 
-template <class MdesType> void 
-Object<MdesType>::setVirtual( bool is_virtual)
+template <class MDesType> void 
+Object<MDesType>::setVirtual( bool is_virtual)
 {
     this->is_virtual = is_virtual;
 }
 
-template <class MdesType> void 
-Object<MdesType>::setId( UInt32 id_)
+template <class MDesType> void 
+Object<MDesType>::setId( UInt32 id_)
 {
     this->id_ = id_;
 }
 
-template <class MdesType> bool 
-Object<MdesType>::isVirtual() const
+template <class MDesType> bool 
+Object<MDesType>::isVirtual() const
 {
     return is_virtual;
 }
 
-template <class MdesType> UInt32 
-Object<MdesType>::id() const
+template <class MDesType> UInt32 
+Object<MDesType>::id() const
 {
     return id_;
 }
 
-template <class MdesType> 
-Object<MdesType>::Object()
+template <class MDesType> 
+Object<MDesType>::Object()
 {
     setVirtual( true);
     setId( (UInt32) -1); 
 }
 
-template <class MdesType> 
-Object<MdesType>::~Object()
+template <class MDesType> 
+Object<MDesType>::~Object()
 {
 }
 
-template <class MdesType> void
-Object<MdesType>::toStream(ostream& os) const
+template <class MDesType> void
+Object<MDesType>::toStream(ostream& os) const
 {
-    typename MdesType::ObjDes *des = MdesType::objectDescription( type());
+    typename MDesType::ObjDes *des = MDesType::objectDescription( type());
     
     if ( isVirtual() )
         os << 'v';
     os << des->prefix << id();    
 }
 
-template <class MdesType> void 
-Operand<MdesType>::setObject( Object<MdesType>* obj)
+template <class MDesType> void 
+Operand<MDesType>::setObject( Object<MDesType>* obj)
 {
     this->obj = obj;
 }
 
-template <class MdesType> void 
-Operand<MdesType>::setImplicit( bool is_implicit)
+template <class MDesType> void 
+Operand<MDesType>::setImplicit( bool is_implicit)
 {
     this->is_implicit = is_implicit;
 }
 
-template <class MdesType> void 
-Operand<MdesType>::setConstValue( Const i_value)
+template <class MDesType> void 
+Operand<MDesType>::setConstValue( Const i_value)
 {
     this->i_value = i_value;
 }
 
-template <class MdesType> void 
-Operand<MdesType>::setType( OperandType type)
+template <class MDesType> void 
+Operand<MDesType>::setType( OperandType type)
 {
     this->type_ = type;
 }
 
-template <class MdesType> 
-Object<MdesType> *
-Operand<MdesType>::object() const
+template <class MDesType> 
+Object<MDesType> *
+Operand<MDesType>::object() const
 {
     return obj;
 }
 
-template <class MdesType> bool 
-Operand<MdesType>::isImplicit() const
+template <class MDesType> bool 
+Operand<MDesType>::isImplicit() const
 {
     return is_implicit;
 }
 
-template <class MdesType> Const 
-Operand<MdesType>::constValue() const
+template <class MDesType> Const 
+Operand<MDesType>::constValue() const
 {
     return i_value;
 }
 
-template <class MdesType>
-Operation< MdesType> *
-Operand<MdesType>::target() const
+template <class MDesType>
+Operation< MDesType> *
+Operand<MDesType>::target() const
 {
     return target_;
 }
 
-template <class MdesType>
+template <class MDesType>
 void
-Operand<MdesType>::setTarget( Operation< MdesType> *target_oper)
+Operand<MDesType>::setTarget( Operation< MDesType> *target_oper)
 {
     target_ = target_oper;
 }
 
-template <class MdesType> OperandType
-Operand<MdesType>::type() const
+template <class MDesType> OperandType
+Operand<MDesType>::type() const
 {
     return type_;
 }
 
-template <class MdesType> 
-Operand<MdesType>::Operand(): target_( NULL), i_value( (Int64)0) 
+template <class MDesType> 
+Operand<MDesType>::Operand(): target_( NULL), i_value( (Int64)0) 
 {
     setObject( NULL);
     setImplicit( false);
     setType( OP_TYPES_NUM);
 }
 
-template <class MdesType> 
-Operand<MdesType>::~Operand()
+template <class MDesType> 
+Operand<MDesType>::~Operand()
 {
 
 }
 
-template <class MdesType> void
-Operand<MdesType>::toStream(ostream& os) const
+template <class MDesType> void
+Operand<MDesType>::toStream(ostream& os) const
 {
     switch ( type() )
     {
@@ -163,49 +163,49 @@ Operand<MdesType>::toStream(ostream& os) const
 }
  
 /** Get number of arguments */
-template <class MdesName> UInt32 Operation<MdesName>::numArgs() const
+template <class MDesName> UInt32 Operation<MDesName>::numArgs() const
 {
-    return MdesName::operDescription( name())->num_args; 
+    return MDesName::operDescription( name())->num_args; 
 }
 
 /** Get number of results */
-template <class MdesName> UInt32 Operation<MdesName>::numRess() const
+template <class MDesName> UInt32 Operation<MDesName>::numRess() const
 {
-    return MdesName::operDescription( name())->num_ress; 
+    return MDesName::operDescription( name())->num_ress; 
 }
 
-template <class MdesName> 
-const Operand<MdesName>&
-Operation<MdesName>::arg( unsigned i) const
+template <class MDesName> 
+const Operand<MDesName>&
+Operation<MDesName>::arg( unsigned i) const
 {
     IR_ASSERTXD( i < numArgs(), "Invalid argument number");
     return args[ i];
 }
 
-template <class MdesName> 
-const Operand<MdesName>&
-Operation<MdesName>::res( unsigned i) const
+template <class MDesName> 
+const Operand<MDesName>&
+Operation<MDesName>::res( unsigned i) const
 {
     IR_ASSERTXD( i < numRess(), "Invalid result number");
     return ress[ i];
 }
 
 /** Set type of object */
-template <class MdesType> 
-void Object<MdesType>::setType( ObjName tp)
+template <class MDesType> 
+void Object<MDesType>::setType( ObjName tp)
 {
     type_ = tp;
 }   
 
 /** Set operation's argument object */
-template <class MdesType> void 
-Operation<MdesType>::setArgObj( UInt32 arg_num, Object< MdesType> *obj)
+template <class MDesType> void 
+Operation<MDesType>::setArgObj( UInt32 arg_num, Object< MDesType> *obj)
 {
     IR_ASSERTD( arg_num < numArgs());
     
-    /** Check that given operand can actually hold object according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
-    typename MdesType::OpDes *op_des = des->argDes( arg_num);
+    /** Check that given operand can actually hold object according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
+    typename MDesType::OpDes *op_des = des->argDes( arg_num);
 
     IR_ASSERTD( isNotNullP( op_des));
     IR_ASSERTD( op_des->isProperName( obj->type()) );
@@ -219,14 +219,14 @@ Operation<MdesType>::setArgObj( UInt32 arg_num, Object< MdesType> *obj)
 }
 
 /** Set operation's argument object */
-template <class MdesType> void 
-Operation<MdesType>::setArgTarget( UInt32 arg_num, Operation<MdesType> *target)
+template <class MDesType> void 
+Operation<MDesType>::setArgTarget( UInt32 arg_num, Operation<MDesType> *target)
 {
     IR_ASSERTD( arg_num < numArgs());
     
-    /** Check that given operand can actually hold object according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
-    typename MdesType::OpDes *op_des = des->argDes( arg_num);
+    /** Check that given operand can actually hold object according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
+    typename MDesType::OpDes *op_des = des->argDes( arg_num);
 
     IR_ASSERTD( isNotNullP( op_des));
     IR_ASSERTD( op_des->canBeTarget() );
@@ -240,14 +240,14 @@ Operation<MdesType>::setArgTarget( UInt32 arg_num, Operation<MdesType> *target)
 }
 
 /** Set operation's argument object */
-template <class MdesType> void 
-Operation<MdesType>::setArgImm( UInt32 arg_num, Const imm_val)
+template <class MDesType> void 
+Operation<MDesType>::setArgImm( UInt32 arg_num, Const imm_val)
 {
     IR_ASSERTD( arg_num < numArgs());
     
-    /** Check that given operand can actually be immediate according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
-    typename MdesType::OpDes *op_des = des->argDes( arg_num);
+    /** Check that given operand can actually be immediate according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
+    typename MDesType::OpDes *op_des = des->argDes( arg_num);
 
     IR_ASSERTD( isNotNullP( op_des));
     IR_ASSERTD( op_des->canBeImm() );
@@ -261,14 +261,14 @@ Operation<MdesType>::setArgImm( UInt32 arg_num, Const imm_val)
 }
 
 /** Set operation's argument object */
-template <class MdesType> void 
-Operation<MdesType>::setResObj( UInt32 res_num, Object< MdesType> *obj)
+template <class MDesType> void 
+Operation<MDesType>::setResObj( UInt32 res_num, Object< MDesType> *obj)
 {
     IR_ASSERTD( res_num < numRess());
     
-    /** Check that given operand can actually hold object according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
-    typename MdesType::OpDes *op_des = des->resDes( res_num);
+    /** Check that given operand can actually hold object according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
+    typename MDesType::OpDes *op_des = des->resDes( res_num);
 
     IR_ASSERTD( isNotNullP( op_des));
     IR_ASSERTD( op_des->isProperName( obj->type()) );
@@ -281,33 +281,33 @@ Operation<MdesType>::setResObj( UInt32 res_num, Object< MdesType> *obj)
 }
 
 /** Return type of object */
-template <class MdesType> 
-typename Object<MdesType>::ObjName
-Object<MdesType>::type() const
+template <class MDesType> 
+typename Object<MDesType>::ObjName
+Object<MDesType>::type() const
 {
     return type_;    
 }
 
 /** Set name of operation */
-template <class MdesType> 
-void Operation<MdesType>::setName( OperName nm)
+template <class MDesType> 
+void Operation<MDesType>::setName( OperName nm)
 {
-    IR_ASSERTD( nm < MdesType::num_opers);
+    IR_ASSERTD( nm < MDesType::num_opers);
     name_ = nm;
 }   
 
 /** Return name of operation */
-template <class MdesName> 
-typename Operation<MdesName>::OperName
-Operation<MdesName>::name() const
+template <class MDesName> 
+typename Operation<MDesName>::OperName
+Operation<MDesName>::name() const
 {
     return name_;    
 }
 
 /** Operation constructor */
-template < class MdesType> 
-Operation<MdesType>::Operation( DG <MdesType> *g):
-    Node< DG< MdesType>, Operation< MdesType>, DepEdge<MdesType> >( g), // Dependence graph node constructor
+template < class MDesType> 
+Operation<MDesType>::Operation( DG <MDesType> *g):
+    Node< DG< MDesType>, Operation< MDesType>, DepEdge<MDesType> >( g), // Dependence graph node constructor
     first_arg( NULL), // We don't have any arguments in the set on operation construction
     first_res( NULL), // We don't have any results in the set on operation construction
     node_( NULL)      // Node is not define at the moment of operation construction
@@ -316,18 +316,18 @@ Operation<MdesType>::Operation( DG <MdesType> *g):
 }
 
 /** Operation destructor */
-template < class MdesType> 
-Operation<MdesType>::~Operation()
+template < class MDesType> 
+Operation<MDesType>::~Operation()
 {
-    deleteList< Operand<MdesType> >( first_arg);
-    deleteList< Operand<MdesType> >( first_res);
+    deleteList< Operand<MDesType> >( first_arg);
+    deleteList< Operand<MDesType> >( first_res);
 }
 
 
 /** Print operand list to stream */
-template < class MdesType> 
+template < class MDesType> 
 void
-Operation<MdesType>::opListToStream(ostream& os, Operand< MdesType>* op) const
+Operation<MDesType>::opListToStream(ostream& os, Operand< MDesType>* op) const
 {
     if ( isNotNullP( op))
     {        
@@ -352,21 +352,21 @@ Operation<MdesType>::opListToStream(ostream& os, Operand< MdesType>* op) const
 
 
 /** Get the mnemonic string of the operation */
-template < class MdesType> 
+template < class MDesType> 
 string &
-Operation<MdesType>::nameStr() const
+Operation<MDesType>::nameStr() const
 {
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
 
     return des->mnemonic_str;
 }
 
 /** Dump operation to stream */
-template < class MdesType> 
+template < class MDesType> 
 void
-Operation<MdesType>::toStream(ostream& os) const
+Operation<MDesType>::toStream(ostream& os) const
 {
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
 
     /* Print id */
     os << '{' << this->id() << "} ";
@@ -436,66 +436,66 @@ Operation<MdesType>::toStream(ostream& os) const
 }
 
 /** Detach from operation sequence */
-template < class MdesType> 
+template < class MDesType> 
 void
-Operation<MdesType>::detachFromSeq()
+Operation<MDesType>::detachFromSeq()
 {
     return OperSeqList::detach();
 }
 
 /** Next in operation sequence */
-template < class MdesType> 
-Operation< MdesType> *
-Operation<MdesType>::nextOper() const
+template < class MDesType> 
+Operation< MDesType> *
+Operation<MDesType>::nextOper() const
 {
     return OperSeqList::next();
 }
 
 /** Previous in operation sequence */
-template < class MdesType> 
-Operation< MdesType> *
-Operation<MdesType>::prevOper() const
+template < class MDesType> 
+Operation< MDesType> *
+Operation<MDesType>::prevOper() const
 {
     return OperSeqList::prev();
 }
 
 /** Insert operation into sequence after the given operation */
-template < class MdesType> 
+template < class MDesType> 
 void
-Operation<MdesType>::insertAfter( Operation< MdesType> *prev_oper)
+Operation<MDesType>::insertAfter( Operation< MDesType> *prev_oper)
 {
     OperSeqList::detach();
     prev_oper->OperSeqList::attach( this);
 }
 
 /** Insert operation into sequence before the given operation */
-template < class MdesType> 
+template < class MDesType> 
 void
-Operation<MdesType>::insertBefore( Operation< MdesType> *next_oper)
+Operation<MDesType>::insertBefore( Operation< MDesType> *next_oper)
 {
     OperSeqList::detach();
     next_oper->OperSeqList::attachInDir( this, LIST_DIR_RDEFAULT);
 }
 
 /** Get operation's function */
-template < class MdesType> 
-Function< MdesType> *
-Operation<MdesType>::function() const
+template < class MDesType> 
+Function< MDesType> *
+Operation<MDesType>::function() const
 {
-    return static_cast<Function< MdesType> *>(this->graph());
+    return static_cast<Function< MDesType> *>(this->graph());
 }
 
 /** Add object argument */
-template < class MdesType> 
-const Operand< MdesType> *
-Operation<MdesType>::addArgToSet( Object< MdesType> *obj)
+template < class MDesType> 
+const Operand< MDesType> *
+Operation<MDesType>::addArgToSet( Object< MDesType> *obj)
 {
-    /** Check that the operation can actually have argument set according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
+    /** Check that the operation can actually have argument set according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
     IR_ASSERTD( des->canHaveArgSet() );
 
     /* Create new operand, set its type and assign object to it */
-    Operand< MdesType> *op = new Operand< MdesType>();
+    Operand< MDesType> *op = new Operand< MDesType>();
     op->setType( OP_TYPE_OBJ);
     op->setObject( obj);
     
@@ -506,16 +506,16 @@ Operation<MdesType>::addArgToSet( Object< MdesType> *obj)
 }
 
 /** Add immediate argument */
-template < class MdesType> 
-const Operand< MdesType> *
-Operation<MdesType>::addArgToSet( Const imm_val)
+template < class MDesType> 
+const Operand< MDesType> *
+Operation<MDesType>::addArgToSet( Const imm_val)
 {
-    /** Check that the operation can actually have argument set according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
+    /** Check that the operation can actually have argument set according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
     IR_ASSERTD( des->canHaveArgSet() );
     
     /* Create new operand, set its type and assign object to it */
-    Operand< MdesType> *op = new Operand< MdesType>();
+    Operand< MDesType> *op = new Operand< MDesType>();
     op->setType( OP_TYPE_IMM);
     op->setConstValue( imm_val);
     
@@ -526,16 +526,16 @@ Operation<MdesType>::addArgToSet( Const imm_val)
 }
 
 /** Add object result */
-template < class MdesType> 
-const Operand< MdesType> *
-Operation<MdesType>::addResToSet( Object< MdesType> *obj)
+template < class MDesType> 
+const Operand< MDesType> *
+Operation<MDesType>::addResToSet( Object< MDesType> *obj)
 {
-    /** Check that the operation can actually have result set according to Mdes */
-    typename MdesType::OperDes *des = MdesType::operDescription( name());
+    /** Check that the operation can actually have result set according to MDes */
+    typename MDesType::OperDes *des = MDesType::operDescription( name());
     IR_ASSERTD( des->canHaveResSet() );
 
     /* Create new operand, set its type and assign object to it */
-    Operand< MdesType> *op = new Operand< MdesType>();
+    Operand< MDesType> *op = new Operand< MDesType>();
     op->setType( OP_TYPE_OBJ);
     op->setObject( obj);
     
@@ -547,41 +547,41 @@ Operation<MdesType>::addResToSet( Object< MdesType> *obj)
 }
 
 /** Get first argument operand in argument set */
-template < class MdesType> 
-Operand< MdesType> * 
-Operation<MdesType>::firstArgInSet() const
+template < class MDesType> 
+Operand< MDesType> * 
+Operation<MDesType>::firstArgInSet() const
 {
     return first_arg;
 }
     
 /** Get first result in result set */
-template < class MdesType> 
-Operand< MdesType> * 
-Operation<MdesType>::firstResInSet() const
+template < class MDesType> 
+Operand< MDesType> * 
+Operation<MDesType>::firstResInSet() const
 {
     return first_res;
 }
 
 /** Get the control flow node of the operation */
-template < class MdesType> 
-CFNode< MdesType> *
-Operation<MdesType>::node() const
+template < class MDesType> 
+CFNode< MDesType> *
+Operation<MDesType>::node() const
 {
     return node_;
 }
 
 // Set the control flow node of the operation
-template < class MdesType> 
+template < class MDesType> 
 void 
-Operation<MdesType>::setNode( CFNode< MdesType> *n)
+Operation<MDesType>::setNode( CFNode< MDesType> *n)
 {
     node_ = n;
 }
 
 // Check if the operation is last in its CF node
-template < class MdesType> 
+template < class MDesType> 
 bool
-Operation<MdesType>::isLastInNode() const
+Operation<MDesType>::isLastInNode() const
 {
     if ( isNullP( node()) )
         return false;
@@ -590,9 +590,9 @@ Operation<MdesType>::isLastInNode() const
 }
 
 // Check if the operation is first in its CF node
-template < class MdesType> 
+template < class MDesType> 
 bool
-Operation<MdesType>::isFirstInNode() const
+Operation<MDesType>::isFirstInNode() const
 {
     if ( isNullP( node()) )
         return false;

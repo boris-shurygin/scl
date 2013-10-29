@@ -91,7 +91,7 @@ public:
 
     /* Log printing interface */
     inline void log( LogId id, std::ostringstream& os); /**< Print string stream to log */
-    inline void log( LogId id, char *mess, ...);        /**< Print formatted string to log */
+    inline void log( LogId id, const char *mess, ...);        /**< Print formatted string to log */
     
     inline UInt8 verb( LogId id);     /**< Get verbosity level of log with given id */
     inline bool isEnabled( LogId id); /**< Check that log is enabled */
@@ -134,7 +134,7 @@ LogControl::isEnabled( LogId id)
 /**
  * Print formated message into log
  */
-inline void LogControl::log( LogId id, char *mess, ...)
+inline void LogControl::log( LogId id, const char *mess, ...)
 {
     LOG_ASSERTD( registered[ id], "log id is not registered");
     if ( enabled[ id])

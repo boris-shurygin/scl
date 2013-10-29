@@ -56,15 +56,15 @@ enum OpDir
 
 namespace IR
 {
-    template <class MdesType> class  Function;
-    template <class MdesType> class  Module;
+    template <class MDesType> class  Function;
+    template <class MDesType> class  Module;
 
-    template <class MdesType> class  DG;
-    template <class MdesType> class  Operation;
-    template <class MdesType> class  DepEdge;
+    template <class MDesType> class  DG;
+    template <class MDesType> class  Operation;
+    template <class MDesType> class  DepEdge;
 
-    template <class MdesType> class  CFG;
-    template <class MdesType> class  CFNode;
-    template <class MdesType> class  CFEdge;
+    template <class MDesType> class  CFG;
+    template <class MDesType> class  CFNode;
+    template <class MDesType> class  CFEdge;
 };
 

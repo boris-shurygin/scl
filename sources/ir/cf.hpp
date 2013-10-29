@@ -17,20 +17,20 @@ namespace IR
      * @brief Control flow edge class
      * @ingroup CF
      */
-    template <class MdesType> class CFEdge: 
-        public Edge< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >
+    template <class MDesType> class CFEdge: 
+        public Edge< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >
     {
     public:
         /** Control flow edge constructor */
-        inline CFEdge( CFG<MdesType> *g, CFNode<MdesType> *pred, CFNode<MdesType> *succ);
-        inline Operation<MdesType> *srcOper() const;       //< Get control source operation
-        inline void setSrcOper( Operation<MdesType> *oper);//< Set control source operation
+        inline CFEdge( CFG<MDesType> *g, CFNode<MDesType> *pred, CFNode<MDesType> *succ);
+        inline Operation<MDesType> *srcOper() const;       //< Get control source operation
+        inline void setSrcOper( Operation<MDesType> *oper);//< Set control source operation
 
         /** Print edge to stream */
         inline void toStream(ostream& os);
 
     private:
-        Operation<MdesType> *src_oper_p;
+        Operation<MDesType> *src_oper_p;
     };
 
     /**
@@ -38,20 +38,20 @@ namespace IR
      * @brief Control flow node
      * @ingroup CF
      */
-    template <class MdesType> class CFNode:
-        public Node< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >
+    template <class MDesType> class CFNode:
+        public Node< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >
     {
     public:
-        inline CFNode( CFG<MdesType> *g); //< Constructor of CF node
+        inline CFNode( CFG<MDesType> *g); //< Constructor of CF node
 
-        inline Operation<MdesType> *firstOper() const;       //< Get first operation of the node
-        inline void setFirstOper( Operation<MdesType> *oper);//< Set first operation of the node
+        inline Operation<MDesType> *firstOper() const;       //< Get first operation of the node
+        inline void setFirstOper( Operation<MDesType> *oper);//< Set first operation of the node
 
-        inline Operation<MdesType> *lastOper() const;        //< Get last operation of the node
-        inline void setLastOper( Operation<MdesType> *oper); //< Set last operation of the node
+        inline Operation<MDesType> *lastOper() const;        //< Get last operation of the node
+        inline void setLastOper( Operation<MDesType> *oper); //< Set last operation of the node
 
-        inline void append( Operation<MdesType> *oper); //< Insert given operation to the end of the node
-        inline void prepend( Operation<MdesType> *oper);//< Insert given operation in the begining of the node
+        inline void append( Operation<MDesType> *oper); //< Insert given operation to the end of the node
+        inline void prepend( Operation<MDesType> *oper);//< Insert given operation in the begining of the node
 
         /** Print node to stream */
         inline void toStream(ostream& os);
@@ -59,8 +59,8 @@ namespace IR
         inline bool isStart() const; //< Check that the given node is the start node of the CFG
         inline bool isStop() const;  //< Check that the given node is the stop node of the CFG
     private:
-        Operation<MdesType> *first;
-        Operation<MdesType> *last;
+        Operation<MDesType> *first;
+        Operation<MDesType> *last;
     };
 
     /**
@@ -68,8 +68,8 @@ namespace IR
      * @brief Control flow graph representation class
      * @ingroup CF
      */
-    template <class MdesType> class CFG:
-        public Graph< CFG<MdesType>, CFNode<MdesType>, CFEdge<MdesType> >
+    template <class MDesType> class CFG:
+        public Graph< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >
     {
     public:
         /** Default constructor */
@@ -84,8 +84,8 @@ namespace IR
         /** Print CFG to stream */
         inline void toStream(ostream& os);
 
-        inline CFNode<MdesType> *startNode() const; //< Get the start node of the CFG
-        inline CFNode<MdesType> *stopNode() const;  //< Get the stop node of the CFG
+        inline CFNode<MDesType> *startNode() const; //< Get the start node of the CFG
+        inline CFNode<MDesType> *stopNode() const;  //< Get the stop node of the CFG
 
         /** Number nodes in topological order. Nodes that are not reachable from start will have arbitrary order */
         Numeration makeTopologicalNumeration();
@@ -94,26 +94,26 @@ namespace IR
         bool is_valid;
 
         /* Pseudo nodes on top and on bottom of graph */
-        CFNode<MdesType> *start_node;
-        CFNode<MdesType> *stop_node;
+        CFNode<MDesType> *start_node;
+        CFNode<MDesType> *stop_node;
     };
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, CFEdge<MdesType> &e) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, CFEdge<MDesType> &e) 
 {   
     e.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, CFNode<MdesType> &n) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, CFNode<MDesType> &n) 
 {   
     n.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, CFG<MdesType> &cfg) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, CFG<MDesType> &cfg) 
 {   
     cfg.toStream(os);
     return os;

@@ -41,6 +41,7 @@
 #include "singleton.h"
 #include "mem.h"
 #include "log.h"
+#include "conf.h"
 
 namespace Utils
 {

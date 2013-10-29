@@ -30,7 +30,7 @@ namespace IR
         inline Const( Int64 int_val); //< Constructor of integer constant
         inline Const( Double f_val);  //< Constructor of floating point constant
         inline Const( string str);    //< Constructor of symbolic constant
-
+        
         inline ConstType type()      const; //< Get type of constant
 
         inline Int64     intVal()    const; //< Get integer constant value
@@ -38,17 +38,19 @@ namespace IR
         inline string    strVal()    const; //< Get integer constant value
 
 
-                /** Print constant to stream */
-                inline void toStream(ostream& os) const;
+        /** Print constant to stream */
+        inline void toStream(ostream& os) const;
     private:
+        /** Pod data representation */
         union ConstData
         {
             Int64 int_val;
             Double d_val;
-            std::string str_val;
         } data;
-
-        ConstType type_;
+        
+        std::string str_val;//< Placeholder for string data
+        
+        ConstType type_; //< Type of the constant
     };
  
     /** Constructor of integer constant */
@@ -66,7 +68,7 @@ namespace IR
     // Constructor of symbolic constant
     Const::Const( string str): type_( CONST_TYPE_SYMBOL)
     {
-        data.str_val = str;
+        str_val = str;
     }    
 
     // Get type of constant
@@ -78,22 +80,22 @@ namespace IR
     // Get integer constant value
     inline Int64 Const::intVal() const
     {
-        ASSERT( type() == CONST_TYPE_INTEGER);
+        IR_ASSERTD( type() == CONST_TYPE_INTEGER);
         return data.int_val;
     } 
     
     // Get floating point constant value
     inline Double Const::floatVal() const
     {
-        ASSERT( type() == CONST_TYPE_FLOAT;
+        IR_ASSERTD( type() == CONST_TYPE_FLOAT);
         return data.d_val;
     } 
     
     // Get integer constant value
     inline string Const::strVal() const
     {
-        ASSERT( type() == CONST_TYPE_SYMBOL;
-        return data.str_val;
+        IR_ASSERTD( type() == CONST_TYPE_SYMBOL);
+        return str_val;
     } 
     /** Print operand to stream */
     inline void Const::toStream(ostream& os) const
@@ -114,11 +116,12 @@ namespace IR
         }
     }
 
-inline 
-std::ostream& operator<<(std::ostream& os, const Const& c) 
-{   
-    c.toStream(os);
-    return os;
-} 
+    inline 
+    std::ostream& operator<<(std::ostream& os, const Const& c) 
+    {   
+        c.toStream(os);
+        return os;
+    } 
 
 };
+

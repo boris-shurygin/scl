@@ -33,7 +33,7 @@ OPER( Brg,  "brg",  Args<reg_32, reg_imm_32, target>, Ress<> )
 OPER( Brle, "brle", Args<reg_32, reg_imm_32, target>, Ress<> )
 OPER( Brge, "brge", Args<reg_32, reg_imm_32, target>, Ress<> )
 OPER( Bre,  "bre",  Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Brne, "brne",  Args<reg_32, reg_imm_32, target>, Ress<> )
+OPER( Brne, "brne", Args<reg_32, reg_imm_32, target>, Ress<> )
 
 /* Frame control */
 OPER( Call, "call", Args<reg_imm_32, arg_set>, Ress<res_set> )

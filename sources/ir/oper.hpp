@@ -7,14 +7,15 @@
 
 namespace IR
 {
+
 /**
  * @class Object
  * @brief Representation of an object
  */
-template <class MdesType> class Object
+template <class MDesType> class Object
 {
 public:
-    typedef typename MdesType::ObjName ObjName;
+    typedef typename MDesType::ObjName ObjName;
         
     /** Set virtual flag to object */
     inline void setVirtual( bool is_virtual); 
@@ -44,18 +45,18 @@ private:
 };
 
 /** Tag type for list */
-template <class MdesType> class OperandList{};
+template <class MDesType> class OperandList{};
 
 /**
  * @class Operand
  * @brief Representation of Operand
  */
-template <class MdesType> class Operand: 
-    public SListIface< Operand< MdesType> >
+template <class MDesType> class Operand: 
+    public SListIface< Operand< MDesType> >
 {
 public:
     /** Set object to operand */
-    inline void setObject( Object< MdesType>* obj);
+    inline void setObject( Object< MDesType>* obj);
     /** Set DF to operand */
     //inline void setDF( DF* df);
     /** Set whether operand is implicit */
@@ -63,11 +64,11 @@ public:
     /** Set constant value */
     inline void setConstValue( Const i_value);
     /** Set target */
-    inline void setTarget( Operation< MdesType> *target_oper);
+    inline void setTarget( Operation< MDesType> *target_oper);
     /** Set operand type */
     inline void setType( OperandType type);
     /** Return operand object */
-    inline Object< MdesType> * object() const;
+    inline Object< MDesType> * object() const;
      /** Return DF edge of operand */
     //inline DF& df() const;
     /** Return whether operand is implicit */
@@ -75,7 +76,7 @@ public:
     /** Return constant value */
     inline Const constValue() const;
     /** Return target operation */
-    inline Operation< MdesType> * target() const;
+    inline Operation< MDesType> * target() const;
     /** Return type of operand */
     inline OperandType type() const;
     
@@ -90,41 +91,41 @@ public:
     /** Print operand to stream */
     inline void toStream(ostream& os) const;
 private:
-    Object< MdesType> * obj;
+    Object< MDesType> * obj;
     //DF* df_;
     bool is_implicit : 1;
     Const i_value;
     OperandType type_;
-    Operation< MdesType> *target_;
+    Operation< MDesType> *target_;
 };
 
 /** Tag type for list */
-template <class MdesType> class OperSeq{};
+template <class MDesType> class OperSeq{};
 
 /**
  * @class Operation
  * @brief Representation of Operation
  */
-template <class MdesType> class Operation:
-    public Node< DG< MdesType>, Operation< MdesType>, DepEdge< MdesType> >,
-    public ListItem< Operation< MdesType>, OperSeq< MdesType> >
+template <class MDesType> class Operation:
+    public Node< DG< MDesType>, Operation< MDesType>, DepEdge< MDesType> >,
+    public ListItem< Operation< MDesType>, OperSeq< MDesType> >
 {
 public:
     
     /** Typedef for operation sequence list */
-    typedef ListItem< Operation< MdesType>, OperSeq< MdesType> > OperSeqList;
+    typedef ListItem< Operation< MDesType>, OperSeq< MDesType> > OperSeqList;
 
     /** Type of operation name */
-    typedef typename MdesType::OperName OperName;
+    typedef typename MDesType::OperName OperName;
     
     /** Constructor */
-    Operation( DG <MdesType> *g);
+    Operation( DG <MDesType> *g);
 
     /** Destructor */
     ~Operation();
 
     /** Get operation's function */
-    inline Function< MdesType> *function() const;
+    inline Function< MDesType> *function() const;
 
     /** Return name of the operation */
     inline OperName name() const;
@@ -136,21 +137,21 @@ public:
     inline UInt32 numRess() const;
 
     /** Get argument */
-    inline const Operand<MdesType>& arg( unsigned i) const;
+    inline const Operand<MDesType>& arg( unsigned i) const;
     /** Get result */
-    inline const Operand<MdesType>& res( unsigned i) const;
+    inline const Operand<MDesType>& res( unsigned i) const;
     
     /** Set argument's object */
-    inline void setArgObj( UInt32 arg_num, Object< MdesType> *obj);
+    inline void setArgObj( UInt32 arg_num, Object< MDesType> *obj);
 
     /** Set argument's immediate value */
     inline void setArgImm( UInt32 arg_num, Const imm_val);
 
     /** Set argument's target */
-    inline void setArgTarget( UInt32 arg_num, Operation<MdesType> *target);
+    inline void setArgTarget( UInt32 arg_num, Operation<MDesType> *target);
 
     /** Set result's object */
-    inline void setResObj( UInt32 res_num, Object< MdesType> *obj);
+    inline void setResObj( UInt32 res_num, Object< MDesType> *obj);
 
     /** Set name of operation */
     inline void setName( OperName nm);
@@ -165,86 +166,86 @@ public:
     inline void detachFromSeq();
 
     /** Next operation in operation sequence */
-    inline Operation< MdesType>* nextOper() const;
+    inline Operation< MDesType>* nextOper() const;
 
     /** Previous operation in operation sequence */
-    inline Operation< MdesType>* prevOper() const;
+    inline Operation< MDesType>* prevOper() const;
 
     /** Insert operation into sequence after given operation */
-    inline void insertAfter( Operation< MdesType> *prev_oper);
+    inline void insertAfter( Operation< MDesType> *prev_oper);
 
     /** Insert operation into sequence before given operation */
-    inline void insertBefore( Operation< MdesType> *next_oper);
+    inline void insertBefore( Operation< MDesType> *next_oper);
 
     /* Add an arguments to set */
-    inline const Operand< MdesType> * addArgToSet( Object< MdesType> *obj); //< Add object argument
-    inline const Operand< MdesType> * addArgToSet( Const imm_val);       //< Add immediate argument
+    inline const Operand< MDesType> * addArgToSet( Object< MDesType> *obj); //< Add object argument
+    inline const Operand< MDesType> * addArgToSet( Const imm_val);       //< Add immediate argument
 
     /* Add an result to set, only objects can be in results set */
-    inline const Operand< MdesType> * addResToSet( Object< MdesType> *obj); //< Add object result
+    inline const Operand< MDesType> * addResToSet( Object< MDesType> *obj); //< Add object result
 
     /** Get first argument operand in argument set */
-    inline Operand< MdesType> * firstArgInSet() const;
+    inline Operand< MDesType> * firstArgInSet() const;
     
     /** Get first result in result set */
-    inline Operand< MdesType> * firstResInSet() const;
+    inline Operand< MDesType> * firstResInSet() const;
 
-    inline CFNode< MdesType> * node() const;    //< Get the control flow node of the operation
-    inline void setNode( CFNode< MdesType> *n); //< Set the control flow node of the operation
+    inline CFNode< MDesType> * node() const;    //< Get the control flow node of the operation
+    inline void setNode( CFNode< MDesType> *n); //< Set the control flow node of the operation
 
     inline bool isLastInNode() const;  //< Check if the operation is last in its CF node
     inline bool isFirstInNode() const; //< Check if the operation is first in its CF node
     
 private:
     /* Arrays of operands */
-    Operand<MdesType> args[ MdesType::max_args]; //< Array of argument operands
-    Operand<MdesType> ress[ MdesType::max_ress]; //< Array of result operands
+    Operand<MDesType> args[ MDesType::max_args]; //< Array of argument operands
+    Operand<MDesType> ress[ MDesType::max_ress]; //< Array of result operands
     
     /* 
      * Argument and result sets of arbitrary length (e.g. in operations like call)
      * are implemented as the lists of operands. Memory is still controlled by the operation.
      */
-    Operand<MdesType> *first_arg; //< First argument in set
-    Operand<MdesType> *first_res; //< First result in set
+    Operand<MDesType> *first_arg; //< First argument in set
+    Operand<MDesType> *first_res; //< First result in set
 
     OperName name_; //< Operation name
 
-    CFNode< MdesType> * node_; //< Control flow node of the operation
+    CFNode< MDesType> * node_; //< Control flow node of the operation
 
     /** Print operand list to stream */
-    inline void opListToStream(ostream& os, Operand< MdesType>* op) const;
+    inline void opListToStream(ostream& os, Operand< MDesType>* op) const;
 };
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, const Object<MdesType> &object) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, const Object<MDesType> &object) 
 {   
     object.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, Object<MdesType> *obj) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, Object<MDesType> *obj) 
 {   
     obj->toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, const Operand<MdesType> &op) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, const Operand<MDesType> &op) 
 {   
     op.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, const Operation<MdesType> &oper) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, const Operation<MDesType> &oper) 
 {   
     oper.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, Operation<MdesType> *oper) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, Operation<MDesType> *oper) 
 {   
     oper->toStream(os);
     return os;

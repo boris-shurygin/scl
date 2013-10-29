@@ -15,36 +15,36 @@ namespace IR
     * @brief Representation of function
     * @ingroup IR
     */
-template <class MdesType> class Function: 
-    public DG< MdesType>,
-    public SListIface<Function <MdesType> >
+template <class MDesType> class Function: 
+    public DG< MDesType>,
+    public SListIface<Function <MDesType> >
 {
 public:
-    Function( Module<MdesType> *m);                   //< Create function in given module
-    Function( Module<MdesType> *m, string func_name); //< Create named function in given module
+    Function( Module<MDesType> *m);                   //< Create function in given module
+    Function( Module<MDesType> *m, string func_name); //< Create named function in given module
     
     virtual ~Function();  //< Delete function
 
-    inline Module<MdesType> *module() const; //< Get the module of the function
-    inline CFG<MdesType> &cfg() ;            //< Get control flow graph of the function
+    inline Module<MDesType> *module() const; //< Get the module of the function
+    inline CFG<MDesType> &cfg() ;            //< Get control flow graph of the function
         
     /** Create new operation */
-    inline Operation< MdesType> * newOper( typename MdesType::OperName name);
+    inline Operation< MDesType> * newOper( typename MDesType::OperName name);
         
     /** Create new operaiton and insert it into sequence */
-    inline Operation< MdesType> * newOperAfter( typename MdesType::OperName name, Operation< MdesType> *prev_oper); 
+    inline Operation< MDesType> * newOperAfter( typename MDesType::OperName name, Operation< MDesType> *prev_oper); 
         
     /** Create new object */
-    inline Object< MdesType> * newObject( typename MdesType::ObjName name);
+    inline Object< MDesType> * newObject( typename MDesType::ObjName name);
     
     /** Create new object */
-    inline Object< MdesType> * newArg( UInt16 arg_num, typename MdesType::ObjName name);
+    inline Object< MDesType> * newArg( UInt16 arg_num, typename MDesType::ObjName name);
 
     /** Get function's first operation in sequence */
-    inline Operation< MdesType> * firstOper() const;
+    inline Operation< MDesType> * firstOper() const;
 
     /** Set function's first operation in sequence */
-    inline void setFirstOper( Operation< MdesType> * oper);
+    inline void setFirstOper( Operation< MDesType> * oper);
 
     /** Print function to stream */
     inline void toStream(ostream& os);
@@ -55,41 +55,41 @@ public:
     /** Get the function name */
     inline void setName( string new_name);
 private:
-    Operation< MdesType> *newNode();   // Create new dep graph node (operation without a name)
-    Module< MdesType> *module_p;       //< Pointer to the module
-    list< Object< MdesType> *> objects;//< List of function's objects
-    CFG< MdesType> cfg_;               //< Control flow graph
+    Operation< MDesType> *newNode();   // Create new dep graph node (operation without a name)
+    Module< MDesType> *module_p;       //< Pointer to the module
+    list< Object< MDesType> *> objects;//< List of function's objects
+    CFG< MDesType> cfg_;               //< Control flow graph
         
     /** First operation in linear sequence of operaitons in this function */
-    Operation< MdesType> *first_oper_in_seq;
+    Operation< MDesType> *first_oper_in_seq;
     /** Next object id */
-    UInt32 obj_id[ MdesType::num_objs];
+    UInt32 obj_id[ MDesType::num_objs];
     /** Name of the function */
     string name_;
     /** Arguments */
-    vector< Object< MdesType> *> args;
+    vector< Object< MDesType> *> args;
 };
 
 /** Get the function name */
-template <class MdesType> string Function< MdesType>::name() const
+template <class MDesType> string Function< MDesType>::name() const
 {
     return name_;
 }
 
 /** Get the function name */
-template <class MdesType> void Function< MdesType>::setName( string new_name)
+template <class MDesType> void Function< MDesType>::setName( string new_name)
 {
     name_ = new_name;
 }
     
 /** Get function's first operation in sequence */
-template <class MdesType> Operation< MdesType> *  Function< MdesType>::firstOper() const
+template <class MDesType> Operation< MDesType> *  Function< MDesType>::firstOper() const
 {
     return first_oper_in_seq;
 }
 
 /** Set function's first operation in sequence */
-template <class MdesType> void Function< MdesType>::setFirstOper( Operation< MdesType> * oper)
+template <class MDesType> void Function< MDesType>::setFirstOper( Operation< MDesType> * oper)
 {
     first_oper_in_seq = oper;
 }
@@ -97,9 +97,9 @@ template <class MdesType> void Function< MdesType>::setFirstOper( Operation< Mde
 /** 
  * Create function in given module
  */
-template <class MdesType> Function< MdesType>::Function( Module<MdesType> *m): module_p( m) 
+template <class MDesType> Function< MDesType>::Function( Module<MDesType> *m): module_p( m) 
 {
-    for ( int i = 0; i < MdesType::num_objs; ++i)
+    for ( int i = 0; i < MDesType::num_objs; ++i)
     {
         obj_id[ i] = 0;
     }
@@ -108,10 +108,10 @@ template <class MdesType> Function< MdesType>::Function( Module<MdesType> *m): m
 /** 
  * Create named function in given module
  */
-template <class MdesType> Function< MdesType>::Function( Module<MdesType> *m, string func_name):
+template <class MDesType> Function< MDesType>::Function( Module<MDesType> *m, string func_name):
     module_p( m), name_( func_name) 
 {
-    for ( int i = 0; i < MdesType::num_objs; ++i)
+    for ( int i = 0; i < MDesType::num_objs; ++i)
     {
         obj_id[ i] = 0;
     }
@@ -120,10 +120,10 @@ template <class MdesType> Function< MdesType>::Function( Module<MdesType> *m, st
 /** 
  * Function destructor
  */
-template <class MdesType> 
-Function< MdesType>::~Function()
+template <class MDesType> 
+Function< MDesType>::~Function()
 {
-    for ( typename list< Object< MdesType> *>::iterator it = objects.begin(), end =  objects.end();
+    for ( typename list< Object< MDesType> *>::iterator it = objects.begin(), end =  objects.end();
             it != end;
             ++it)
     {
@@ -132,60 +132,60 @@ Function< MdesType>::~Function()
 }
 
 /** Get the module of the function */
-template <class MdesType> Module< MdesType> *Function<MdesType>::module() const
+template <class MDesType> Module< MDesType> *Function<MDesType>::module() const
 {
     return module_p;
 }
 /** Get control flow graph of the function */
-template <class MdesType> CFG<MdesType> &
-Function< MdesType>::cfg()
+template <class MDesType> CFG<MDesType> &
+Function< MDesType>::cfg()
 {
     return cfg_;
 }
 
-template <class MdesType>
-Operation< MdesType> * 
-Function< MdesType>::newNode()
+template <class MDesType>
+Operation< MDesType> * 
+Function< MDesType>::newNode()
 {
-    return DG< MdesType>::newNode();
+    return DG< MDesType>::newNode();
 }
 
-template <class MdesType>
-Operation< MdesType> * 
-Function< MdesType>::newOper( typename MdesType::OperName name)
+template <class MDesType>
+Operation< MDesType> * 
+Function< MDesType>::newOper( typename MDesType::OperName name)
 {
-    IR_ASSERTD( MdesType::checkName( name) );
-    Operation< MdesType> * oper = newNode();
+    IR_ASSERTD( MDesType::checkName( name) );
+    Operation< MDesType> * oper = newNode();
     oper->setName( name);
     return oper;
 }
-template <class MdesType>
-Operation< MdesType> * 
-Function< MdesType>::newOperAfter( typename MdesType::OperName name, Operation< MdesType> *prev_oper)
+template <class MDesType>
+Operation< MDesType> * 
+Function< MDesType>::newOperAfter( typename MDesType::OperName name, Operation< MDesType> *prev_oper)
 {
-    IR_ASSERTD( MdesType::checkName( name) );
-    Operation< MdesType> * oper = newNode();
+    IR_ASSERTD( MDesType::checkName( name) );
+    Operation< MDesType> * oper = newNode();
     oper->setName( name);
     oper->insertAfter( prev_oper);
     return oper;
 }
 
-template <class MdesType>
-Object< MdesType> * 
-Function< MdesType>::newObject( typename MdesType::ObjName name)
+template <class MDesType>
+Object< MDesType> * 
+Function< MDesType>::newObject( typename MDesType::ObjName name)
 {
-    Object< MdesType> * obj = new Object< MdesType>();
+    Object< MDesType> * obj = new Object< MDesType>();
     obj->setType( name);
     obj->setId( obj_id[ name]++);
     objects.push_back( obj);
     return obj;
 }
 
-template <class MdesType>
-Object< MdesType> * 
-Function< MdesType>::newArg( UInt16 arg_num, typename MdesType::ObjName name)
+template <class MDesType>
+Object< MDesType> * 
+Function< MDesType>::newArg( UInt16 arg_num, typename MDesType::ObjName name)
 {
-    Object< MdesType> * obj = newObject( name);
+    Object< MDesType> * obj = newObject( name);
     if ( ( arg_num + 1 ) > args.size() )
     {
         args.resize( arg_num + 1);
@@ -194,9 +194,9 @@ Function< MdesType>::newArg( UInt16 arg_num, typename MdesType::ObjName name)
     return obj;
 }
 
-template <class MdesType>
+template <class MDesType>
 void
-Function< MdesType>::toStream(ostream& os)
+Function< MDesType>::toStream(ostream& os)
 {
     Marker m = MarkerManager::newMarker();
 
@@ -205,7 +205,7 @@ Function< MdesType>::toStream(ostream& os)
 
     /** Print arguments */
     os << "( ";
-    for ( typename vector< Object< MdesType> *>::iterator it = args.begin(),
+    for ( typename vector< Object< MDesType> *>::iterator it = args.begin(),
                                                 end = args.end();
          it != end; ++it)
     {
@@ -222,7 +222,7 @@ Function< MdesType>::toStream(ostream& os)
     }
 
     /* Find the target operations */
-    for ( Operation< MdesType> * oper = DG< MdesType>::firstNode();
+    for ( Operation< MDesType> * oper = DG< MDesType>::firstNode();
             isNotNullP( oper);
             oper = oper->nextNode())
     {
@@ -230,14 +230,14 @@ Function< MdesType>::toStream(ostream& os)
         {
             if ( oper->arg( i).isTarget())
             {
-                Operation< MdesType> * target = oper->arg(i).target();
+                Operation< MDesType> * target = oper->arg(i).target();
                 target->mark( m);
             }
         }
     }
 
     /* Iterating over operations in functions */
-    for ( Operation< MdesType> *oper = firstOper();
+    for ( Operation< MDesType> *oper = firstOper();
             isNotNullP( oper);
             oper = oper->nextOper())
     {
@@ -250,15 +250,15 @@ Function< MdesType>::toStream(ostream& os)
     this->freeMarker( m);
 }
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, const Function<MdesType> &f) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, const Function<MDesType> &f) 
 {   
     f.toStream(os);
     return os;
 } 
 
-template <class MdesType> 
-std::ostream& operator<<(std::ostream& os, Function<MdesType> *f) 
+template <class MDesType> 
+std::ostream& operator<<(std::ostream& os, Function<MDesType> *f) 
 {   
     f->toStream(os);
     return os;
