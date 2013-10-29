@@ -13,10 +13,18 @@ template <> MDes::ObjDes MDes::objects[ MDes::num_objs] = {};
 #define OPER( name, str, ...) initOperDes< __VA_ARGS__>( name, str);
 #define OBJ( ...) initObjDes( __VA_ARGS__);
 
-/** Operations descriptions */
-template <> MDes::MDesImpl()
+/*
+ * Enclosed the MDes constructor specialization in IR namespace to resolve
+ * 'specialization in different namespace compiler error'
+ */
+namespace IR
 {
-    #include "opt_mdes_inc.hpp"
-}
+    /** Operations descriptions */
+    template <> MDes::MDesImpl()
+    {
+        #include "opt_mdes_inc.hpp"
+    }
+};
 
 MDes opt_mdes;
+

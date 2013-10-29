@@ -41,4 +41,5 @@ namespace Opt
     typedef MDes::OpType<Reg, 32, CAN_BE_IMM> reg_imm_32;
     typedef MDes::OpType<Reg, 32, CANNOT_BE_IMM> reg_32;
     typedef MDes::OpType<OPT_OBJECTS_NUM, 32, CAN_BE_IMM> imm_32;
+  
 };
