@@ -98,6 +98,9 @@
     <ClInclude Include="utest_impl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\opt\opt.vcxproj">
+      <Project>{a5918eac-8bb5-47ed-bd40-261965827990}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Tools\Tools.vcxproj">
       <Project>{d128839b-3939-4b47-b2ae-7dc75c56f282}</Project>
     </ProjectReference>
