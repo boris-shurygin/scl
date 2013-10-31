@@ -4,8 +4,3 @@
  */
 #include "../Tools/tools_iface.h"
 #include "../opt/opt_iface.hpp"
-
-/**
- * Test Utils package
- */
-bool uTestUtils();

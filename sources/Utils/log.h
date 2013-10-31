@@ -23,6 +23,10 @@
 #    define LOG_ASSERTD(cond, what) ASSERT_XD(cond, "Logs", what)
 #endif
 
+/* Add log to Utils namespace */
+namespace Utils
+{
+
 /**
  * Log identificator
  * @ingroup Logs
@@ -65,6 +69,8 @@ enum LogId
  */
 class LogControl
 {
+    /** Default indentation unit width */
+    static const UInt32 DEFAULT_INDENT_WIDTH = 2;
 public:
     
     /** Log colntrol contructor. 
@@ -96,7 +102,20 @@ public:
     inline UInt8 verb( LogId id);     /**< Get verbosity level of log with given id */
     inline bool isEnabled( LogId id); /**< Check that log is enabled */
 
+    inline UInt32 indent( LogId id) const;        /**< Get indentation factor for the given log id (in units) */
+    inline void incIndent( LogId id);             /**< Increase indentation for the given log id */
+    inline void decIndent( LogId id);             /**< Decrease indentation for the given log id */
+    inline void setIndent( LogId id, UInt32 sz);  /**< Set indentation for the given log id */
+
+    inline UInt32 indentWidth( LogId id) const;         /**< Get indentation unit width for the given log id */
+    inline void setIndentWidth( LogId id, UInt32 width);/**< Set indentation unit width for the given log id */
 private:
+    
+    /**
+     * Convert incoming message string into several strings 
+     * with the correct prefixes and indentation
+     */
+    inline std::string prepareString( LogId id, const std::string &str);
 
     static const UInt8 max_verbosity = (UInt8)(-1);
     static const UInt32 max_buf_size = 256;
@@ -104,12 +123,64 @@ private:
     bool registered[ LOGS_NUM];
     bool enabled[ LOGS_NUM];
     bool unique_name[ LOGS_NUM];
+    UInt32 indent_size[ LOGS_NUM];
+    UInt32 indent_width[ LOGS_NUM];
     string fname[ LOGS_NUM];
     ostream* stream[ LOGS_NUM];
     string prefix[ LOGS_NUM];
     UInt8 verbosity[ LOGS_NUM];
     filebuf fb[ LOGS_NUM];
 };
+
+/** Get indentation factor for the given log id (in units) */
+inline UInt32
+LogControl::indent( LogId id) const
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    return indent_size[ id];
+}
+
+/** Increase indentation for the given log id */
+inline void
+LogControl::incIndent( LogId id)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    indent_size[ id]++;
+}      
+
+/** Decrease indentation for the given log id */
+inline void
+LogControl::decIndent( LogId id)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    if ( indent_size[ id] > 0)
+    {
+        indent_size[ id]--;
+    }
+}
+
+
+/** Set indentation for the given log id */
+inline void
+LogControl::setIndent( LogId id, UInt32 sz)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    indent_size[ id] = sz;
+}
+
+/** Get indentation unit width for the given log id */
+inline UInt32 LogControl::indentWidth( LogId id) const
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    return indent_width[ id];
+}
+
+/** Set indentation unit width for the given log id */
+inline void LogControl::setIndentWidth( LogId id, UInt32 width)
+{
+    LOG_ASSERTD( registered[ id], "log id is not registered");
+    indent_width[ id] = width;
+}
 
 /**
  * Get verbosity level of log with given id
@@ -154,7 +225,7 @@ inline void LogControl::log( LogId id, const char *mess, ...)
 
         /* Print string to stream */
         ostream &output_stream = *(stream[ id]);
-        output_stream << prefix[ id] << ": " << buf << endl;
+        output_stream << prepareString( id, buf);
     }
 }
 
@@ -168,7 +239,7 @@ LogControl::log( LogId id, std::ostringstream& os)
     if ( enabled[ id])
     {
         ostream &output_stream = *(stream[ id]);
-        output_stream << prefix[ id] << ": " << os.str() << endl;
+        output_stream << prepareString( id, os.str());
     }
 }
   
@@ -179,6 +250,29 @@ inline void LogControl::disable( LogId id)
 {
     LOG_ASSERTD( registered[ id], "log id is not registered");
     enabled[ id] = false;
+}
+
+/**
+ * Convert incoming message string into several strings with correct prefixes and indentation
+ */
+inline std::string
+LogControl::prepareString( LogId id, const std::string &str)
+{
+    std::ostringstream tmp;
+    std::stringstream ss(str);
+    std::string one_line_str;
+    UInt32 padding_width = indent_size[ id] * indent_width[ id];
+
+    // Split the incoming message string into a bunch of one-line strings separated by the '\n'
+    while ( std::getline(ss, one_line_str))
+    {
+        // Insert correct number of whitespaces
+        one_line_str.insert( one_line_str.begin(), padding_width, ' ');
+        
+        // Print one string to the ostream with the prefix
+        tmp << prefix[ id] << ": " << one_line_str << endl;
+    }
+    return tmp.str();
 }
 
 
@@ -208,22 +302,36 @@ inline void LogControl::disable( LogId id)
  */
 typedef Single< LogControl> Log;
 
+/** Convenience routine */
+inline LogControl* log()
+{
+    return Log::ptr();
+}
+
 #ifndef NO_LOGS
 #  define LOGV( log_id, verbosity, message, ...) \
-     if ( Log::ptr()->isEnabled( log_id)\
-          && verbosity <= Log::ptr()->verb( log_id) ) Log::ptr()->log( log_id, message, __VA_ARGS__)
+     if ( Utils::Log::ptr()->isEnabled( log_id)\
+          && verbosity <= Log::ptr()->verb( log_id) ) Utils::Log::ptr()->log( log_id, message, __VA_ARGS__)
 #  define LOGVS( log_id, verbosity, message)\
     if ( bool cond = true\
-         && Log::ptr()->isEnabled( log_id)\
-         && verbosity <= Log::ptr()->verb( log_id) ) for ( std::ostringstream os; cond; cond = false)\
-         {os << message;Log::ptr()->log( log_id, os);}
+         && Utils::Log::ptr()->isEnabled( log_id)\
+         && verbosity <= Utils::Log::ptr()->verb( log_id) ) for ( std::ostringstream os; cond; cond = false)\
+         {os << message;Utils::Log::ptr()->log( log_id, os);}
 #  define LOG( log_id, message, ...) LOGV( log_id, 0, message, __VA_ARGS__)
 #  define LOGS( log_id, message) LOGVS( log_id, 0, message)
+#  define LOG_INC_INDENT( log_id) { Utils::Log::ptr()->incIndent( log_id); }
+#  define LOG_DEC_INDENT( log_id) { Utils::Log::ptr()->decIndent( log_id); }
 #else
 #  define LOGV( log_id, verbosity, message, ...)
 #  define LOGVS( log_id, verbosity, message)
 #  define LOG( log_id, verbosity, message)
 #  define LOGS( log_id, verbosity, message)
+#  define LOG_INC_INDENT( log_id)
+#  define LOG_DEC_INDENT( log_id)
 #endif
 
+    /** Unit testing routine for logs */
+    bool uTestLogs();
+
+}; /* namespace Utils*/
 #endif /* UTILS_LOG_H */

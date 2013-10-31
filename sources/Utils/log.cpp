@@ -7,6 +7,8 @@
  */
 #include "utils_iface.h"
 
+using namespace Utils;
+
 /**
  * Constructor for logs
  */
@@ -14,6 +16,9 @@ LogControl::LogControl()
 {
     for ( Int8 id = 0; id < LOGS_NUM; id++)
     {
+        indent_size[ id]  = 0;
+        indent_width[ id] = DEFAULT_INDENT_WIDTH;
+        prefix[ id] = std::string(); // no prefix by default
         enabled[ id] = false;
         registered[ id] = false;
         verbosity[ id] = max_verbosity;

@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     MemMgr::init();
 
     /** Test utils */
-    if ( !uTestUtils())
+    if ( !Utils::uTest())
         return -1;
 
     /** Test Graph package */
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
     /** Test optimizer package */
     if ( !Opt::uTest())
         return -1;
-    
+
     MemMgr::deinit();
     Log::deinit();
     

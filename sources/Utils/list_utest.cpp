@@ -7,6 +7,8 @@
  */
 #include "utils_iface.h"
 
+using namespace Utils;
+
 static const int LIST_TEST_NUM_NODES = 100000;
 
 
@@ -130,7 +132,7 @@ uTestTagList()
 /**
  * Test list classes operation
  */
-bool uTestList()
+bool Utils::uTestList()
 {
     if ( !uTestMList())
         return false;

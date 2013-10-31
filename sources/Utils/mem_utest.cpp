@@ -166,7 +166,7 @@ static bool uTestPools()
 /**
  * Test smart pointers, objects and pools
  */
-bool uTestMem()
+bool Utils::uTestMem()
 {
     /** Test smart pointers */
     if ( !uTestRef())

@@ -46,17 +46,20 @@
 namespace Utils
 {
     using namespace PrintUtils;
+
+    /**
+     * Test list classes
+     */
+    bool uTestList();
+
+    /**
+     * Test memory manager
+     */
+    bool uTestMem();
+    /**
+     * Test Utils package
+     */
+    bool uTest();
 };
-
-/**
- * Test list classes
- */
-bool uTestList();
-
-/**
- * Test memory manager
- */
-bool uTestMem();
-
 
 #endif

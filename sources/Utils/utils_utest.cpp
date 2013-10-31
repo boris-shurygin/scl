@@ -7,6 +7,8 @@
  */
 #include "utils_iface.h"
 
+using namespace Utils;
+
 /** Sample class */
 class A
 {
@@ -55,7 +57,7 @@ namespace UTestFinal
  */
 static bool uTestMisc()
 {
-#if 0 
+#if 0
     // We can create objects of the class Base
     UTestFinal::Base b;
     
@@ -70,7 +72,7 @@ static bool uTestMisc()
 /**
  * Test Utils package
  */
-bool uTestUtils()
+bool Utils::uTest()
 {
     /** Various tests of auxiliary routines - REPLACED WITH BOOST UTF */
     if ( !uTestMisc())
@@ -81,9 +83,11 @@ bool uTestUtils()
     /** Tets list classes */
     if ( !uTestList())
         return false;
-
     /** Test memory management */
     if ( !uTestMem())
+        return false;
+    /** Test memory management */
+    if ( !uTestLogs())
         return false;
 
     return true;

@@ -29,8 +29,8 @@ public:
      * Decaration of friends so that we could
      * access the constructor from specified classes
      */
-    //friend FinalType;
-    //friend Final< FinalType>;
+    friend FinalType;
+    friend class Final< FinalType>;
 };
 
 /**
