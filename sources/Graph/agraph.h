@@ -29,32 +29,7 @@ class ANode: public Node< AGraph, ANode, AEdge>
 {
 public:
     int dummy;
-    
     ANode( AGraph* g): Node< AGraph, ANode, AEdge>( g){};
-
-    /** Get next GraphImpl's node */
-    inline ANode* nextNode()
-    {
-        return static_cast< ANode*>( NodeImpl::nextNode());
-    }
-    /** Get prev GraphImpl's node */
-    inline ANode* prevNode()
-    {
-        return static_cast< ANode*>( NodeImpl::prevNode());
-    }
-    /** EdgeImpl connection reimplementation */
-    inline void AddEdgeInDir( AEdge *edge, GraphDir dir);
-    /** Add predecessor */
-    inline void AddPred( AEdge *edge);
-    /** Add successor */
-    inline void AddSucc( AEdge *edge);
-    /** Get first edge in given direction */
-    inline AEdge* firstEdgeInDir( GraphDir dir);
-    /** Get first successor */
-    inline AEdge* firstSucc();
-    /** Get first predecessor */
-    inline AEdge* firstPred();
-
 };
 
 /**
@@ -72,102 +47,15 @@ public:
     {
         
     }
-
-    /** Get node in given direction */
-    inline ANode *node( GraphDir dir) const
-    {
-        return static_cast< ANode *>( EdgeImpl::node( dir));
-    }
-    /** Get predecessor */
-    inline ANode *pred() const 
-    {
-        return node( GRAPH_DIR_UP);
-    }
-    /** Get successor */
-    inline ANode *succ() const 
-    {
-        return node( GRAPH_DIR_DOWN);
-    }  
-    /** Next edge in GraphImpl's list */
-    inline AEdge* nextEdge()
-    {
-        return static_cast< AEdge *>( EdgeImpl::nextEdge());
-    }
-    /** Next edge in give direction */
-    inline AEdge* nextEdgeInDir( GraphDir dir)
-    {
-        return static_cast< AEdge *>( EdgeImpl::nextEdgeInDir( dir));
-    }
-    /** Next successor */
-    inline AEdge* nextSucc()
-    {
-        return nextEdgeInDir( GRAPH_DIR_DOWN);
-    }
-    /** Next predecessor */
-    inline AEdge* nextPred()
-    {
-        return nextEdgeInDir( GRAPH_DIR_UP);
-    } 
 };
 
 /**
- * Testing-purpose GraphImpl
+ * Testing-purpose graph
  *
  * @ingroup AGr
  */
 class AGraph: public Graph< AGraph, ANode, AEdge>
 {
     int dummy; //Dummy class member
-
-public:
-            
-    /** Get GraphImpl's first edge */
-    inline AEdge* firstEdge() 
-    {
-        return static_cast< AEdge *>( GraphImpl::firstEdge());
-    }
-    /** Get GraphImpl's first node */
-    inline ANode* firstNode()
-    {
-        return static_cast< ANode *>( GraphImpl::firstNode());
-    }
 };
-
-/** Get first edge in given direction */
-inline AEdge*
-ANode::firstEdgeInDir( GraphDir dir)
-{
-    return static_cast< AEdge*>( NodeImpl::firstEdgeInDir( dir));
-}
-/** Get first successor */
-inline AEdge*
-ANode::firstSucc()
-{
-    return firstEdgeInDir( GRAPH_DIR_DOWN);
-}
-/** Get first predecessor */
-inline AEdge*
-ANode::firstPred()
-{
-    return firstEdgeInDir( GRAPH_DIR_UP);
-}
-
-/** EdgeImpl connection reimplementation */
-inline void
-ANode::AddEdgeInDir( AEdge *edge, GraphDir dir)
-{
-    NodeImpl::AddEdgeInDir( edge, dir);
-}
-/** Add predecessor */
-inline void
-ANode::AddPred( AEdge *edge)
-{
-    AddEdgeInDir( edge, GRAPH_DIR_UP);
-}
-/** Add successor */
-inline void
-ANode::AddSucc( AEdge *edge) 
-{
-    AddEdgeInDir( edge, GRAPH_DIR_DOWN);
-}
 #endif
