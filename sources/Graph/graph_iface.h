@@ -5,9 +5,9 @@
  * @defgroup GraphBase Graph
  * @ingroup Core
  *
- * @brief Representation of GraphImpls
+ * @brief Representation of graphs
  * 
- * Graph representation is implemented through 3 tightly connected classes Graph, NodeImpl and EdgeImpl.
+ * Graph representation is implemented through 3 tightly connected classes Graph, Node and Edge.
  */
 /*
  * Graph library, internal representation of GraphImpls in compiler prototype project tool.
@@ -40,9 +40,9 @@
 /**
  * Convenience macro for traversing edges in given direction
  * @ingroup GraphBase
- * @param node A node that we use to get first edge
- * @param edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
- * @param dir 'Succ' or 'Pred'
+am node A node that we use to get first edge
+am edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
+am dir 'Succ' or 'Pred'
  */
 #ifndef ForEdges
 #  define ForEdges(node, edge, dir) ITERATE_NODE_EDGES(node, edge, dir)
@@ -51,8 +51,8 @@
 /**
  * Convenience macro for traversing successors of node
  * @ingroup GraphBase
- * @param edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
- * @param node A node that we use to get first edge
+am edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
+am node A node that we use to get first edge
  */
 #ifndef foreachSucc
 #  define foreachSucc(edge, node) ITERATE_NODE_SUCCS(edge, node)
@@ -61,8 +61,8 @@
 /**
  * Convenience macro for traversing predecessors of node
  * @ingroup GraphBase
- * @param edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
- * @param node A node that we use to get first edge
+am edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
+am node A node that we use to get first edge
  */
 #ifndef foreachPred
 #  define foreachPred(edge, node) ITERATE_NODE_PREDS(edge, node)
@@ -80,8 +80,8 @@
 /**
  * Convenience macro for traversing edges in Graph
  * @ingroup GraphBase
- * @param edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
- * @param Graph Graph of interest
+am edge An object of EdgeImpl type or subclass of EdgeImpl which is the loop variable
+am Graph Graph of interest
  */
 #ifndef foreachEdge
 #  define foreachEdge(edge, Graph) ITERATE_GRAPH_EDGES(edge, Graph)
@@ -90,8 +90,8 @@
 /**
  * Convenience macro for traversing nodes in Graph
  * @ingroup GraphBase
- * @param node An object of NodeImpl type or subclass of NodeImpl which is the loop variable
- * @param Graph Graph of interest
+am node An object of NodeImpl type or subclass of NodeImpl which is the loop variable
+am Graph Graph of interest
  */
 #ifndef foreachNode
 #  define foreachNode(node, Graph) ITERATE_GRAPH_NODES(node, Graph)

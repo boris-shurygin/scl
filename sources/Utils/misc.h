@@ -52,7 +52,7 @@ inline bool areNotEqP( const void *p1, const void *p2)
  * @param Value value type
  * @param val signed value used to get absolute value
  *
- * @par 
+ * @details
  * Returns absolute value for a given signed operand. Note that operators
  * "<" and "-" must be defined for parameter class
  */

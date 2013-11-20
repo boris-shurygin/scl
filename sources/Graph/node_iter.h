@@ -38,6 +38,7 @@ public:
         return this->edge_p == o.edge_p;
     }
 };
+
 /** Parameter for iterator template specialization (succ traversal) */
 template < class N, class E> class SuccIterImpl: public IterImplBase< N, E>
 {

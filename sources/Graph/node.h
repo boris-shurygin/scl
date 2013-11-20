@@ -15,11 +15,9 @@
 /**
  * @class NodeImpl
  * @brief Representation of GraphImpl node. 
- *
- * @ingroup GraphBase
  * 
- * @par
- * A GraphImpl node has two lists of edges which represent predecessors and successors. 
+ * @details
+ * A graph node has two lists of edges which represent predecessors and successors. 
  * NodeImpl's predecessors and successors can be traversed by using three interfaces:
  * -# Get first edge in direction of interest via firstSucc(),firstPred() and then 
  *    use EdgeImpl's interface EdgeImpl::nextSucc(), EdgeImpl::nextPred()
@@ -51,21 +49,15 @@
      ...
   }
   @endcode
- * @par
+ *
  * A node can be @ref Marked "marked" and @ref Numbered "numbered". @ref Mark "Markers" and
  * @ref Nums "numerations" are managed by @ref GraphImpl "GraphImpl". Note that @ref EdgeImpl "edges" can be marked with the
  * same marker or numbered in the same numeration.
  * 
- * @par
- * All nodes in GraphImpl are linked in a list. Previous and next nodes can be obtained
+ * All nodes in graph are linked in a list. Previous and next nodes can be obtained
  * through prevNode and nextNode routines. Also for debug purposes all nodes in a GraphImpl
  * have unique id, which can be usefull for printing to console or setting breakpoint conditions.
  *
- * @par
- * A node resides in memory pool that is controlled by GraphImpl. Operator new can't be called 
- * directly. Nodes can be only created by newNode method of GraphImpl class. 
- *
- * @par
  * Nodes have associated QDomElement for XML export support. The updateElement() routine should be called before 
  * export to get element in sync with node's properties.
  *
@@ -130,7 +122,74 @@ private:
 };
 
 
-
+/**
+ * @class Node
+ * @brief Template for making user object a node of directed graph, parameterized by the graph, node and edge types
+ * @ingroup GraphBase
+ * @details
+ * The user can create his custom node class by subclassing Node template instance in the following manner:
+ @code
+class MyNode: public Node< MyGraph, MyNode, MyEdge>
+{
+    int dummy; //user data
+public:
+    MyNode( MyGraph* g): 
+        Node< MyGraph, MyNode, MyEdge>( g){};//A constructor with graph pointer parameter must be implemented
+};
+ @endcode
+ *
+ * A graph node has two lists of edges which represent predecessors and successors. 
+ * NodeImpl's predecessors and successors can be traversed by using three interfaces:
+ * -# Get first edge in direction of interest via firstSucc(),firstPred() and then 
+ *    use EdgeImpl's interface EdgeImpl::nextSucc(), EdgeImpl::nextPred()
+ * -# Use iterators NodeImpl::Succ and NodeImpl::Pred wich are used for successor and predecessor traversal of edges. 
+ *    Routines succsBegin(), succsEnd(), predsBegin() and predsEnd() are used for creating iterators.
+ * -# EdgeIter can be used for iterating trough all node's adjacent edges without respect to 
+ *    their direction.
+ * 
+@code
+  // Traversing edges simple
+  for ( MyEdge* e = firstPred();
+        isNotNullP( e);
+        e = e->nextPred())
+  {
+     ...
+  }
+  //Same using macro foreachPred
+  MyEdge* e; 
+  foreachPred( e, node)
+  {
+     ...
+  }
+  //Traversal via iterators
+  for ( MyNode::Succ s = node->succsBegin(),
+                   s_end = node->succsEnd();
+        s != s_end;
+        s++ )
+  {
+     ...
+  }
+@endcode
+ * A node can be @ref Marked "marked" and @ref Numbered "numbered". @ref Mark "Markers" and
+ * @ref Nums "numerations" are managed by @ref GraphImpl "GraphImpl". Note that @ref EdgeImpl "edges" can be marked with the
+ * same marker or numbered in the same numeration.
+ * 
+ * All nodes in GraphImpl are linked in a list. Previous and next nodes can be obtained
+ * through prevNode and nextNode routines. Also for debug purposes all nodes in a GraphImpl
+ * have unique id, which can be usefull for printing to console or setting breakpoint conditions.
+ *
+ * A node resides in memory pool that is controlled by Graph. Operator new can't be called 
+ * directly. Nodes can be only created by newNode method of Graph class. 
+ *
+ * Nodes have associated QDomElement for XML export support. The updateElement() routine should be called before 
+ * export to get element in sync with node's properties.
+ * 
+ * @sa ANode
+ * @sa Graph
+ * @sa Edge
+ * @sa Mark
+ * @sa Nums
+ */
 template < class G, class N, class E> class Node: 
     public NodeImpl,
     public PoolObj< N, UseCustomFixedPool>

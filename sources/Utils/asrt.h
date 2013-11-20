@@ -17,8 +17,11 @@ void fatalAssert(const char *assertion, const char *file, int line);
 inline void noop() {}
 
 /** 
- * Simple assert macro
+ * @brief Simple assert macro
  * @ingroup Asserts
+ * @param cond The condition
+ * @details 
+ * Assert macro: in case of failure prints condition, location and dies.
  */
 #if !defined(ASSERT)
 #  ifndef NO_DEBUG
@@ -37,6 +40,7 @@ void fatalAssertWithMess(const char *where, const char *what, const char *file, 
  * @param where Description of functionality where failure occured
  * @param what Error message explaining what happened
  *
+ * @details
  * Assertion that in case of failure provides additional info about what happened
  */
 #if !defined(ASSERT_X)
@@ -49,8 +53,11 @@ void fatalAssertWithMess(const char *where, const char *what, const char *file, 
 
 
 /**
- * Assert macro that works only in debug version
+ * @brief Assert macro that works only in debug version
  * @ingroup Asserts
+ * @param cond The condition
+ * @details 
+ * Assert macro that works only in debug version. In case of failure prints condition, location and dies.
  */
 #if !defined(ASSERTD)
 #  ifdef _DEBUG
@@ -66,7 +73,7 @@ void fatalAssertWithMess(const char *where, const char *what, const char *file, 
  * @param cond The condition
  * @param where Description of functionality where failure occured
  * @param what Error message explaining what happened
- *
+ * @details 
  * Assertion that in case of failure provides additional info about what happened
  */
 #if !defined(ASSERT_XD)

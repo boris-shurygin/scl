@@ -9,34 +9,37 @@
 
 using namespace Utils;
 
-/** Sample class */
-class A
+namespace TestSingle
 {
-    int a;
-    /** private constructors, assignment and destructor */
-    A(){};
-    A( const A&){};
-    A& operator =( const A&){};
-    ~A(){};
-    /** Needed for singleton creation */
-    friend class Single< A>;
-};
+    /** Sample class */
+    class A
+    {
+        int a;
+        /** private constructors, assignment and destructor */
+        A(){};
+        A( const A&){};
+        A& operator =( const A&){};
+        ~A(){};
+        /** Needed for singleton creation */
+        friend class Single< A>;
+    };
 
-/** Typedef for A encapsulated in singleton */
-typedef Single< A> SingleA;
+    /** Typedef for A encapsulated in singleton */
+    typedef Single< A> SingleA;
 
-/**
- * Test simple singleton
- */
-static bool uTestSingle()
-{
-    SingleA::init();
+    /**
+     * Test simple singleton
+     */
+    static bool uTestSingle()
+    {
+        SingleA::init();
 
-    A* a1 = SingleA::instance();
-    A* a2 = SingleA::instance();
-    ASSERT( areEqP( a1, a2));
-    SingleA::deinit();
-    return true;
+        A* a1 = SingleA::instance();
+        A* a2 = SingleA::instance();
+        ASSERT( areEqP( a1, a2));
+        SingleA::deinit();
+        return true;
+    }
 }
 
 #if 0
@@ -74,11 +77,11 @@ static bool uTestMisc()
  */
 bool Utils::uTest()
 {
-    /** Various tests of auxiliary routines - REPLACED WITH BOOST UTF */
+    /** Various tests of auxiliary routines */
     if ( !uTestMisc())
         return false;
-    /** test singleton  - REPLACED WITH BOOST UTF */
-    if ( !uTestSingle())
+    /** test singleton */
+    if ( !TestSingle::uTestSingle())
         return false;
     /** Tets list classes */
     if ( !uTestList())

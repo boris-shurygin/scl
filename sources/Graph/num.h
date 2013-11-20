@@ -7,14 +7,12 @@
  * @ingroup GraphBase
  * Numerations can be used to assign numbers to objects.
  *
- * @par
  * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()
  * or Numbered::setNumber()
  *
- * @par
  * Usage model is following. To make an object numerable you derive it from Numbered class.
  * Then if you have some class representing a container for this objects you derive it from
  * the NumManager class. When you want to numerate objects derived from Numbered you ask
@@ -144,14 +142,14 @@ const GraphNum NUMBER_MAX = (( GraphNum) -1) - 1;
  * @ingroup Nums
  * @brief Numeration description. 
  *
- * @par
+
  * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()
  * or Numbered::setNumber(). 
  *
- * @par Some Implemetation Details
+ * Some Implemetation Details
  * Numeration is created by NumManager class which ensures that numeration's index is used 
  * for this particular numeration only and gives it new value. Value field is used for 
  * comparison in routines like Numbered::isNumbered(). Value in numeration is compared to value
@@ -309,7 +307,7 @@ Numbered::clear( NumIndex i)
  * @brief Class that creates/frees numerations
  * @ingroup Nums
  *
- * @par
+
  * @ref NumManager "Numeration manager" creates and frees numerations. You can have up to MAX_NUMERATIONS numerations
  * at a time. A derived class should reimplement clearNumerationsInObjects() routine which calls clearUnusedNumerations
  * for every Numbered-derived object.

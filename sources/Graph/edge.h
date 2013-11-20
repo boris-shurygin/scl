@@ -24,27 +24,20 @@ enum EdgeListType
 /**
  * @class EdgeImpl
  * @brief  Representation of GraphImpl edge
- * @ingroup GraphBase
  *
- * @par
- * EdgeImpl class implements basic concept of GraphImpl edge. Every edge has two adjacent nodes.
- * Use pred() and succ() routines to get them. EdgeImpl is a member of 3 lists: edge list in GraphImpl,
+ * @details
+ * EdgeImpl class implements basic concept of an edge of the directed graph. Every edge has two adjacent nodes.
+ * Use pred() and succ() routines to get them. An edge is a member of 3 lists: edge list in graph,
  * pred list in succ node and succ list in pred node. To traverse these lists use nextEdge(),
- * nextPred() and  nextSucc() routines. Also for debug purposes all edges in a GraphImpl
+ * nextPred() and  nextSucc() routines. Also for debug purposes all edges in a graph
  * have unique id, which can be usefull for printing to console or setting breakpoint conditions.
  *
- * @par
  * An edge can be @ref Marked "marked" and @ref Numbered "numbered". @ref Mark "Markers" and
  * @ref Nums "numerations" are managed by @ref GraphImpl "GraphImpl". Note that @ref NodeImpl "nodes" can be marked with the
  * same marker or numbered in the same numeration.
  * Also for debug purposes all nodes in a GraphImpl
  * have unique id, which can be usefull for printing to console or setting breakpoint conditions.
  *
- * @par
- * Edges reside in memory pool that is controlled by GraphImpl. Operator new can't be called
- * directly. Edges can be only created by calling GraphImpl::newEdge().
- *
- * @par
  * Every edge have associated QDomElement for XML export support. The updateElement() routine should be called before
  * export to get element in sync with edge's properties.
  *
@@ -63,12 +56,12 @@ public:
     /** Get edge's unique ID */
     inline GraphUid id() const;
 
-    /** Get edge's GraphImpl */
+    /** Get edge's graph */
     inline GraphImpl * graph() const;
 
     /** 
      *  Destructor.
-     *  Delete edge from list in GraphImpl.
+     *  Delete edge from list in graph.
      *  Deletion from node lists MUST be performed manually.
      */
     virtual ~EdgeImpl();
@@ -90,7 +83,7 @@ public:
     inline NodeImpl *pred() const;/**< Get predecessor node of edge */
     inline NodeImpl *succ() const;/**< Get successor node of edge   */
 
-    /** Return next edge of the GraphImpl */
+    /** Return next edge of the graph */
     inline EdgeImpl* nextEdge() const;
 
     /** Return next edge of the same node in given direction  */
@@ -102,9 +95,9 @@ public:
     virtual void debugPrint();
 
 private:
-    /** GraphImpl part */
+    /** Graph part */
     GraphUid uid; //Unique ID
-    GraphImpl * graph_p; //GraphImpl
+    GraphImpl * graph_p; //Graph
 
     /** Nodes */
     NodeImpl *nodes[ GRAPH_DIRS_NUM]; //Adjacent nodes
@@ -127,7 +120,7 @@ protected:
     inline void detachFromNode( GraphDir dir);
 
     /**
-     * Remove myself from GraphImpl's list of edges
+     * Remove myself from graph's list of edges
      */
     inline void detachFromGraph()
     {
@@ -135,7 +128,46 @@ protected:
     }
 };
 
-
+/**
+ * @class Edge
+ * @brief Template for making user object an edge of a directed graph, parameterized by the graph, node and edge types.
+ * @ingroup GraphBase
+ * @details
+ *
+ * The user can create his custom edge class by subclassing Node template instance in the following manner:
+@code
+class MyEdge: public Edge< MyGraph, MyNode, MyEdge>
+{
+    int dummy; //User data
+public:
+    MyEdge( MyGraph *g, MyNode *pred, MyNode *succ): 
+        Edge< MyGraph, MyNode, MyEdge>( g, pred, succ) {} //Constructor must be implemented
+};
+@endcode
+ * Edge class implements basic concept of graph edge. Every edge has two adjacent nodes.
+ * Use pred() and succ() routines to get them. An edge is a member of 3 lists: edge list in graph,
+ * pred list in succ node and succ list in pred node. To traverse these lists use nextEdge(),
+ * nextPred() and  nextSucc() routines. Also for the debug purposes all edges in a graph
+ * have unique id, which can be usefull for printing to the console or setting the breakpoint conditions.
+ *
+ * An edge can be @ref Marked "marked" and @ref Numbered "numbered". @ref Mark "Markers" and
+ * @ref Nums "numerations" are managed by the @ref GraphImpl "graph". Note that @ref Node "nodes" can
+ * be marked with the same marker or numbered in the same numeration.
+ *
+ * Also for the debug purposes all edge in a graph
+ * have unique id, which can be usefull for printing to the console or setting the breakpoint conditions.
+ *
+ * Edges reside in memory pool that is controlled by Graph. Operator new can't be called
+ * directly. Edges can be only created by calling Graph::newEdge().
+ *
+ * Every edge have associated QDomElement for XML export support. The updateElement() routine should be called before
+ * export to get element in sync with edge's properties.
+ *
+ * @sa GraphImpl
+ * @sa NodeImpl
+ * @sa Mark
+ * @sa Nums
+ */
 template < class G, class N, class E> class Edge: 
     public EdgeImpl,
     public PoolObj<E, UseCustomFixedPool>
@@ -150,16 +182,16 @@ public:
 
     /** Get node in specified direction  */
     inline N *node( GraphDir dir) const;
-    inline N *pred() const;/**< Get predecessor node of edge */
-    inline N *succ() const;/**< Get successor node of edge   */
+    inline N *pred() const; /**< Get predecessor node of edge */
+    inline N *succ() const; /**< Get successor node of edge   */
 
-    /** Return next edge of the GraphImpl */
+    /** Return next edge of the graph */
     inline E* nextEdge() const;
 
     /** Return next edge of the same node in given direction  */
     inline E* nextEdgeInDir( GraphDir dir) const;
-    inline E* nextSucc() const;/**< Next successor */
-    inline E* nextPred() const;/**< Next predecessor */
+    inline E* nextSucc() const; /**< Next successor */
+    inline E* nextPred() const; /**< Next predecessor */
 };
 
 #endif
