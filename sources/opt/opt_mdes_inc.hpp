@@ -14,10 +14,10 @@
 #  define OPER( name, mnem, ...)
 #endif
 
-/** Objects */
+/* Objects */
 OBJ( Reg, "t", 32, 0, REGISTER, true)
 
-/** Arithmetic Operations */
+/* Arithmetic Operations */
 OPER( Add,  "add",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
 OPER( Sub,  "sub",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
 OPER( Mul,  "mul",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )

@@ -12,9 +12,9 @@ namespace IR
 {
 
 /**
-    * @brief Representation of function
-    * @ingroup IR
-    */
+ * @brief Representation of function
+ * @ingroup IR
+ */
 template <class MDesType> class Function: 
     public DG< MDesType>,
     public SListIface<Function <MDesType> >

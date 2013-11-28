@@ -1,5 +1,5 @@
 /**
- * @file:ir/cf.hpp
+ * @file: ir/cf.hpp
  * Declaration of the control flow representation classes
  * @defgroup CF Control flow
  * @ingroup IR

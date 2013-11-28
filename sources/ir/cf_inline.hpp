@@ -1,5 +1,5 @@
 /**
- * @file:ir/cf_inline.hpp
+ * @file: ir/cf_inline.hpp
  * Implementation of the inlined functions of control flow representation classes
  */
 

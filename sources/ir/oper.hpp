@@ -1,7 +1,7 @@
 /**
- * @file: oper.hpp 
+ * @file: ir/oper.hpp 
  * Operation class definition
- * Author: Robert Khasanov
+ * Authors: Robert Khasanov, Boris Shurygin
  */
 #pragma once 
 
@@ -11,6 +11,7 @@ namespace IR
 /**
  * @class Object
  * @brief Representation of an object
+ * @ingroup IR
  */
 template <class MDesType> class Object
 {
@@ -50,6 +51,7 @@ template <class MDesType> class OperandList{};
 /**
  * @class Operand
  * @brief Representation of Operand
+ * @ingroup IR
  */
 template <class MDesType> class Operand: 
     public SListIface< Operand< MDesType> >
@@ -105,6 +107,7 @@ template <class MDesType> class OperSeq{};
 /**
  * @class Operation
  * @brief Representation of Operation
+ * @ingroup IR
  */
 template <class MDesType> class Operation:
     public Node< DG< MDesType>, Operation< MDesType>, DepEdge< MDesType> >,

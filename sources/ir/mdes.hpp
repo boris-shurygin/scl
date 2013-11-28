@@ -1,9 +1,97 @@
 /**
  * @file:ir/mdes.hpp
- * Declaration of the machine description classes and templates
+ * @brief Declaration of the machine description classes and templates
  * @defgroup MDES Machine description
  * @ingroup IR
+ *
+ * @details
+ * MDES classes are used to define an architecture. This definition includes objects and operations
+ * available on a particular architecture. 
+ * An object is defined by:
+ * -# type (alternatively called name)
+ * -# printing prefix in IR dumps/debug prints)
+ * -# maximum size for objects of this type
+ * -# a maximum number of such objects
+ * -# name of storage class (used for grouping objects)
+ * -# and whether of not it can be virtual
+ *
+ * An operation is defined by its name, its mnemonic string and its signature. The signature of the
+ * operation defines the operands of operation: their number and their types. MDES signatures look like:
+@code
+//Two arguments that can be register or immediate with size of 32 bits.
+//One result that should be register with size of 32 bits
+Args<reg_imm_32, reg_imm_32>, Ress<reg_32>
+@endcode
+ * This kind of signature is used in operation definition mechanism as described below.
+ *
+ * The intended usage of MDES implies fairly simple copy-paste like actions. Let's see the example.
+ * First the client code should define the enums to be used for objects' and operations' names. We assume
+ * that the following code will be in some .hpp file:
+ @code
+    // Object types
+    enum MyObjectName
+    {
+        INTEGER_REG,
+        FP_REG,
+        MY_OBJECTS_NUM
+    };
+
+    // Operation names
+    enum MyOperName
+    {
+        ADD,
+        SUB,
+        //...
+        MY_OPERS_NUM
+    };
+ @endcode
+ * After that we can define our custom MDes class
+@code
+    // My Machine description
+    typedef MDesImpl< MyObjectName, MyOperName, My_OBJECTS_NUM, MY_OPERS_NUM, 3, 1> MDes;
+@endcode
+ * Then the client code should specify the available operands for operations
+@code
+    typedef MDes::OpType<Reg, 32, CAN_BE_IMM> reg_imm_32;
+    typedef MDes::OpType<Reg, 32, CANNOT_BE_IMM> reg_32;
+@endcode
+ * Now we have enums for all possible objects, operations and we have defined feasible operands of
+ * target architecture. To fill the machine description with actual objects we have to implement full
+ * specialization of MDesImpl() constructor routine in some .cpp file. The objects descriptions are built
+ * by the call of MDesImpl::initObjDes routine and the operation descriptions are built by the call 
+ * to MDesImpl::initOperDes routine. These routines fill the objects and operation description array, 
+ * statically declared within the MDesImpl template. The defintion of these templates should also be placed
+ * in .cpp file. All of the above is illistrated by the following example:
+@code
+    //
+    //Mdes implementation .cpp file
+    //
+
+    //For more readable form of operation definition
+    #define OPER( name, str, ...) initOperDes< __VA_ARGS__>( name, str);
+    
+    //Definition of description arrays
+    template <> MDes::OperDes MDes::opers[ MDes::num_opers] = {};
+    template <> MDes::ObjDes MDes::objects[ MDes::num_objs] = {};
+
+    //Initialization of operation descriptions
+    template <> MDes::MDesImpl()
+    {
+        //Objects
+        initObjDes( INTEGER_REG, "r", 32, 0, REGISTER, true);
+        initObjDes( FP_REG, "f", 32, 0, REGISTER, true);
+
+        //Operations
+        OPER( Add,  "add",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
+        OPER( Sub,  "sub",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
+        OPER( Mul,  "mul",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
+        OPER( Ld,   "ld",   Args<reg_imm_32>            , Ress<reg_32> )
+        OPER( St,   "st",   Args<reg_imm_32, reg_imm_32>, Ress<>       )
+    }
+@endcode
+ **
  */
+
  /*
   * Copyright 2012 MIPT-COMPILER team
   */

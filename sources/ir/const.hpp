@@ -1,5 +1,5 @@
 /**
- * @file:ir/cf.hpp
+ * @file: ir/cf.hpp
  * Compile-time constant representation
  * @ingroup IR
  */

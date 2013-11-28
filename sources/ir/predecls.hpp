@@ -1,5 +1,5 @@
 /**
- * @file: predecls.h
+ * @file: ir/predecls.h
  * Predeclarations for interface of IR library
  */
 
