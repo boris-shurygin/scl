@@ -18,20 +18,17 @@ int main(int argc, char **argv)
     MemMgr::init();
 
     /** Test utils */
-    if ( !Utils::uTest())
-        return -1;
-
+    RUN_TEST( Utils::uTest);
     /** Test Graph package */
-    if ( !uTestGraph())
-        return -1;
-
+    RUN_TEST( uTestGraph);
     /** Test optimizer package */
-    if ( !Opt::uTest())
-        return -1;
+    RUN_TEST( Opt::uTest);
 
     MemMgr::deinit();
     Log::deinit();
     
     cout.flush();
     cerr.flush();
+
+    return 0;
 }

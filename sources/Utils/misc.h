@@ -10,6 +10,14 @@
 #ifndef MISC_H
 #define MISC_H
 
+/* String for build mode identification */
+static const std::string BUILD_MODE 
+#ifdef _DEBUG
+	("debug");
+#else
+	("release");
+#endif
+
 /**
  * Check if pointer is not null
  * @ingroup Misc

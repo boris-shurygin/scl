@@ -42,6 +42,7 @@
 #include "mem.h"
 #include "log.h"
 #include "conf.h"
+#include "utest.h"
 
 namespace Utils
 {
