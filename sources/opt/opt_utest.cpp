@@ -4,7 +4,7 @@
  */
 #include "opt_iface.hpp"
 
-bool Opt::uTest()
+bool Opt::uTest( UnitTest *utest)
 {
     Module m;
     Function *f = m.newFunction();
@@ -69,8 +69,8 @@ bool Opt::uTest()
     /* Unit test of store operation representation */
     MDes::OperDes *st_des = MDes::operDescription( st->name());
 
-    ASSERT( st_des->num_args == 2);
-    ASSERT( st_des->num_ress == 0);
+    UTEST_CHECK( utest, st_des->num_args == 2);
+    UTEST_CHECK( utest, st_des->num_ress == 0);
 
     CFNode* cf_node = cfg.newNode();
     
@@ -79,22 +79,22 @@ bool Opt::uTest()
           isNotNullP( node);
           node = node->nextNode())
     {
-        ASSERT( isNotNullP( node->graph()) );
+        UTEST_CHECK( utest, isNotNullP( node->graph()) );
     }
 
-    cout << "Operations as they go in linear order" << endl;
-    cout << f; // Print the whole function
+    utest->out() << "Operations as they go in linear order" << endl;
+    utest->out() << f; // Print the whole function
 
     cfg.setValid( true);
 
-    cout << "Control flow graph print" << endl;
-    cout << f; // After CFG is valid the 'operator <<' should print the whole CFG
+    utest->out() << "Control flow graph print" << endl;
+    utest->out() << f; // After CFG is valid the 'operator <<' should print the whole CFG
 
     /* Unit test of operation representation */
     MDes::OperDes *des = MDes::operDescription( Add);
 
-    ASSERT( des->num_args == 2);
-    ASSERT( des->num_ress == 1);
-    return true;
+    UTEST_CHECK( utest, des->num_args == 2);
+    UTEST_CHECK( utest, des->num_ress == 1);
+    return utest->result();
 }
 

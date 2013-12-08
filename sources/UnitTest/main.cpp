@@ -18,17 +18,18 @@ int main(int argc, char **argv)
     MemMgr::init();
 
     /** Test utils */
-    RUN_TEST( Utils::uTest);
+    Utils::uTest();
+
     /** Test Graph package */
     RUN_TEST( uTestGraph);
     /** Test optimizer package */
-    RUN_TEST( Opt::uTest);
+    RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
 
     MemMgr::deinit();
     Log::deinit();
     
     cout.flush();
     cerr.flush();
-
-    return 0;
+    TestDriver::printStats();
+    return TestDriver::returnRes();
 }

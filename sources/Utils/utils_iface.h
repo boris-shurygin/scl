@@ -35,6 +35,7 @@
 #include "host.h"
 #include "misc.h"
 #include "asrt.h"
+#include "utest.h"
 //#include "techniques.h"
 #include "print.h"
 #include "list.h"
@@ -42,7 +43,7 @@
 #include "mem.h"
 #include "log.h"
 #include "conf.h"
-#include "utest.h"
+
 
 namespace Utils
 {
@@ -51,16 +52,18 @@ namespace Utils
     /**
      * Test list classes
      */
-    bool uTestList();
+    bool uTestList( UnitTest *utest_p);
 
     /**
      * Test memory manager
      */
-    bool uTestMem();
+    bool uTestMem( UnitTest *utest_p);
     /**
      * Test Utils package
      */
     bool uTest();
 };
+
+static const UInt32 FUNC_NAME_WIDTH = 30;
 
 #endif

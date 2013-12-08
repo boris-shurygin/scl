@@ -36,28 +36,28 @@ class B: public ClassAList
 };
 
 /** MList testing */
-static bool uTestMList()
+static bool uTestMList( UnitTest *utest_p)
 {
     B *obj1 = new B();
     B *obj2 = new B();
     B *obj3 = new B();
     obj1->attach( LIST_ONE, obj2);
     obj1->attach( LIST_TWO, obj3);
-    ASSERT( areEqP( obj1->next( LIST_ONE), obj2));
-    ASSERT( areEqP( obj1->next( LIST_TWO), obj3));
-    ASSERT( isNullP( obj1->prev( LIST_ONE)));
-    ASSERT( isNullP( obj1->prev( LIST_TWO)));
-    ASSERT( areEqP( obj2->prev( LIST_ONE), obj1));
-    ASSERT( areEqP( obj3->prev( LIST_TWO), obj1));
-    ASSERT( isNullP( obj3->prev( LIST_ONE)));
-    ASSERT( isNullP( obj2->prev( LIST_TWO)));
-    ASSERT( isNullP( obj2->next( LIST_ONE)));
-    ASSERT( isNullP( obj3->next( LIST_TWO)));
+    UTEST_CHECK( utest_p, areEqP( obj1->next( LIST_ONE), obj2));
+    UTEST_CHECK( utest_p, areEqP( obj1->next( LIST_TWO), obj3));
+    UTEST_CHECK( utest_p, isNullP( obj1->prev( LIST_ONE)));
+    UTEST_CHECK( utest_p, isNullP( obj1->prev( LIST_TWO)));
+    UTEST_CHECK( utest_p, areEqP( obj2->prev( LIST_ONE), obj1));
+    UTEST_CHECK( utest_p, areEqP( obj3->prev( LIST_TWO), obj1));
+    UTEST_CHECK( utest_p, isNullP( obj3->prev( LIST_ONE)));
+    UTEST_CHECK( utest_p, isNullP( obj2->prev( LIST_TWO)));
+    UTEST_CHECK( utest_p, isNullP( obj2->next( LIST_ONE)));
+    UTEST_CHECK( utest_p, isNullP( obj3->next( LIST_TWO)));
     obj2->detachAll();
     delete obj2;
     delete obj1;
     delete obj3;
-    return true;
+    return utest_p->result();
 }
 
 
@@ -101,7 +101,7 @@ public:
  * Test tagged list
  */
 static bool 
-uTestTagList()
+uTestTagList( UnitTest *utest_p)
 {
     TListB *list = NULL;
     TListB *list_temp = NULL;
@@ -126,20 +126,17 @@ uTestTagList()
         delete list_temp;
         list_temp = next;
     }
-    return true;
+    return utest_p->result();
 }
 
 /**
  * Test list classes operation
  */
-bool Utils::uTestList()
+bool Utils::uTestList( UnitTest *utest_p)
 {
-    if ( !uTestMList())
-        return false;
+    uTestMList( utest_p);
+    uTestTagList( utest_p);
 
-    if ( !uTestTagList())
-        return false;
-    
-    return true;
+    return utest_p->result();
 }
 

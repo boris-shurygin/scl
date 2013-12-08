@@ -72,6 +72,7 @@
     <ClInclude Include="misc.h" />
     <ClInclude Include="print.h" />
     <ClInclude Include="singleton.h" />
+    <ClInclude Include="utest.h" />
     <ClInclude Include="utils_iface.h" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +84,7 @@
     <ClCompile Include="mem_mgr.cpp" />
     <ClCompile Include="mem_pool.cpp" />
     <ClCompile Include="mem_utest.cpp" />
+    <ClCompile Include="utest.cpp" />
     <ClCompile Include="utils.cpp" />
     <ClCompile Include="utils_utest.cpp" />
   </ItemGroup>

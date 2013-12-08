@@ -103,6 +103,6 @@ am Graph Graph of interest
 #include "graph_inline.h"
 
 /** Unit tests for Graph library */
-extern bool uTestGraph( void);
+extern bool uTestGraph( UnitTest* utest_p);
 
 #endif

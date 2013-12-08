@@ -35,7 +35,9 @@ enum LogId
 {
     /** Default log */
     LOG_DEFAULT,
-    /** Unit testing log */
+    /** Parent log used for testing purposes */
+    LOG_UTEST_PARENT,
+    /** Child log used for testing purposes */
     LOG_UTEST,
     /** Frontend log */
     LOG_FE,
@@ -86,7 +88,7 @@ public:
      * Register log that writes to file with given name.
      * File is not open until enable() is called.
      */
-    void add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log = false); 
+    void add( LogId id, string prefix_str, UInt8 verbosity_level, string &filename, bool enable_log = false); 
     
     /** Register log that writes to file with given name */
     void add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id, bool enable_log = false);
@@ -331,7 +333,7 @@ inline LogControl* log()
 #endif
 
     /** Unit testing routine for logs */
-    bool uTestLogs();
+    bool uTestLogs( UnitTest *utest_p, std::string &name);
 
 }; /* namespace Utils*/
 #endif /* UTILS_LOG_H */

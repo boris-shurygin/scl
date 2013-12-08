@@ -6,8 +6,8 @@
  * Copyright (C) 2012  Boris Shurygin
  */
 #include "utils_iface.h"
-#include "mem.h"
 
+using namespace Utils;
 using namespace Mem;
 
 /** Test object class */
@@ -27,7 +27,7 @@ typedef Ptr< TestObj> ObjPtr;
 /**
  * Test smart pointers
  */
-static bool uTestRef()
+static bool uTestRef( UnitTest *utest_p)
 {
     DefaultPool< TestObj>::init();
 
@@ -37,19 +37,19 @@ static bool uTestRef()
     ObjPtr ref3; /** Test default constructor */
 
     /** Test operator bool() */
-    ASSERT( !ref2 && ref);
-    //ASSERT( ref2 == NULL && ref != NULL);
+    UTEST_CHECK( utest_p, !ref2 && ref);
+    //UTEST_CHECK( utest_p, ref2 == NULL && ref != NULL);
     /** Test copy constructor */
     ref2 = ref;
-    ASSERT( ref2 && ref);
+    UTEST_CHECK( utest_p, ref2 && ref);
     /** Test operator == ( ref) */
-    ASSERT( ref == ref2);
+    UTEST_CHECK( utest_p, ref == ref2);
 
     /** Test operator -> */
     ref->a = 2;
 
 #ifdef USE_REF_COUNTERS
-    ASSERT_X( ref.refCount() == 2, "POOL_UTEST", "incorrect reference counter");
+    UTEST_CHECK( utest_p, ref.refCount() == 2);//incorrect reference counter
 #endif
 
     ref2.setNull();
@@ -57,7 +57,7 @@ static bool uTestRef()
     
     ref = 0;
     
-    ASSERT_X( isNullP( ref), "POOL_UTEST", "ref pointer should be null at this point");
+    UTEST_CHECK( utest_p, isNullP( ref));//ref pointer should be null at this point
 
     ref3.destroy();
     DefaultPool< TestObj>::deinit();
@@ -104,7 +104,7 @@ public:
 /**
  * Test memory pools
  */
-static bool uTestPools()
+static bool uTestPools( UnitTest *utest_p)
 {
 
     TypedPool< MyPoolObj> *pool = new TypedPool< MyPoolObj>();
@@ -113,7 +113,7 @@ static bool uTestPools()
     bool called_destructor1 = false;
     bool called_destructor2 = false;
 
-    ASSERT( p1 != p2);
+    UTEST_CHECK( utest_p, p1 != p2);
     p1->a = 1;
     p2->a = 2;
     p1->b = 3;
@@ -123,24 +123,24 @@ static bool uTestPools()
 
     p1->setVal( 5);
     p2->setVal( 6);
-    ASSERT( p1->a != p1->b);
-    ASSERT( p1->a != p2->a);
-    ASSERT( p1->b != p2->a);
-    ASSERT( p1->b != p2->b);
-    ASSERT( p1->a != p2->a);
+    UTEST_CHECK( utest_p, p1->a != p1->b);
+    UTEST_CHECK( utest_p, p1->a != p2->a);
+    UTEST_CHECK( utest_p, p1->b != p2->a);
+    UTEST_CHECK( utest_p, p1->b != p2->b);
+    UTEST_CHECK( utest_p, p1->a != p2->a);
     
-    ASSERT( !called_destructor1);
-    ASSERT( !called_destructor2);
+    UTEST_CHECK( utest_p, !called_destructor1);
+    UTEST_CHECK( utest_p, !called_destructor2);
     
     pool->destroy( p1);
     
-    ASSERT( called_destructor1);
-    ASSERT( !called_destructor2);
+    UTEST_CHECK( utest_p, called_destructor1);
+    UTEST_CHECK( utest_p, !called_destructor2);
 
     pool->destroy( p2);
     
-    ASSERT( called_destructor1);
-    ASSERT( called_destructor2);
+    UTEST_CHECK( utest_p, called_destructor1);
+    UTEST_CHECK( utest_p, called_destructor2);
 
     /** More objects */
     MyPoolObj *obj = NULL;
@@ -166,13 +166,12 @@ static bool uTestPools()
 /**
  * Test smart pointers, objects and pools
  */
-bool Utils::uTestMem()
+bool Utils::uTestMem( UnitTest *utest_p)
 {
     /** Test smart pointers */
-    if ( !uTestRef())
-        return false;
+    uTestRef( utest_p);
+
     /** Test memory pools */
-    if ( !uTestPools())
-        return false;
-    return true;
+    uTestPools( utest_p);
+    return utest_p->result();
 }

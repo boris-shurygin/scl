@@ -47,9 +47,10 @@ LogControl::~LogControl()
  * Register log that writes to given file
  */
 void 
-LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log)
+LogControl::add( LogId id, string prefix_str, UInt8 verbosity_level, string &filename, bool enable_log)
 {
     LOG_ASSERTD( id < LOGS_NUM, "Id is out of range");
+    LOG_ASSERTD( !filename.empty(), "Log file name is not specified");
 
     /* Check if we already have opened the file for some other log */
     registered[ id] = true;

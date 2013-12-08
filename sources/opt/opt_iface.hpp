@@ -20,5 +20,5 @@ namespace Opt
     typedef IR::Operation< MDes> Oper;
     typedef IR::Object< MDes> Obj;
 
-    bool uTest();
+    bool uTest( UnitTest *utest);
 };

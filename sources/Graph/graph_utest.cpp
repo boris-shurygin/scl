@@ -12,7 +12,7 @@ static const int GRAPH_TEST_NUM_NODES = 100000;
  /**
   * TODO: Check Graph's data structures being consistent with node and edge functionality
   */
-bool uTestGraphImplOwn()
+bool uTestGraphImplOwn( UnitTest* utest_p)
 {
     {
         AGraph graph;
@@ -25,15 +25,15 @@ bool uTestGraphImplOwn()
         /** Check node insertion */
         ANode *new_node = edge->insertNode();
         AEdge *edge2 = new_node->firstSucc();
-        ASSERT( areEqP( new_node->firstPred(), pred->firstSucc())); 
-        ASSERT( areEqP( new_node->firstSucc(), succ->firstPred()));
-        ASSERT( areEqP( edge->pred(), pred));
-        ASSERT( areEqP( pred->firstSucc(), edge));
-        ASSERT( areEqP( edge->succ(), new_node));
-        ASSERT( areEqP( new_node->firstPred(), edge));
-        ASSERT( areEqP( edge2->pred(), new_node));
-        ASSERT( areEqP( edge2->succ(), succ));
-        ASSERT( areEqP( succ->firstPred(), edge2));
+        UTEST_CHECK( utest_p, areEqP( new_node->firstPred(), pred->firstSucc())); 
+        UTEST_CHECK( utest_p, areEqP( new_node->firstSucc(), succ->firstPred()));
+        UTEST_CHECK( utest_p, areEqP( edge->pred(), pred));
+        UTEST_CHECK( utest_p, areEqP( pred->firstSucc(), edge));
+        UTEST_CHECK( utest_p, areEqP( edge->succ(), new_node));
+        UTEST_CHECK( utest_p, areEqP( new_node->firstPred(), edge));
+        UTEST_CHECK( utest_p, areEqP( edge2->pred(), new_node));
+        UTEST_CHECK( utest_p, areEqP( edge2->succ(), succ));
+        UTEST_CHECK( utest_p, areEqP( succ->firstPred(), edge2));
     }
 
     /** Test iterators */
@@ -50,42 +50,42 @@ bool uTestGraphImplOwn()
               succ_iter != succ_iter_end;
               ++succ_iter )
         {
-            ASSERT( areEqP( *succ_iter, edge2));
+            UTEST_CHECK( utest_p, areEqP( *succ_iter, edge2));
         }
         for ( ANode::Pred pred_iter = node2->predsBegin(),
                          pred_iter_end = node2->predsEnd();
               pred_iter != pred_iter_end;
               pred_iter++ )
         {
-            ASSERT( areEqP( *pred_iter, edge1));
+            UTEST_CHECK( utest_p, areEqP( *pred_iter, edge1));
         }
         ANode::EdgeIter edge_iter = node2->edgesBegin();
         ANode::EdgeIter edge_iter_end = node2->edgesEnd();
-        ASSERT( edge_iter != edge_iter_end);
-        ASSERT( areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
+        UTEST_CHECK( utest_p, edge_iter != edge_iter_end);
+        UTEST_CHECK( utest_p, areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
         if ( areEqP( *edge_iter, edge1))
         {
-            ASSERT( areEqP( edge_iter.node(), edge1->pred()));
-            ASSERT( areEqP( edge_iter.node(), node1));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), edge1->pred()));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), node1));
         } else
         {
-            ASSERT( areEqP( edge_iter.node(), edge2->succ()));
-            ASSERT( areEqP( edge_iter.node(), node3));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), edge2->succ()));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), node3));
         }
         edge_iter++;
-        ASSERT( edge_iter != edge_iter_end);
-        ASSERT( areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
+        UTEST_CHECK( utest_p, edge_iter != edge_iter_end);
+        UTEST_CHECK( utest_p, areEqP( *edge_iter, edge1) || areEqP( *edge_iter, edge2));
         if ( areEqP( *edge_iter, edge1))
         {
-            ASSERT( areEqP( edge_iter.node(), edge1->pred()));
-            ASSERT( areEqP( edge_iter.node(), node1));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), edge1->pred()));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), node1));
         } else
         {
-            ASSERT( areEqP( edge_iter.node(), edge2->succ()));
-            ASSERT( areEqP( edge_iter.node(), node3));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), edge2->succ()));
+            UTEST_CHECK( utest_p, areEqP( edge_iter.node(), node3));
         }
         edge_iter++;
-        ASSERT( edge_iter == edge_iter_end);
+        UTEST_CHECK( utest_p, edge_iter == edge_iter_end);
     }
     return true;
 }
@@ -106,7 +106,7 @@ struct DummyEdgeProps
 /**
  * TODO: Check consistency of NodeImpl and EdgeImpl classes interoperation
  */
-bool uTestNodeEdge()
+bool uTestNodeEdge( UnitTest* utest_p)
 {
     /**
      * TODO: Check that node and edge remain correct after basic edge/node creation/deletion
@@ -120,7 +120,7 @@ bool uTestNodeEdge()
 /**
  * Check marker functionality
  */
-bool uTestMarkers()
+bool uTestMarkers( UnitTest* utest_p)
 {
     AGraph graph;
     ANode *dummy = graph.newNode();
@@ -133,25 +133,25 @@ bool uTestMarkers()
 
     Marker m_array[ MAX_GRAPH_MARKERS];
     
-    ASSERT( !pred->isMarked( m));
-    ASSERT( !succ->isMarked( m));
-    ASSERT( !edge->isMarked( m));
-    ASSERT( !pred->isMarked( m2));
+    UTEST_CHECK( utest_p, !pred->isMarked( m));
+    UTEST_CHECK( utest_p, !succ->isMarked( m));
+    UTEST_CHECK( utest_p, !edge->isMarked( m));
+    UTEST_CHECK( utest_p, !pred->isMarked( m2));
     
     pred->mark( m);
     succ->mark( m);
     edge->mark( m);
     edge->mark( m2);
 
-    ASSERT( pred->isMarked( m));
-    ASSERT( succ->isMarked( m));
-    ASSERT( edge->isMarked( m));
-    ASSERT( edge->isMarked( m2));
+    UTEST_CHECK( utest_p, pred->isMarked( m));
+    UTEST_CHECK( utest_p, succ->isMarked( m));
+    UTEST_CHECK( utest_p, edge->isMarked( m));
+    UTEST_CHECK( utest_p, edge->isMarked( m2));
     edge->unmark( m);
 
     /** Check that different markers have different behaviour */
-    ASSERT( edge->isMarked( m2));
-    ASSERT( !edge->isMarked( m));
+    UTEST_CHECK( utest_p, edge->isMarked( m2));
+    UTEST_CHECK( utest_p, !edge->isMarked( m));
     
     graph.freeMarker( m);
     graph.freeMarker( m2);
@@ -180,7 +180,7 @@ bool uTestMarkers()
 /**
  * Check marker functionality
  */
-static bool uTestNumerations()
+static bool uTestNumerations( UnitTest* utest_p)
 {
     /** 
      * Every class that can be a numerations manager should implement
@@ -208,7 +208,7 @@ static bool uTestNumerations()
     } catch ( NumErrorType error)
     {
         // thrown error type MUST match the expected one
-        ASSERT( error == NUM_ERROR_OUT_OF_INDEXES);
+        UTEST_CHECK( utest_p, error == NUM_ERROR_OUT_OF_INDEXES);
     }
 
     /** 2. Too big number */
@@ -221,7 +221,7 @@ static bool uTestNumerations()
     } catch ( NumErrorType error)
     {
         // thrown error type MUST match the expected one
-        ASSERT( error == NUM_ERROR_NUMBER_OUT_OF_RANGE);
+        UTEST_CHECK( utest_p, error == NUM_ERROR_NUMBER_OUT_OF_RANGE);
     }
     mgr2.freeNum( num2);
 
@@ -235,15 +235,15 @@ static bool uTestNumerations()
     Numeration num = mgr.newNum();
     Numeration num_unused = mgr.newNum();
     Numbered obj; 
-    ASSERT( obj.number( num) == NUMBER_NO_NUM);
-    ASSERT( obj.number( num_unused) == NUMBER_NO_NUM);
+    UTEST_CHECK( utest_p, obj.number( num) == NUMBER_NO_NUM);
+    UTEST_CHECK( utest_p, obj.number( num_unused) == NUMBER_NO_NUM);
     obj.setNumber( num, 1);
-    ASSERT( obj.isNumbered( num));
-    ASSERT( obj.number( num) == 1);
-    ASSERT( obj.number( num_unused) == NUMBER_NO_NUM);
+    UTEST_CHECK( utest_p, obj.isNumbered( num));
+    UTEST_CHECK( utest_p, obj.number( num) == 1);
+    UTEST_CHECK( utest_p, obj.number( num_unused) == NUMBER_NO_NUM);
     obj.unNumber( num);
-    ASSERT( obj.number( num) == NUMBER_NO_NUM);
-    ASSERT( obj.number( num_unused) == NUMBER_NO_NUM);    
+    UTEST_CHECK( utest_p, obj.number( num) == NUMBER_NO_NUM);
+    UTEST_CHECK( utest_p, obj.number( num_unused) == NUMBER_NO_NUM);    
     return true;
 }
 
@@ -284,33 +284,22 @@ bool uTestSave()
 /**
  * Unit tests for Graph library
  */
-bool uTestGraph()
+bool uTestGraph( UnitTest* utest_p)
 {
     /**
      * Check Graph's data structures consistency
      */
-     if ( !uTestGraphImplOwn())
-         return false;
+    uTestGraphImplOwn( utest_p);
     /**
      * Check node-edge consistency
      */
-    if ( !uTestNodeEdge())
-         return false;
+    uTestNodeEdge( utest_p);
+    
+    uTestNumerations( utest_p);
 
-    /**
-     * Check numerations 
-     */
-    if ( !uTestNumerations())
-        return false;
+    uTestMarkers( utest_p);
 
-    /**
-     * Check markers
-     */
-    if ( !uTestMarkers())
-        return false;
-
-    //GRAPH_ASSERTXD( 0, "Generic failing assertion");
-    return true;
+    return utest_p->result();
 }
 #endif
 

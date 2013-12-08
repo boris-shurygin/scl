@@ -30,13 +30,13 @@ namespace TestSingle
     /**
      * Test simple singleton
      */
-    static bool uTestSingle()
+    static bool uTestSingle( UnitTest *utest_p)
     {
         SingleA::init();
 
         A* a1 = SingleA::instance();
         A* a2 = SingleA::instance();
-        ASSERT( areEqP( a1, a2));
+        UTEST_CHECK( utest_p, areEqP( a1, a2));
         SingleA::deinit();
         return true;
     }
@@ -73,26 +73,21 @@ static bool uTestMisc()
 
 
 /**
- * Test Utils package
+ * Test Utils package (logically this should be seen as a 'testing suite'
+ * though the concept is not yet supported in utest)
  */
 bool Utils::uTest()
 {
     /** Various tests of auxiliary routines */
-    if ( !uTestMisc())
-        return false;
+    RUN_TEST( uTestMisc);
     /** test singleton */
-    if ( !TestSingle::uTestSingle())
-        return false;
+    RUN_TEST( TestSingle::uTestSingle);
     /** Tets list classes */
-    if ( !uTestList())
-        return false;
+    RUN_TEST( uTestList);
     /** Test memory management */
-    if ( !uTestMem())
-        return false;
+    RUN_TEST( uTestMem);
     /** Test memory management */
-    if ( !uTestLogs())
-        return false;
-
+    RUN_TEST_OUT_FILE_CHECK( uTestLogs, "log.txt");
     return true;
 }
 

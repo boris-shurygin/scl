@@ -27,6 +27,9 @@
     <ClCompile Include="conf.cpp">
       <Filter>conf</Filter>
     </ClCompile>
+    <ClCompile Include="utest.cpp">
+      <Filter>utest</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asrt.h" />
@@ -76,6 +79,9 @@
     <ClInclude Include="conf.h">
       <Filter>conf</Filter>
     </ClInclude>
+    <ClInclude Include="utest.h">
+      <Filter>utest</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">
@@ -92,6 +98,9 @@
     </Filter>
     <Filter Include="conf">
       <UniqueIdentifier>{01a362a7-a015-4971-a31f-cf773b389e85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utest">
+      <UniqueIdentifier>{8dc22d0d-f9ea-4880-9d5e-255f3ac07b48}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
