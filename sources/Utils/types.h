@@ -13,9 +13,11 @@
 
 /* Determine OS */
 #if defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+#  define OS_WIN
 #  define OS_WIN32
 #  define OS_WIN64
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#  define OS_WIN
 #  if defined(WINCE) || defined(_WIN32_WCE)
 #    define OS_WINCE
 #  else

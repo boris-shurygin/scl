@@ -14,7 +14,6 @@
  */
 int main(int argc, char **argv)
 {
-    Log::init();
     MemMgr::init();
 
     /** Test utils */
@@ -26,7 +25,6 @@ int main(int argc, char **argv)
     RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
 
     MemMgr::deinit();
-    Log::deinit();
     
     cout.flush();
     cerr.flush();

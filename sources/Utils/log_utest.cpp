@@ -14,6 +14,7 @@ using namespace Utils;
  */
 bool Utils::uTestLogs( UnitTest *utest_p, std::string &name)
 {
+    Log::init();
     UInt32 message_num = 0;
     
     // Add default log
@@ -56,6 +57,7 @@ bool Utils::uTestLogs( UnitTest *utest_p, std::string &name)
     // Test direct calls to log
     Log::ptr()->log( LOG_UTEST, "Utest log message %d", message_num++);
     Log::ptr()->log( LOG_UTEST_PARENT, "Log message %d", message_num++);
-
+        
+    Log::deinit();
     return utest_p->result();
 }

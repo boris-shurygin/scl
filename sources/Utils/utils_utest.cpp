@@ -87,7 +87,7 @@ bool Utils::uTest()
     /** Test memory management */
     RUN_TEST( uTestMem);
     /** Test memory management */
-    RUN_TEST_OUT_FILE_CHECK( uTestLogs, "log.txt");
+    RUN_TEST_OUT_FILE_CHECK( uTestLogs, "log_utest.txt");
     return true;
 }
 

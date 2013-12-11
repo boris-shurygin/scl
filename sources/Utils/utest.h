@@ -16,6 +16,22 @@
 
 namespace Utils
 {
+
+/**
+ * Possible test outcomes
+ */
+enum UTestResult
+{
+    //Full pass
+    UTEST_SUCCESS = 0x0,
+
+    //Assertions failed
+    UTEST_ASSERT_FAIL = 0x1,
+
+    //Comparison failed
+    UTEST_CMP_FAIL = 0x2
+};
+
 //Forward declaration of UnitTest class
 class UnitTest;
 
@@ -59,7 +75,7 @@ class UnitTest
 public:
     
     /** Create the empty unit test object and set it up for the work with given streams */
-    UnitTest( std::ostream& log_strm = std::cerr, std::ostream& out_strm = std::cout);
+    UnitTest( std::string &tst_name, std::string &o_name, std::ostream& log_strm = std::cerr, std::ostream& out_strm = std::cout);
 
     /* text stream accessors */
     inline std::ostream& out(){ return out_stream;}; //< Get stream for test output
@@ -77,16 +93,28 @@ public:
         return checks;
     }
 
-    bool result() { return main_res;}; // < Get the overall result of the test
-    UInt32 numFails() const { return num_fail;} //< Get the number of failed assertions
+    bool result() { return main_res == UTEST_SUCCESS;} // < Get the overall result of the test
+    
+    void setAssertFailed() { main_res = main_res | UTEST_ASSERT_FAIL;}//< Remember that some assertions failed
+    void setCmpFailed() { main_res = main_res | UTEST_CMP_FAIL;}      //< Remember that comparison with ref data is failed
+    
+    bool assertFailed() const { return main_res & UTEST_ASSERT_FAIL;}//< Check if some assertions failed
+    bool cmpFailed() const { return main_res & UTEST_CMP_FAIL;}      //< Check if comparison with ref data is failed
+    
+    UInt32 numFails() const { return num_fail;}     //< Get the number of failed assertions
     UInt32 numPasses() const { return num_success;} //< Get the number of passed assertions
+
+    const std::string &name() const { return test_name;} //< Get the test name string
+    const std::string &filename() const { return out_name;} //< Get the output file name string
 private:
+    std::string test_name;
+    std::string out_name;
     std::ostream& out_stream;
     std::ostream& log_stream;
     std::list<UTestCheck> checks;
     UInt32 num_fail;
     UInt32 num_success;
-    bool main_res;
+    UInt8 main_res;
 };
 
 
@@ -132,13 +160,20 @@ public:
         log_stream = &log_strm;
     }
     
+    /** Configure output stream */
+    static void setRefPath( std::string &ref_path);
+    static const std::string &refPath();
+
     static int returnRes(); //< Generate return result for main
     static void printStats(); //< Print test statistics
     static void useLogFile( std::string name); //< Set output file name and open it
 private:
+    static std::string ref_data_path;
     static void testHeader( std::string name);
     static void testFooter( std::string name);
-    static void processResult( bool res, UnitTest *utest = 0);
+    static void compareOut( UnitTest *test_p);
+    static void processResult( bool res);//deprecated
+    static void processResult( UnitTest *utest);
     static std::ostream *log_stream;
     static std::ofstream file_log;
     static int fail_num;

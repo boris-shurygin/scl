@@ -1,0 +1,7 @@
+Default log: Log message 0
+Default log:   Log message with stream 1
+Default log:   A very very long logging message that needs to be written on multiple lines
+Default log:   the number of this long message is 2
+Default log:     Fairly verbose message (verb 4) with formatted print 3
+Default log:   Fairly verbose message(4) with stream interface 4
+Unit testing: Utest log message 5

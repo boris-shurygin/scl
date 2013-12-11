@@ -1,0 +1,39 @@
+Operations as they go in linear order
+Function noname_0( )
+{0} add vt2 = vt0, vt1
+{1} brg vt2, 512, <label_4>
+{2} sub vt3 = vt2, 512
+{3} call (vt3) = unknown_routine, (vt2, vt3)
+label_4:
+{4} st 74565, vt3
+{5} ret
+Control flow graph print
+Function noname_0( )
+CF Node 0 Start
+CF Edge 0: 0->2, fallthrough
+
+CF Node 2
+CF Edge 0: 0->2, fallthrough
+{0} add vt2 = vt0, vt1
+{1} brg vt2, 512, <label_4>
+CF Edge 3: 2->4, src: 1 brg
+CF Edge 2: 2->3, fallthrough
+
+CF Node 3
+CF Edge 2: 2->3, fallthrough
+{2} sub vt3 = vt2, 512
+{3} call (vt3) = unknown_routine, (vt2, vt3)
+CF Edge 4: 3->4, fallthrough
+
+CF Node 4
+CF Edge 4: 3->4, fallthrough
+CF Edge 3: 2->4, src: 1 brg
+{4} st 74565, vt3
+{5} ret
+CF Edge 1: 4->1, fallthrough
+
+CF Node 1 Stop
+CF Edge 1: 4->1, fallthrough
+
+unreachable CF Node 5
+

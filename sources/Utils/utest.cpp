@@ -11,10 +11,15 @@ namespace Utils
 {
 
 /** Create the empty unit test object and set it up for the work with given streams */
-UnitTest::UnitTest( std::ostream& log_strm, std::ostream& out_strm):
+UnitTest::UnitTest( std::string &tst_name,
+                    std::string &o_name,
+                    std::ostream& log_strm,
+                    std::ostream& out_strm):
+    test_name( tst_name),
+    out_name( o_name),
     log_stream( log_strm), 
     out_stream( out_strm),
-    main_res( true),
+    main_res( UTEST_SUCCESS),
     num_fail( 0), 
     num_success( 0)
 {
@@ -33,8 +38,7 @@ void UnitTest::saveCheckResult( bool res, const char *assertion, const char *fil
     } else
     {
         ++num_fail;
-        main_res = false;
-        
+        setAssertFailed();
         std::string check_text(assertion);
         std::ostringstream place_str_strm;
         place_str_strm << file << " line " << line;    
@@ -49,6 +53,19 @@ int TestDriver::success_num = 0;
 std::ostream *TestDriver::log_stream( &std::cerr);
 TestList TestDriver::tests;
 std::ofstream TestDriver::file_log;
+std::string TestDriver::ref_data_path("ref"); 
+
+
+void TestDriver::setRefPath( std::string &ref_path)
+{
+    ref_data_path = ref_path;
+}
+
+const std::string &
+    TestDriver::refPath()
+{
+    return ref_data_path;
+}
 
 bool TestDriver::runTest( std::string name, SimpleTestFuncPtr func)
 {
@@ -79,17 +96,23 @@ bool TestDriver::runTest( std::string name, TestFuncPtr func, std::string out_fi
     UnitTest *test_p;
     if ( use_file)
     {
-        test_p = new UnitTest( *log_stream, out_file_strm);
+        test_p = new UnitTest( name, out_file_name, *log_stream, out_file_strm);
     } else
     {
-        test_p = new UnitTest( *log_stream);
+        test_p = new UnitTest( name, out_file_name, *log_stream);
     }
 
     //Invoke the testing routine 
     bool res = func( test_p);//results are saved to test
     tests.push_back( test_p);
 	
-    processResult( res, test_p);
+    if ( use_file)
+    {
+        out_file_strm.close();
+    }
+
+    compareOut( test_p);
+    processResult( test_p);
     testFooter( name);
     return res;
 }
@@ -101,12 +124,12 @@ bool TestDriver::runTest( std::string name,
 {
 	//Print header line
     testHeader( name);
-    UnitTest *test_p = new UnitTest( *log_stream);
+    UnitTest *test_p = new UnitTest( name, out_file_name, *log_stream);
     //Invoke the testing routine 
     bool res = func( test_p, out_file_name);//results are saved to test
     tests.push_back( test_p);
-	
-    processResult( res, test_p);
+    compareOut( test_p);
+    processResult( test_p);
     testFooter( name);
     return res;
 }
@@ -118,32 +141,79 @@ void TestDriver::testHeader( std::string name)
 
 void TestDriver::testFooter( std::string name){ /* Not implemented - do nothing */}
 
-void TestDriver::processResult( bool res, UnitTest* utest)
+void TestDriver::processResult( bool res)
 {
     if ( res )
     {
         success_num++;
-        if ( !utest)
-        {
-            *log_stream << " success" << endl;
-        } else
-        {
-            *log_stream << " success ("
-                        << std::right << std::setw(3) << std::setfill(' ')
-                        << utest->numPasses() 
-                        << " assertions checked)" << endl;
-        }
+        *log_stream << " success" << endl;
     } else
 	{
-        if ( !utest)
+        *log_stream << " fail" <<endl;
+        fail_num++;
+	} 
+}
+
+void TestDriver::compareOut( UnitTest *test_p)
+{
+    std::string test_name = test_p->filename();
+    std::string ref_name = Host::concatPaths( refPath(), test_name);
+    
+    ifstream ref_stream( ref_name.c_str());
+    ifstream test_stream( test_name.c_str());
+    UInt32 line_num = 0;
+
+    std::string ref_line;
+    std::string test_line;
+
+    while ( getline( ref_stream, ref_line) )
+    {
+        if ( !getline( test_stream, test_line))
         {
-            *log_stream << " fail" <<endl;
-        } else
+            //Test file ended but ref file continues
+            test_p->setCmpFailed();
+            break;
+        } else if ( ref_line != test_line)
         {
-            *log_stream << " fail (assertions summary: " 
-                        << utest->numFails()  << " failed, "
-                        << utest->numPasses() << " passed)" <<endl;
+            //lines differ
+            test_p->setCmpFailed();
+            break;
         }
+    }
+    //Ref file ended
+    if ( getline( test_stream, test_line))
+    {
+        test_p->setCmpFailed();
+    }
+}
+
+void TestDriver::processResult( UnitTest* utest)
+{
+    bool res = utest->result();
+    
+    if ( res )
+    {
+        success_num++;
+        
+        *log_stream << " success ("
+                    << std::right << std::setw(3) << std::setfill(' ')
+                    << utest->numPasses() 
+                    << " assertions checked)" << endl;
+    } else
+	{
+        *log_stream << " fail (";
+            
+        if ( utest->assertFailed() )
+        {
+            *log_stream << "assertions summary: " 
+                        << utest->numFails()  << " failed, "
+                        << utest->numPasses() << " passed";
+        }
+        if ( utest->cmpFailed() )
+        {
+            *log_stream << "comparison failed";
+        }
+        *log_stream << ")" <<endl;
         fail_num++;
 	} 
 }
