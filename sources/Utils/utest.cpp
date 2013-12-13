@@ -103,9 +103,11 @@ bool TestDriver::runTest( std::string name, TestFuncPtr func, std::string out_fi
     }
 
     //Invoke the testing routine 
+    Timer timer(true);
     bool res = func( test_p);//results are saved to test
     tests.push_back( test_p);
-	
+	test_p->setRunTime( timer.elapsedUSec() ); 
+
     if ( use_file)
     {
         out_file_strm.close();
@@ -125,8 +127,12 @@ bool TestDriver::runTest( std::string name,
 	//Print header line
     testHeader( name);
     UnitTest *test_p = new UnitTest( name, out_file_name, *log_stream);
+    
     //Invoke the testing routine 
+    Timer timer(true);
     bool res = func( test_p, out_file_name);//results are saved to test
+    test_p->setRunTime( timer.elapsedUSec() );    
+
     tests.push_back( test_p);
     compareOut( test_p);
     processResult( test_p);
@@ -198,7 +204,7 @@ void TestDriver::processResult( UnitTest* utest)
         *log_stream << " success ("
                     << std::right << std::setw(3) << std::setfill(' ')
                     << utest->numPasses() 
-                    << " assertions checked)" << endl;
+                    << " assertions checked)";
     } else
 	{
         *log_stream << " fail (";
@@ -213,9 +219,10 @@ void TestDriver::processResult( UnitTest* utest)
         {
             *log_stream << "comparison failed";
         }
-        *log_stream << ")" <<endl;
+        *log_stream << ")";
         fail_num++;
 	} 
+    *log_stream << " " << utest->runTime() << " uSec" << endl;
 }
 
 //< Print test statistics

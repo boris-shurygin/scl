@@ -82,6 +82,7 @@
     <ClInclude Include="utest.h">
       <Filter>utest</Filter>
     </ClInclude>
+    <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">

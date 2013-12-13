@@ -8,42 +8,12 @@
  */
 #pragma once
 
-#ifndef TYPES
+#ifndef TYPES_H
 #define TYPES_H
 
-/* Determine OS */
-#if defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
-#  define OS_WIN
-#  define OS_WIN32
-#  define OS_WIN64
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#  define OS_WIN
-#  if defined(WINCE) || defined(_WIN32_WCE)
-#    define OS_WINCE
-#  else
-#    define OS_WIN32
-#  endif
-#endif
-
-/* Determine compiler */
-#if defined(_MSC_VER)
-#  define Q_CC_MSVC
-#  if defined(__INTEL_COMPILER)
-#    define CC_INTEL
-#  endif
-#elif defined(__GNUC__)
-#  define CC_GNU
-#  if defined(__MINGW32__)
-#    define CC_MINGW
-#  endif
-#  if defined(__INTEL_COMPILER)
-#    define CC_INTEL
-#  endif
-#endif
-
 /*
-   Size-dependent types (architechture-dependent byte order)
-*/
+  Size-dependent types (architechture-dependent byte order)
+ */
 typedef signed char Int8;         /* 8 bit signed */
 typedef unsigned char UInt8;      /* 8 bit unsigned */
 typedef short Int16;              /* 16 bit signed */

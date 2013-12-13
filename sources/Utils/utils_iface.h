@@ -30,11 +30,12 @@
 #    define UTILS_ASSERTD(cond) ASSERT_XD(cond, "Utils", "")
 #endif
 
+#include "host.h"
 
 #include "types.h"
-#include "host.h"
 #include "misc.h"
 #include "asrt.h"
+#include "timer.h"
 #include "utest.h"
 //#include "techniques.h"
 #include "print.h"

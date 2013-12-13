@@ -12,6 +12,39 @@
 #ifndef UTILS_HOST_H
 #define UTILS_HOST_H
 
+
+/* Determine OS */
+#if defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+#  define OS_WIN
+#  define OS_WIN32
+#  define OS_WIN64
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#  define OS_WIN
+#  if defined(WINCE) || defined(_WIN32_WCE)
+#    define OS_WINCE
+#  else
+#    define OS_WIN32
+#  endif
+#elif defined (__linux__)
+#  define OS_LINUX
+#endif
+
+/* Determine compiler */
+#if defined(_MSC_VER)
+#  define Q_CC_MSVC
+#  if defined(__INTEL_COMPILER)
+#    define CC_INTEL
+#  endif
+#elif defined(__GNUC__)
+#  define CC_GNU
+#  if defined(__MINGW32__)
+#    define CC_MINGW
+#  endif
+#  if defined(__INTEL_COMPILER)
+#    define CC_INTEL
+#  endif
+#endif
+
 /* System headers */
 #include <cstdlib>
 #include <iostream>
