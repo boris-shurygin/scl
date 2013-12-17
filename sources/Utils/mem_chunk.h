@@ -45,9 +45,8 @@ namespace MemImpl
         ChunkPos busy;
         /** maximum block size */
         ChunkPos max_block_size;
-        /** Get chunk for given number */
+        /** Get entry for given number */
         inline FixedEntry< size> *entry( ChunkPos pos) const;
-
     public:
 #ifdef CHECK_CHUNKS
         void *pool;       
@@ -72,6 +71,8 @@ namespace MemImpl
         inline ChunkPos maxBlockSize() const;
         /** Deallocate one entry */
         inline void deallocateEntry( FixedEntry< size> *e);
+        /** Deallocate one entry */
+        inline void deallocateBlock( FixedEntry< size> *e, ChunkPos num_entries);
         /** For some reason GCC asks for it :( */
         inline void operator delete( void* mem);
         /** Placement new */
@@ -86,6 +87,9 @@ namespace MemImpl
         inline void toStream( std::ostream& os) const;
         inline void toStdErr() const;
         inline void toStdOut() const;
+
+        /** Check that the given pointer belongs to this chunk */
+        inline bool checkPtr( void *ptr) const;
     };
     
     /** Constructor */
@@ -261,6 +265,7 @@ namespace MemImpl
             e->debugInfo().setAllocEvent( Mem::MemMgr::instance()->allocEvent());
 #endif        
             free_entry = e->nextFree();
+            pos++;
             busy++;
             max_block_size--;
         }
@@ -293,6 +298,43 @@ namespace MemImpl
         e->setNextFree( free_entry);
         free_entry = e->pos();
         busy--;
+    }
+
+    /** Deallocate one entry */
+    template< size_t size> 
+    void
+    Chunk< size>::deallocateBlock( FixedEntry< size> *e, ChunkPos num_entries)
+    {
+        MEM_ASSERTD( busy >= num_entries, "Trying to deallocate too many entries");
+        
+        // Freeing elements in reverse order 
+        for ( ChunkPos num_dealloc = 0,
+                       pos = e->pos() + num_entries - 1; 
+              num_dealloc < num_entries;
+              num_dealloc++)
+        {
+            e = entry( pos);
+#ifdef CHECK_ENTRY
+            MEM_ASSERTD( e->isBusy(), 
+                         "Trying to deallocate entry that is free. Check deallocation event ID");
+            e->setBusy( false);
+#endif
+#ifdef USE_MEM_EVENTS        
+            e->debugInfo().setDeallocEvent( Mem::MemMgr::instance()->deallocEvent());
+#endif 
+            if ( e->pos() + 1 == free_entry)
+            {
+                max_block_size++;
+            } else
+            {
+                max_block_size = 1;
+            }
+            e->setNextFree( free_entry);
+            free_entry = e->pos();
+
+            pos--;
+            busy--;
+        } 
     }
 
     /** Print chunk to stream for debug purposes */
@@ -332,6 +374,21 @@ namespace MemImpl
     Chunk< size>::toStdOut() const
     {
         toStream( std::cout);
+    }
+
+    /** Check that the given pointer belongs to this chunk */
+    template < size_t size> 
+    bool 
+    Chunk< size>::checkPtr( void *ptr) const
+    {
+        //First entry ptr
+        FixedEntry< size> *first_entry_ptr = entry( 0);
+        FixedEntry< size> *last_entry_ptr = entry( MAX_CHUNK_ENTRIES_NUM - 1) + 1;
+
+        // Check range
+        if ( ptr < first_entry_ptr || ptr >= last_entry_ptr)
+            return false;
+        return true;
     }
 
     template < size_t size> 

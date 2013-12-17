@@ -83,8 +83,12 @@ namespace Mem
          */
         void* allocate( size_t alloc_size, UInt32 n);
 
-        /** Free memory block */
+        /** Free memory entry */
         void deallocate( void *ptr);
+
+        /** Free memory block */
+        void deallocate( void *ptr, UInt32 n);
+
         /** Type of the pool */
         virtual PoolType type() const;
 #ifdef _DEBUG
@@ -364,7 +368,8 @@ namespace Mem
 
 #ifdef CHECK_CHUNKS
         /* 4. Check that we are deleting entry from this pool */
-        MEM_ASSERTD( areEqP( this, chunk->pool), "Trying deallocate entry from a wrong pool"); 
+        MEM_ASSERTD( areEqP( this, chunk->pool), "Trying deallocate entry from a wrong pool");
+        MEM_ASSERTD( chunk->checkPtr( ptr), "Pointer is not valid for the chunk");
 #endif
         /*
          * 5. If chunk is free already - it must be in free list 
@@ -404,6 +409,78 @@ namespace Mem
             }
         }
         entry_count--;
+    }
+
+    /** Free memory block */
+    template < size_t size> 
+    void
+    FixedPool< size>::deallocate( void *ptr, UInt32 n)
+    {
+        if ( n == 0)
+            return;
+        if ( n == 1)
+        {
+            deallocate( ptr);
+            return;
+        }
+
+        /* 1. Check pointer */
+        MEM_ASSERTD( isNotNullP( ptr), "Deallocation tried on NULL pointer");
+        
+        /* 2. Check entry count */
+        MEM_ASSERTD( entry_count > 0, "Trying deallocate entry of an empty pool"); 
+
+        MemImpl::FixedEntry< size> *e =static_cast< MemImpl::FixedEntry< size> *>( MemImpl::Entry< size>::getEntryPtr( ptr));
+        
+        /* 3. Get chunk of the deallocated entry */
+        MemImpl::Chunk< size> *chunk = entryChunk( e);
+
+#ifdef CHECK_CHUNKS
+        /* 4a. Check that we are deleting entry from this pool */
+        MEM_ASSERTD( areEqP( this, chunk->pool), "Trying deallocate entry from a wrong pool"); 
+
+        /* 4b. Check that all of the deallocated entries belong to one chunk */
+        MEM_ASSERTD( chunk->checkPtr( ptr), "Pointer is not valid for the chunk");
+        MEM_ASSERTD( chunk->checkPtr( (UInt8 *)ptr + size * (n - 1)), "Last object pointer is not valid for the chunk");
+#endif
+        /*
+         * 5. If chunk is free already - it must be in free list 
+         * no need to add it again
+         */
+        bool add_to_free_list = !chunk->isFree();
+
+        /* 6. Free block in chunk */
+        chunk->deallocateBlock( e, n);
+
+#ifdef COLLECT_POOL_STAT
+        num_entries_dealloced+= n;
+#endif        
+        /*
+         * 7. If this chunk is not the same as the current 'free chunk' 
+         *     add it to free list or deallocate it if it is empty
+         */
+        if ( areNotEqP( chunk, free_chunk))
+        {
+            if ( add_to_free_list)
+            {
+#ifdef COLLECT_POOL_STAT
+                free_chunks++;
+#endif   
+                /* Add the chunk to free list if it is not already there */
+                chunk->attach( MemImpl::CHUNK_LIST_FREE, free_chunk);
+                /* Deallocate previous free chunk if it is empty */
+                if ( isNotNullP( free_chunk) && free_chunk->isEmpty())
+                {
+                    deallocateChunk( free_chunk);
+                }
+                free_chunk = chunk;
+            } else if ( chunk->isEmpty())
+            {
+                /* Deallocate this chunk if it is empty and not the first free chunk */
+                deallocateChunk( chunk);
+            }
+        }
+        entry_count-= n;
     }
 
     /**

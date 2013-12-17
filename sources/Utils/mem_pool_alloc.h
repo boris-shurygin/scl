@@ -91,7 +91,7 @@ public:
 
     // deallocate storage p of deleted elements
     void deallocate (pointer p, size_type num) {
-        pool().deallocate( p);
+        pool().deallocate( p, num);
     }
 private:
     //Automatically handled pool singleton
