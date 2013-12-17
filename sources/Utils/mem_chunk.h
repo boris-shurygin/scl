@@ -36,13 +36,17 @@ namespace MemImpl
         public MListIface< Chunk< size>, // List client data
                            CHUNK_LISTS_NUM > // Lists number
     {
-        void *dummy_ptr; //for alignment
+        typedef MListIface< Chunk< size>, CHUNK_LISTS_NUM > List;
+
+        //void *dummy_ptr; //for alignment
         /** position of first free entry */
         ChunkPos free_entry;
         /** busy entries num */
         ChunkPos busy;
+        /** maximum block size */
+        ChunkPos max_block_size;
         /** Get chunk for given number */
-        inline FixedEntry< size> *entry( ChunkPos pos);
+        inline FixedEntry< size> *entry( ChunkPos pos) const;
 
     public:
 #ifdef CHECK_CHUNKS
@@ -56,10 +60,16 @@ namespace MemImpl
         inline bool isFree() const;
         /** Check if this chunk is empty */
         inline bool isEmpty() const;
+        /** Return number of free entries */
+        inline ChunkPos numFree() const;
         /** Initialization of chunk */
         inline void initialize();
-        /** Allocate on entry */
+        /** Allocate one entry */
         inline void *allocateEntry();
+        /** Allocate a number of continuos entries */
+        inline void *allocateBlock( ChunkPos num_entries);
+        /** Find maximum number of continuos free entries */
+        inline ChunkPos maxBlockSize() const;
         /** Deallocate one entry */
         inline void deallocateEntry( FixedEntry< size> *e);
         /** For some reason GCC asks for it :( */
@@ -72,6 +82,10 @@ namespace MemImpl
          *          It is needed for freeing memory in case of exceptions in constructor
          */
         inline void operator delete( void* ptr, void* mem);
+
+        inline void toStream( std::ostream& os) const;
+        inline void toStdErr() const;
+        inline void toStdOut() const;
     };
     
     /** Constructor */
@@ -79,7 +93,8 @@ namespace MemImpl
     Chunk< size>::Chunk()
     {
         FixedEntry< size> *e = NULL;
-        
+        max_block_size = 0;
+
         /*
          * This loop basicly does new ( mem_ptr)[MAX_CHUNK_ENTRIES_NUM] for entries 
          * should be rewritten in explicit manner, with operator new overriding for Entry class
@@ -102,6 +117,7 @@ namespace MemImpl
 #ifdef USE_REF_COUNTERS
             e->debugInfo().resetCount();
 #endif
+            max_block_size++;
         }
         MEM_ASSERTD( e->nextFree() == UNDEF_POS, "Chunk size constant and undefined value do not match");
         free_entry = 0;
@@ -137,7 +153,7 @@ namespace MemImpl
     /** Get entry by number */
     template< size_t size> 
     FixedEntry< size>*
-    Chunk< size>::entry( ChunkPos pos)
+    Chunk< size>::entry( ChunkPos pos) const
     {
         MEM_ASSERTD( pos != UNDEF_POS, "Requested entry with undefined number");
         return ( FixedEntry< size> *)( (UInt8 *) this 
@@ -179,6 +195,17 @@ namespace MemImpl
     {
         return busy == 0;
     }      
+
+    /** Check if this chunk is empty */
+    template< size_t size> 
+    ChunkPos 
+    Chunk< size>::numFree() const
+    {
+        MEM_ASSERTD( busy <= MAX_CHUNK_ENTRIES_NUM,
+                     "Internal error: number of busy chunks is greater then max");
+        return MAX_CHUNK_ENTRIES_NUM - busy;
+    }    
+    
     /** Allocate one entry */
     template< size_t size> 
     void*
@@ -196,8 +223,51 @@ namespace MemImpl
         void *res = e->dataMem();
         free_entry = e->nextFree();
         busy++;
+        max_block_size--;
         return res;
     }
+
+    template< size_t size> 
+    ChunkPos
+    Chunk< size>::maxBlockSize() const
+    {
+        return max_block_size;
+    }
+
+    /** Allocate a number of continuos entries */
+    template< size_t size> 
+    void*
+    Chunk< size>::allocateBlock( ChunkPos num_entries)
+    {
+        MEM_ASSERTD( this->isFree(), "Trying to allocated entry in a full chunk");
+        MEM_ASSERTD( maxBlockSize() >= num_entries, "Trying to allocate more entries than we have");
+        
+        FixedEntry< size> *e = entry( free_entry);
+        void *res = e->dataMem();
+        
+        for ( ChunkPos num_alloc = 0,
+                       pos = free_entry; 
+              num_alloc < num_entries;
+              num_alloc++)
+        {
+            FixedEntry< size> *e = entry( pos);
+#ifdef CHECK_ENTRY
+            MEM_ASSERTD( !e->isBusy(), 
+                         "Entry should be free, otherwise we have "
+                         "wrongly estimated number of free entries");
+            e->setBusy( true);
+#endif
+#ifdef USE_MEM_EVENTS        
+            e->debugInfo().setAllocEvent( Mem::MemMgr::instance()->allocEvent());
+#endif        
+            free_entry = e->nextFree();
+            busy++;
+            max_block_size--;
+        }
+        
+        return res;
+    }
+
     /** Deallocate one entry */
     template< size_t size> 
     void
@@ -212,9 +282,66 @@ namespace MemImpl
 #ifdef USE_MEM_EVENTS        
         e->debugInfo().setDeallocEvent( Mem::MemMgr::instance()->deallocEvent());
 #endif 
+        if ( e->pos() + 1 == free_entry)
+        {
+            max_block_size++;
+        } else
+        {
+            max_block_size = 1;
+        }
+
         e->setNextFree( free_entry);
         free_entry = e->pos();
         busy--;
     }
+
+    /** Print chunk to stream for debug purposes */
+    template < size_t size> 
+    void
+    Chunk< size>::toStream( std::ostream& os) const
+    {
+        os << "Chunk " << this
+           << " next " << List::next( CHUNK_LIST_ALL)
+           << ", prev " << List::prev( CHUNK_LIST_ALL)
+           << ", next_free " << List::next( CHUNK_LIST_FREE)
+           << ", prev_free " << List::next( CHUNK_LIST_FREE) << endl;
+        os << "Entries\n";
+        /* Traverse and print entries */
+        for ( int i = 0; i < MAX_CHUNK_ENTRIES_NUM; i++)
+        {
+            FixedEntry< size> *e = entry( i);
+            os << (UInt32)e->pos() << ": ";
+#ifdef CHECK_ENTRY
+            if ( e->isBusy() ) os << "Busy ";
+            else os << "Free ";
+#endif
+            os << "Next free " << (UInt32) e->nextFree();
+            os << "\n";
+        }
+    }
+    /** Print chunk to stream for debug purposes */
+    template < size_t size> 
+    void
+    Chunk< size>::toStdErr() const
+    {
+        toStream( std::cerr);
+    }
+
+    template < size_t size> 
+    void
+    Chunk< size>::toStdOut() const
+    {
+        toStream( std::cout);
+    }
+
+    template < size_t size> 
+    std::ostream& operator<<(std::ostream& os, const Chunk< size> &chunk) 
+    {   
+        if ( chunk.numFree() == 0 && chunk.isEmpty())
+            chunk.toStdOut();
+        chunk.toStream(os);
+        return os;
+    } 
+
 }; /* namespace MemImpl */
 #endif /* MEM_CHUNK_H */

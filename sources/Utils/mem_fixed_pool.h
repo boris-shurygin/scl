@@ -76,6 +76,13 @@ namespace Mem
                 
         /** Allocate new memory block */
         void* allocate( size_t alloc_size);
+        
+        /**
+         * Allocate an array of n elements of size 'size'. Throws std::bad_alloc
+         * in case of requsting number of elements greater than the size of a chunk
+         */
+        void* allocate( size_t alloc_size, UInt32 n);
+
         /** Free memory block */
         void deallocate( void *ptr);
         /** Type of the pool */
@@ -84,7 +91,16 @@ namespace Mem
         /** Get first busy chunk */
         inline MemImpl::Chunk< size> *firstBusyChunk();
 #endif
-    private:        
+        /** Print */
+        void stat2Stream( std::ostream &os) const;
+    private:
+#ifdef COLLECT_POOL_STAT
+        UInt64 num_entries_alloced;
+        UInt64 num_entries_dealloced;
+        UInt64 chunks_alloced;
+        UInt64 alive_chunks;
+        UInt64 free_chunks;
+#endif 
         /** Number of used entries */
         EntryNum entry_count;
         /** First chunk */
@@ -109,13 +125,23 @@ namespace Mem
         first_chunk( NULL),
         free_chunk( NULL)
     {
-
+#ifdef COLLECT_POOL_STAT
+        num_entries_alloced = 0;
+        num_entries_dealloced = 0;
+        chunks_alloced = 0;
+        alive_chunks = 0;
+        free_chunks = 0;
+#endif 
     }
 
     /** Destroy the pool */
     template < size_t size> 
     FixedPool< size>::~FixedPool()
     {
+#ifdef COLLECT_POOL_STAT
+        stat2Stream( cout);
+#endif
+
         /** Deallocated cached chunks */
         while ( isNotNullP( first_chunk))
         {
@@ -155,7 +181,7 @@ namespace Mem
     FixedPool< size>::allocateChunk()
     {
         /* We should only allocate chunk if there are no free chunks left */
-        MEM_ASSERTD( isNullP( free_chunk ), "Tried to deallocate chunk while there is a free chunk");
+        //MEM_ASSERTD( isNullP( free_chunk ), "Tried to deallocate chunk while there is a free chunk");
         
         /* Allocate memory for chunk */
         void *chunk_mem = 
@@ -175,6 +201,12 @@ namespace Mem
 #ifdef CHECK_CHUNKS
         chunk->pool = ( void *)this;
 #endif
+
+#ifdef COLLECT_POOL_STAT
+        chunks_alloced++;
+        alive_chunks++;
+        free_chunks++;
+#endif 
         return chunk;
     }
     
@@ -202,6 +234,10 @@ namespace Mem
 #else
         delete[] (UInt8 *)chunk;
 #endif
+#ifdef COLLECT_POOL_STAT
+        alive_chunks--;
+        free_chunks--;
+#endif 
     }
 
     /* Calculate pointer to chunk from pointer to entry */
@@ -235,11 +271,82 @@ namespace Mem
         /* if no more entries left */
         if ( !free_chunk->isFree())
         {
+#ifdef COLLECT_POOL_STAT
+        free_chunks--;
+#endif 
             MemImpl::Chunk< size> *chunk = free_chunk;
             free_chunk = chunk->next( MemImpl::CHUNK_LIST_FREE);
             chunk->detach( MemImpl::CHUNK_LIST_FREE);
         }
         entry_count++;
+
+#ifdef COLLECT_POOL_STAT
+        num_entries_alloced++;
+#endif 
+        return ptr;
+    }
+
+    /**
+     * Allocate new memory block
+     * TODO: should be further optimized. Namely the call to maxBlockSize() significantly slows down the allocation
+     */
+    template < size_t size> 
+    void* 
+    FixedPool< size>::allocate( size_t sz, UInt32 n)
+    {
+        /* Optimized for single allocation */
+        if ( n == 1)
+            return allocate( sz);
+
+        MEM_ASSERTD( size == sz,
+                     "Allocation size doesn't match FixedPool's template parameter size");
+        void *ptr = NULL;
+        
+        MEM_LOG( "Allocating block of size " << n << "\n");
+        MEM_LOG_INC_INDENT;
+
+        /*
+         * We can only allocate MemImpl::MAX_CHUNK_ENTRIES_NUM elements at once
+         * so we fail if we are asked to allocate more
+         */
+        if ( n > MemImpl::MAX_CHUNK_ENTRIES_NUM)
+            throw std::bad_alloc();
+
+        /* If we don't have a free chunk */
+        if ( isNullP( free_chunk) || free_chunk->maxBlockSize() < n)
+        {
+            /* We need to create new chunk */
+            MEM_LOG( "Allocating new chunk\n");
+        
+            allocateChunk();
+        
+            MEM_LOG( "Allocated at " << free_chunk << "\n");
+        } 
+
+        MEM_ASSERTD( free_chunk->isFree(), "Pool's first free chunk is not free");
+
+        /* allocate requsted number of entries */
+        ptr = ( void *)free_chunk->allocateBlock( n);
+       
+        MEM_LOG( "Allocated block of size " << n << " at " << ptr << "\n");
+       
+        /* if no more entries left */
+        if ( !free_chunk->isFree())
+        {
+#ifdef COLLECT_POOL_STAT
+            free_chunks--;
+#endif 
+            MemImpl::Chunk< size> *chunk = free_chunk;
+            free_chunk = chunk->next( MemImpl::CHUNK_LIST_FREE);
+            chunk->detach( MemImpl::CHUNK_LIST_FREE);
+        }
+        entry_count += n;
+        
+        MEM_LOG_DEC_INDENT;
+
+#ifdef COLLECT_POOL_STAT
+        num_entries_alloced += n;
+#endif         
         return ptr;
     }
 
@@ -271,7 +378,10 @@ namespace Mem
 
         /* 6. Free entry in chunk */
         chunk->deallocateEntry( e);
-        
+
+#ifdef COLLECT_POOL_STAT
+        num_entries_dealloced++;
+#endif        
         /*
          * 7. If this chunk is not the same as the current 'free chunk' 
          *     add it to free list or deallocate it if it is empty
@@ -280,6 +390,9 @@ namespace Mem
         {
             if ( add_to_free_list)
             {
+#ifdef COLLECT_POOL_STAT
+                free_chunks++;
+#endif   
                 /* Add the chunk to free list if it is not already there */
                 chunk->attach( MemImpl::CHUNK_LIST_FREE, free_chunk);
                 /* Deallocate previous free chunk if it is empty */
@@ -321,6 +434,22 @@ namespace Mem
         
         /* 3. Free memory */
         this->deallocate( ptr);
+    }
+
+    /** Create fixed pool with default parameters */
+    template < size_t size> 
+    void
+    FixedPool< size>::stat2Stream( std::ostream &os) const
+    {
+#ifdef COLLECT_POOL_STAT
+        os << "Pool " << this << "( entry size " << size << " ) statistics:\n";
+        os << "  Memory used " << entry_count * size << " ( " << entry_count << " entries)\n"; 
+        os << "  entries alloced   : " << num_entries_alloced << "\n";
+        os << "  entries dealloced : " << num_entries_dealloced << "\n";
+        os << "  chunks alloced    : " << chunks_alloced << "\n";
+        os << "  alive chunks      : " << alive_chunks << "\n";
+        os << "  free chunks       : " << free_chunks << endl;
+#endif 
     }
 
     /**

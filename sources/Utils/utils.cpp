@@ -12,7 +12,7 @@
 */
 void fatalAssert(const char *assertion, const char *file, int line)
 {
-    cerr << "ASSERT: " << assertion << " in file " << file << "line " << line << endl;
+    cerr << "ASSERT: " << assertion << " in file " << file << ", line " << line << endl;
     abort();
 }
 

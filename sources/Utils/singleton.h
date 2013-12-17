@@ -13,7 +13,7 @@
 #define SINGLETON_H
 
 /**
- * @brief Template for simple singleton objects.
+ * @brief Template for simple singleton objects with controlled lifetime.
  * @ingroup Singleton
  * @param T type of client object
  *
@@ -137,5 +137,80 @@ Single< T>::ptr()
 template < class T> T *Single<T>::instance_p = 0;                                       
 
 
+/**
+ * @brief Template for singleton objects with automatic creation and destruction.
+ * @ingroup Singleton
+ * @param T type of client object
+ *
+ * AutoSingleton provides the singleton implementation with automatic control over its
+ * lifetime. However two different singletons have unspecified order of creation and destruction.
+ * Objects handled by AutoSingle should not you one another. Note that the instance() returns a
+ * reference instead of a pointer.
+ * Example of usage:
+ @code
+ // Sample class
+ class classA
+ {
+ public:
+     doSomething() {...}
+ private:
+     // private constructors, assignment and destructor
+     classA(){};
+     classA( const classA&){};
+     classA& operator =( const classA&){};
+     ~classA(){};
+     // Needed for singleton opration
+     friend class AutoSingle< classA>;
+ };
+ 
+ // Typedef for classA encapsulated in singleton
+ typedef Single< classA> SingleA;
 
+ //void myfunc()
+ {
+    SingleA::instance().doSomething();
+ }
+
+ @endcode
+ */
+template < class T> class AutoSingle
+{
+public:
+    /** Get a reference to client object */
+    static T& instance();
+    /** Get a pointer to client object */
+    static T* ptr();
+
+protected:
+    /* Uniqueness ensurance */
+    /** Private constructor */
+    AutoSingle();
+    /** Private copy constructor */
+    AutoSingle( const AutoSingle&);
+    /** Private assignment */
+    AutoSingle& operator = ( const AutoSingle&);
+    /** Private destructor */
+    ~AutoSingle();
+};
+
+/**
+ * Access to client object
+ */
+template < class T> 
+T&
+AutoSingle< T>::instance()
+{
+    static T client_object; //Handled automatically by the compiler
+    return client_object;
+}
+
+/**
+ * Access to client object
+ */
+template < class T> 
+T*
+AutoSingle< T>::ptr()
+{
+    return &instance();
+}
 #endif /* SINGLETON_H */

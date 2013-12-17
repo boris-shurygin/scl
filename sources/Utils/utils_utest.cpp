@@ -86,7 +86,10 @@ bool Utils::uTest()
     RUN_TEST( uTestList);
     /** Test memory management */
     RUN_TEST( uTestMem);
-    /** Test memory management */
+    /** Test pool allocator */
+    RUN_TEST( uTestStdListAlloc);
+    RUN_TEST( uTestMemPoolListAlloc);
+    /** Test logs */
     RUN_TEST_OUT_FILE_CHECK( uTestLogs, "log_utest.txt");
     return true;
 }

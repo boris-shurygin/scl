@@ -83,6 +83,9 @@
       <Filter>utest</Filter>
     </ClInclude>
     <ClInclude Include="timer.h" />
+    <ClInclude Include="mem_pool_alloc.h">
+      <Filter>mem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="mem">

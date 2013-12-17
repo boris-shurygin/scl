@@ -68,24 +68,13 @@ namespace MemImpl
     };
 
     inline DebugInfo::DebugInfo()
+    {
 #ifdef USE_REF_COUNTERS 
-#  ifdef        MEM_CHECK_POOL
-        :
-#  endif
-#endif
-#ifdef USE_REF_COUNTERS
-    ref_count( 0)
-#endif
-#ifdef USE_REF_COUNTERS 
-#  ifdef        MEM_CHECK_POOL
-        ,
-#  endif
+       ref_count = 0;
 #endif
 #ifdef MEM_CHECK_POOL
-        _pool( 0)
-#endif
-    {
-    
+         _pool = 0;
+#endif       
     }
 
 #ifdef USE_REF_COUNTERS

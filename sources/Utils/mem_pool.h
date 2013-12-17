@@ -56,6 +56,7 @@ namespace Mem
 
         /** Destructor */
         virtual ~Pool(){};
+ 
     };
 
 }; /* namespace Mem */

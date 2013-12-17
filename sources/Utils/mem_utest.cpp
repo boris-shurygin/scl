@@ -173,5 +173,94 @@ bool Utils::uTestMem( UnitTest *utest_p)
 
     /** Test memory pools */
     uTestPools( utest_p);
+    
     return utest_p->result();
 }
+ 
+//Used for list sizes in unit tests
+static const UInt32 LIST_SIZE = 100000;
+
+struct PoolAllocTestStruct
+{
+    UInt32 ui;
+    UInt64 ul;
+    Float f;
+    Double d;
+};
+
+/**
+ * Test smart pointers, objects and pools
+ */
+bool Utils::uTestMemPoolListAlloc( UnitTest *utest_p)
+{
+    Log::init();
+
+    std::string name("mem_log.txt");
+    log()->add( LOG_UTILS_MEM, "Memory log", 5, name, true);
+    
+    
+    //Test allocator with list
+    std::list< UInt32, PoolAllocator< UInt32> > int_list;
+    std::list< UInt64, PoolAllocator< UInt64> > long_list;
+    std::list< PoolAllocTestStruct, PoolAllocator< PoolAllocTestStruct> > struct_list;
+    
+    UInt32 ref_sum = 0;
+    PoolAllocTestStruct strct;
+    for ( UInt32 i = 0; i < LIST_SIZE; ++i)
+    {
+        int_list.push_back( i);
+        long_list.push_back( i);
+        struct_list.push_back( strct);
+        ref_sum+=i;
+    }
+    
+    UTEST_CHECK( utest_p, int_list.size() == LIST_SIZE);
+
+    UInt32 sum = 0;
+    for ( std::list< UInt32, PoolAllocator< UInt32> >::iterator
+            it = int_list.begin(),
+            end = int_list.end();
+          it != end; ++it)
+    {
+        sum += *it;
+    }
+    UTEST_CHECK( utest_p, ref_sum == sum);
+    Log::deinit();
+    return utest_p->result();
+}
+
+/**
+ * Test smart pointers, objects and pools
+ */
+bool Utils::uTestStdListAlloc( UnitTest *utest_p)
+{
+    //Test allocator with list
+    std::list< UInt32> int_list;
+    std::list< UInt64> long_list;
+    std::list< PoolAllocTestStruct> struct_list;
+    
+    UInt32 ref_sum = 0;
+    PoolAllocTestStruct strct;
+    for ( UInt32 i = 0; i < LIST_SIZE; ++i)
+    {
+        int_list.push_back( i);
+        long_list.push_back( i);
+        struct_list.push_back( strct);
+        ref_sum+=i;
+    }
+    
+    
+    UTEST_CHECK( utest_p, int_list.size() == LIST_SIZE);
+
+    UInt32 sum = 0;
+    for ( std::list< UInt32>::iterator it = int_list.begin(),
+                                       end = int_list.end();
+          it != end; ++it)
+    {
+        sum += *it;
+    }
+    UTEST_CHECK( utest_p, ref_sum == sum);
+
+    return utest_p->result();
+}
+

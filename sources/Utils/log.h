@@ -15,6 +15,8 @@
 #ifndef UTILS_LOG_H
 #define UTILS_LOG_H
 
+//#define NO_LOGS
+
 /**
  * Debug assert for logs
  * @ingroup GraphBase
@@ -57,6 +59,8 @@ enum LogId
     LOG_BE_SCH,
     /** Register allocator log */
     LOG_BE_RA,
+    /** MEMORY log */
+    LOG_UTILS_MEM,
     /** Number of logs */
     LOGS_NUM
 };
@@ -200,8 +204,7 @@ LogControl::verb( LogId id)
 inline bool 
 LogControl::isEnabled( LogId id)
 {
-    LOG_ASSERTD( registered[ id], "log id is not registered");
-    return enabled[ id];
+    return registered[ id] && enabled[ id];
 }
 
 /**
@@ -321,13 +324,15 @@ inline LogControl* log()
          {os << message;Utils::Log::ptr()->log( log_id, os);}
 #  define LOG( log_id, message, ...) LOGV( log_id, 0, message, __VA_ARGS__)
 #  define LOGS( log_id, message) LOGVS( log_id, 0, message)
-#  define LOG_INC_INDENT( log_id) { Utils::Log::ptr()->incIndent( log_id); }
-#  define LOG_DEC_INDENT( log_id) { Utils::Log::ptr()->decIndent( log_id); }
+#  define LOG_INC_INDENT( log_id)\
+            { if ( Utils::Log::ptr()->isEnabled( log_id)) Utils::Log::ptr()->incIndent( log_id);}
+#  define LOG_DEC_INDENT( log_id)\
+            { if ( Utils::Log::ptr()->isEnabled( log_id)) Utils::Log::ptr()->decIndent( log_id) ;}
 #else
 #  define LOGV( log_id, verbosity, message, ...)
 #  define LOGVS( log_id, verbosity, message)
-#  define LOG( log_id, verbosity, message)
-#  define LOGS( log_id, verbosity, message)
+#  define LOG( log_id, message, ...)
+#  define LOGS( log_id, message)
 #  define LOG_INC_INDENT( log_id)
 #  define LOG_DEC_INDENT( log_id)
 #endif

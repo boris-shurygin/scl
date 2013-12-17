@@ -58,6 +58,7 @@
     <ClInclude Include="mem_alloc_policy.h" />
     <ClInclude Include="mem_generic_pool.h" />
     <ClInclude Include="host.h" />
+    <ClInclude Include="mem_pool_alloc.h" />
     <ClInclude Include="techniques.h" />
     <ClInclude Include="timer.h" />
     <ClInclude Include="types.h" />

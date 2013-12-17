@@ -21,6 +21,8 @@
 #ifndef MEM_H
 #define MEM_H
 
+#include <new>
+
 #undef CHECK_CHUNKS
 #undef CHECK_ENTRY
 #undef USE_REF_COUNTERS
@@ -35,17 +37,27 @@
 #  define USE_MEM_EVENTS
 #  define CHECK_DELETE
 #  define MEM_CHECK_POOL
+#  define COLLECT_POOL_STAT
 #endif
 
 #define MEM_USE_MALLOC
+//#define MEM_NO_ASSERTS
 
 /**
  * Debug assert in memory manager
  * @ingroup Mem
  */
 #if !defined(MEM_ASSERTD)
+#  ifndef MEM_NO_ASSERTS
 #    define MEM_ASSERTD(cond, what) ASSERT_XD(cond, "Memory manager", what)
+#  else
+#    define MEM_ASSERTD(cond, what)
+#  endif
 #endif
+
+#define MEM_LOG( message) LOGS( Utils::LOG_UTILS_MEM, message)
+#define MEM_LOG_INC_INDENT LOG_INC_INDENT( Utils::LOG_UTILS_MEM)
+#define MEM_LOG_DEC_INDENT LOG_DEC_INDENT( Utils::LOG_UTILS_MEM)
 
 /**
  * Namespace for memory-related routines
@@ -118,5 +130,6 @@ namespace Mem
 #include "mem_generic_pool.h" /** Memory pool */
 #include "mem_alloc_policy.h" /** Allocation policies */
 #include "mem_obj.h"          /** Memory object base class */
+#include "mem_pool_alloc.h"   /** Pool-based allocator */
 
 #endif /* MEM_H */
