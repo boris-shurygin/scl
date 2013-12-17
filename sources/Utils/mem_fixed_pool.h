@@ -138,10 +138,6 @@ namespace Mem
     template < size_t size> 
     FixedPool< size>::~FixedPool()
     {
-#ifdef COLLECT_POOL_STAT
-        stat2Stream( cout);
-#endif
-
         /** Deallocated cached chunks */
         while ( isNotNullP( first_chunk))
         {

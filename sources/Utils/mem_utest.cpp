@@ -178,7 +178,7 @@ bool Utils::uTestMem( UnitTest *utest_p)
 }
  
 //Used for list sizes in unit tests
-static const UInt32 LIST_SIZE = 100000;
+static const UInt32 LIST_SIZE = 1000;
 
 struct PoolAllocTestStruct
 {

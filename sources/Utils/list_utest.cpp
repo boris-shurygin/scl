@@ -9,7 +9,7 @@
 
 using namespace Utils;
 
-static const int LIST_TEST_NUM_NODES = 100000;
+static const int LIST_TEST_NUM_NODES = 1000;
 
 
 /** Define the  lists we use */
