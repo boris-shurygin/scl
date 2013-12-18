@@ -9,7 +9,7 @@
  * - Dangling pointers. Solution: reference counting via smart pointers
  * - Memory leaks. Solution: Various checks in pools and in pointers
  * - Fragmentation. Solution: Fixed-sized chunks used in pools
- * - Poor locality. Solution: not clear yet :(
+ * - Poor locality. Solution: not clear yet, except for pooled objects :(
  * @ingroup Utils
  */
 /*

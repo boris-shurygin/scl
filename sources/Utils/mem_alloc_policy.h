@@ -69,7 +69,7 @@ namespace Mem
         void *operator new( size_t size)
         {
              MEM_ASSERTD( sizeof( T) == size, "Size passed as new parameter must be equal to the one that"
-                                           "was selected for the object with specialization of PoolObj");
+                                              "was selected for the object with specialization of PoolObj");
              return DefaultPool< T>::ptr()->allocate( size);
         }
         /** Operator 'delete' deallocationg from default pool */
