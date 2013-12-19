@@ -119,7 +119,11 @@ namespace Mem
      * @ingroup MemImpl
      */
     typedef Single< MemImpl::MemInfo> MemMgr;
+    
+    class Pool;
 };
+
+
 
 #include "mem_mgr.h"          /** Memory manager */
 #include "mem_chunk.h"        /** Memory chunk class */

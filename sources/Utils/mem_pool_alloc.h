@@ -15,7 +15,13 @@ namespace Mem
 {
 
 /**
- * Allocator that uses TypedPool for allocation logic implementation
+ * @brief Allocator that uses TypedPool for allocation logic implementation
+ * @ingroup Mem
+ *
+ * @details  
+ * Allocator that uses TypedPool for allocation logic implementation. Due to usage 
+ * chunks in the pool implementation this allocator is only suitable for containers
+ * that only allocate one object at a time (tested with std::list and std::map).
  */
 template <class T>
 class PoolAllocator
@@ -157,7 +163,7 @@ PoolAllocator<T>::construct( typename PoolAllocator<T>::pointer p,
  */
 template <class T> 
 void
-PoolAllocator<T>::destroy( PoolAllocator<T>::pointer p)
+PoolAllocator<T>::destroy( typename PoolAllocator<T>::pointer p)
 {
     p->~T();
 }

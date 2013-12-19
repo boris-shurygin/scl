@@ -49,7 +49,7 @@ namespace MemImpl
         inline FixedEntry< size> *entry( ChunkPos pos) const;
     public:
 #ifdef CHECK_CHUNKS
-        void *pool;       
+        Mem::Pool *pool;       
         /** Get chunk's first busy entry */
         inline FixedEntry< size> *firstBusyEntry();
 #endif
@@ -221,7 +221,10 @@ namespace MemImpl
 #ifdef CHECK_ENTRY
         e->setBusy( true);
 #endif
-#ifdef USE_MEM_EVENTS        
+#ifdef MEM_CHECK_POOL
+        e->debugInfo().setPool( this->pool);
+#endif
+#ifdef USE_MEM_EVENTS   
         e->debugInfo().setAllocEvent( Mem::MemMgr::instance()->allocEvent());
 #endif        
         void *res = e->dataMem();
@@ -260,6 +263,9 @@ namespace MemImpl
                          "Entry should be free, otherwise we have "
                          "wrongly estimated number of free entries");
             e->setBusy( true);
+#endif
+#ifdef MEM_CHECK_POOL
+            e->debugInfo().setPool( this->pool);
 #endif
 #ifdef USE_MEM_EVENTS        
             e->debugInfo().setAllocEvent( Mem::MemMgr::instance()->allocEvent());

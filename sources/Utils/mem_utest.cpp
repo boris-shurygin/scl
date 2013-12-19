@@ -179,6 +179,7 @@ bool Utils::uTestMem( UnitTest *utest_p)
  
 //Used for list sizes in unit tests
 static const UInt32 LIST_SIZE = 1000;
+static const UInt32 MAP_SIZE = 1000;
 
 struct PoolAllocTestStruct
 {
@@ -223,6 +224,41 @@ bool Utils::uTestMemPoolListAlloc( UnitTest *utest_p)
           it != end; ++it)
     {
         sum += *it;
+    }
+    UTEST_CHECK( utest_p, ref_sum == sum);
+    Log::deinit();
+    return utest_p->result();
+}
+
+/**
+ * Test smart pointers, objects and pools
+ */
+bool Utils::uTestMemPoolMapAlloc( UnitTest *utest_p)
+{
+    Log::init();
+
+    std::string name("mem_log.txt");
+    log()->add( LOG_UTILS_MEM, "Memory log", 5, name, true);
+    
+    //Test allocator with vector
+    typedef std::map<UInt32, UInt32, std::less<UInt32>, PoolAllocator< std::pair<UInt32, UInt32> > > UIntMap;
+    UIntMap int_map;
+    UInt32 ref_sum = 0;
+    PoolAllocTestStruct strct;
+    for ( UInt32 i = 0; i < MAP_SIZE; ++i)
+    {
+        int_map[ i] = i;
+        ref_sum+=i;
+    }
+    
+    UTEST_CHECK( utest_p, int_map.size() == MAP_SIZE);
+
+    UInt32 sum = 0;
+    for ( UIntMap::iterator it = int_map.begin(),
+                            end = int_map.end();
+          it != end; ++it)
+    {
+        sum += (*it).first;
     }
     UTEST_CHECK( utest_p, ref_sum == sum);
     Log::deinit();

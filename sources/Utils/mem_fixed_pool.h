@@ -199,7 +199,7 @@ namespace Mem
         free_chunk = chunk;
         
 #ifdef CHECK_CHUNKS
-        chunk->pool = ( void *)this;
+        chunk->pool = this;
 #endif
 
 #ifdef COLLECT_POOL_STAT

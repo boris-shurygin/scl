@@ -89,6 +89,8 @@ bool Utils::uTest()
     /** Test pool allocator */
     RUN_TEST( uTestStdListAlloc);
     RUN_TEST( uTestMemPoolListAlloc);
+    RUN_TEST( uTestMemPoolMapAlloc);
+
     /** Test logs */
     RUN_TEST_OUT_FILE_CHECK( uTestLogs, "log_utest.txt");
     return true;

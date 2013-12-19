@@ -61,14 +61,20 @@ namespace Utils
     bool uTestMem( UnitTest *utest_p);
 
     /**
-     * Test pool allocators
+     * Test pool allocators with list
      */
     bool uTestMemPoolListAlloc( UnitTest *utest_p);
+
     /**
      * Test std allocators to get reference time
      */
     bool uTestStdListAlloc( UnitTest *utest_p);
 
+    /**
+     * Test pool allocator with map
+     */
+    bool uTestMemPoolMapAlloc( UnitTest *utest_p);
+    
     /**
      * Test Utils package
      */
