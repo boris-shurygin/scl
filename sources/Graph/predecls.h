@@ -16,7 +16,7 @@ using namespace Utils;
 using namespace Mem;
 
 /**
- * Debug assert for GraphImpl library
+ * Debug assert for Graph library
  * @ingroup GraphBase
  */
 #if !defined(GRAPH_ASSERTD)
@@ -24,7 +24,7 @@ using namespace Mem;
 #endif
 
 /**
- * Debug assert for GraphImpl library
+ * Debug assert for Graph library
  * @ingroup GraphBase
  */
 #if !defined(GRAPH_ASSERTXD)
@@ -32,7 +32,7 @@ using namespace Mem;
 #endif
 
 /**
- * Directions type in GraphImpl
+ * Directions type in Graph
  * @ingroup GraphBase
  */
 enum GraphDir

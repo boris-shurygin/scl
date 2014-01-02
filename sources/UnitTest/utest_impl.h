@@ -4,3 +4,4 @@
  */
 #include "../Tools/tools_iface.h"
 #include "../opt/opt_iface.hpp"
+#include "../syntax/stx_iface.h"

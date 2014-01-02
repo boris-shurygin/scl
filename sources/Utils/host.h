@@ -59,6 +59,7 @@
 #include <cstdarg>
 #include <numeric>
 #include <iomanip>
+#include <exception>
 
 using namespace std;
 

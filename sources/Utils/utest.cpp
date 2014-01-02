@@ -69,8 +69,8 @@ const std::string &
 
 bool TestDriver::runTest( std::string name, SimpleTestFuncPtr func)
 {
-	testHeader( name);
-	bool res = func();
+    testHeader( name);
+    bool res = func();
     processResult( res);
     testFooter( name);
     return res;
@@ -78,9 +78,9 @@ bool TestDriver::runTest( std::string name, SimpleTestFuncPtr func)
 
 bool TestDriver::runTest( std::string name, TestFuncPtr func, std::string out_file_name)
 {
-	//Print header line
+    //Print header line
     testHeader( name);
-	
+    
     ofstream out_file_strm;//will close automatically
     bool use_file = false;
     
@@ -106,7 +106,7 @@ bool TestDriver::runTest( std::string name, TestFuncPtr func, std::string out_fi
     Timer timer(true);
     bool res = func( test_p);//results are saved to test
     tests.push_back( test_p);
-	test_p->setRunTime( timer.elapsedUSec() ); 
+    test_p->setRunTime( timer.elapsedUSec() ); 
 
     if ( use_file)
     {
@@ -124,7 +124,7 @@ bool TestDriver::runTest( std::string name,
                           TestFuncWFileNamePtr func,
                           std::string out_file_name) 
 {
-	//Print header line
+    //Print header line
     testHeader( name);
     UnitTest *test_p = new UnitTest( name, out_file_name, *log_stream);
     
@@ -154,10 +154,10 @@ void TestDriver::processResult( bool res)
         success_num++;
         *log_stream << " success" << endl;
     } else
-	{
+    {
         *log_stream << " fail" <<endl;
         fail_num++;
-	} 
+    } 
 }
 
 void TestDriver::compareOut( UnitTest *test_p)
@@ -206,7 +206,7 @@ void TestDriver::processResult( UnitTest* utest)
                     << utest->numPasses() 
                     << " assertions checked)";
     } else
-	{
+    {
         *log_stream << " fail (";
             
         if ( utest->assertFailed() )
@@ -221,7 +221,7 @@ void TestDriver::processResult( UnitTest* utest)
         }
         *log_stream << ")";
         fail_num++;
-	} 
+    } 
     *log_stream << " " << utest->runTime() << " uSec" << endl;
 }
 

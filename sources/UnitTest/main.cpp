@@ -24,6 +24,8 @@ int main(int argc, char **argv)
     /** Test optimizer package */
     RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
 
+    RUN_TEST_OUT_FILE_CHECK( Syntax::Arithmetics::uTest, "stx_utest.txt");
+
     MemMgr::deinit();
     
     cout.flush();

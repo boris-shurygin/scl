@@ -10,12 +10,14 @@
 #ifndef MISC_H
 #define MISC_H
 
+#define FOREVER for (;;)
+
 /* String for build mode identification */
 static const std::string BUILD_MODE 
 #ifdef _DEBUG
-	("debug");
+    ("debug");
 #else
-	("release");
+    ("release");
 #endif
 
 /**
