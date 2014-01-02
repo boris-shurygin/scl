@@ -54,6 +54,7 @@
 #include <map>
 #include <algorithm>
 #include <list>
+#include <stack>
 #include <vector>
 #include <cstdio>
 #include <cstdarg>

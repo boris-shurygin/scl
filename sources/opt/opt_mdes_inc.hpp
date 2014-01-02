@@ -17,10 +17,14 @@
 /* Objects */
 OBJ( Reg, "t", 32, 0, REGISTER, true)
 
+/* Movs */
+OPER( Mov,  "mov",  Args<reg_imm_32>, Ress<reg_32> )
+
 /* Arithmetic Operations */
 OPER( Add,  "add",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
 OPER( Sub,  "sub",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
 OPER( Mul,  "mul",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
+OPER( Div,  "div",  Args<reg_imm_32, reg_imm_32>, Ress<reg_32> )
 
 /* Memory operations */
 OPER( Ld,   "ld",   Args<reg_imm_32>            , Ress<reg_32> )

@@ -95,6 +95,9 @@
     <ClInclude Include="utest_impl.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\lowering\lowering.vcxproj">
+      <Project>{de9bbbfb-8fee-4e31-9312-58f1b0fd6de2}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\opt\opt.vcxproj">
       <Project>{a5918eac-8bb5-47ed-bd40-261965827990}</Project>
     </ProjectReference>

@@ -18,5 +18,13 @@
     <ClInclude Include="low_iface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="arithm2opt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="arithm2opt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
