@@ -1,0 +1,10 @@
+Function compute( )
+{0} mov vt0 = 10
+{1} mov vt1 = 5
+{2} mov vt2 = 5
+{3} add vt3 = vt1, vt2
+{4} mov vt4 = 2
+{5} mul vt5 = vt3, vt4
+{6} sub vt6 = vt0, vt5
+{7} ret
+
