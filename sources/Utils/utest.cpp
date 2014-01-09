@@ -225,20 +225,20 @@ void TestDriver::processResult( UnitTest* utest)
     *log_stream << " " << utest->runTime() << " uSec" << endl;
 }
 
-//< Print test statistics
+/** Print test statistics */
 void TestDriver::printStats()
 {
     *log_stream << "Tests failed: " << fail_num << endl;
     *log_stream << "Tests passed: " << success_num << endl;
 }
 
-//< Set output file name and open it
+/** Set output file name and open it */
 void TestDriver::useLogFile( std::string name)
 {
 
 }
 
-// Generate return result for main
+/** Generate return result for main */
 int TestDriver::returnRes()
 {
     if ( fail_num)

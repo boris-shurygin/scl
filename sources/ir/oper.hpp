@@ -181,11 +181,11 @@ public:
     inline void insertBefore( Operation< MDesType> *next_oper);
 
     /* Add an arguments to set */
-    inline const Operand< MDesType> * addArgToSet( Object< MDesType> *obj); //< Add object argument
-    inline const Operand< MDesType> * addArgToSet( Const imm_val);       //< Add immediate argument
+    inline const Operand< MDesType> * addArgToSet( Object< MDesType> *obj); /**< Add object argument */
+    inline const Operand< MDesType> * addArgToSet( Const imm_val);       /**< Add immediate argument */
 
     /* Add an result to set, only objects can be in results set */
-    inline const Operand< MDesType> * addResToSet( Object< MDesType> *obj); //< Add object result
+    inline const Operand< MDesType> * addResToSet( Object< MDesType> *obj); /**< Add object result */
 
     /** Get first argument operand in argument set */
     inline Operand< MDesType> * firstArgInSet() const;
@@ -193,27 +193,27 @@ public:
     /** Get first result in result set */
     inline Operand< MDesType> * firstResInSet() const;
 
-    inline CFNode< MDesType> * node() const;    //< Get the control flow node of the operation
-    inline void setNode( CFNode< MDesType> *n); //< Set the control flow node of the operation
+    inline CFNode< MDesType> * node() const;    /**< Get the control flow node of the operation */
+    inline void setNode( CFNode< MDesType> *n); /**< Set the control flow node of the operation */
 
-    inline bool isLastInNode() const;  //< Check if the operation is last in its CF node
-    inline bool isFirstInNode() const; //< Check if the operation is first in its CF node
+    inline bool isLastInNode() const;  /**< Check if the operation is last in its CF node  */
+    inline bool isFirstInNode() const; /**< Check if the operation is first in its CF node */
     
 private:
     /* Arrays of operands */
-    Operand<MDesType> args[ MDesType::max_args]; //< Array of argument operands
-    Operand<MDesType> ress[ MDesType::max_ress]; //< Array of result operands
+    Operand<MDesType> args[ MDesType::max_args]; /**< Array of argument operands */
+    Operand<MDesType> ress[ MDesType::max_ress]; /**< Array of result operands   */
     
     /* 
      * Argument and result sets of arbitrary length (e.g. in operations like call)
      * are implemented as the lists of operands. Memory is still controlled by the operation.
      */
-    Operand<MDesType> *first_arg; //< First argument in set
-    Operand<MDesType> *first_res; //< First result in set
+    Operand<MDesType> *first_arg; /**< First argument in set */
+    Operand<MDesType> *first_res; /**< First result in set   */
 
-    OperName name_; //< Operation name
+    OperName name_; /**< Operation name */
 
-    CFNode< MDesType> * node_; //< Control flow node of the operation
+    CFNode< MDesType> * node_; /**< Control flow node of the operation */
 
     /** Print operand list to stream */
     inline void opListToStream(ostream& os, Operand< MDesType>* op) const;

@@ -78,8 +78,8 @@ public:
     UnitTest( std::string &tst_name, std::string &o_name, std::ostream& log_strm = std::cerr, std::ostream& out_strm = std::cout);
 
     /* text stream accessors */
-    inline std::ostream& out(){ return out_stream;}; //< Get stream for test output
-    inline std::ostream& log(){ return log_stream;}; //< Get stream for log output
+    inline std::ostream& out(){ return out_stream;}; /**< Get stream for test output */
+    inline std::ostream& log(){ return log_stream;}; /**< Get stream for log output  */
     
     /**
      * Remember results of individual check along with the textual
@@ -87,25 +87,25 @@ public:
      */
     void saveCheckResult( bool res, const char *assertion, const char *file, int line);
     
-    bool result() { return main_res == UTEST_SUCCESS;} // < Get the overall result of the test
+    bool result() { return main_res == UTEST_SUCCESS;} /**< Get the overall result of the test */
     
-    void setAssertFailed() { main_res = main_res | UTEST_ASSERT_FAIL;}//< Remember that some assertions failed
-    void setCmpFailed() { main_res = main_res | UTEST_CMP_FAIL;}      //< Remember that comparison with ref data is failed
-    
-    // Check if some assertions failed
+    void setAssertFailed() { main_res = main_res | UTEST_ASSERT_FAIL;}/**< Remember that some assertions failed */
+    void setCmpFailed() { main_res = main_res | UTEST_CMP_FAIL;}      /**< Remember that comparison with ref data is failed */
+
+    /** Check if some assertions failed */
     bool assertFailed() const { return UTEST_SUCCESS != (main_res & UTEST_ASSERT_FAIL);}
 
-    // Check if comparison with ref data is failed
+    /** Check if comparison with ref data is failed */
     bool cmpFailed() const { return UTEST_SUCCESS != (main_res & UTEST_CMP_FAIL);}      
     
-    UInt32 numFails() const { return num_fail;}     //< Get the number of failed assertions
-    UInt32 numPasses() const { return num_success;} //< Get the number of passed assertions
+    UInt32 numFails() const { return num_fail;}     /**< Get the number of failed assertions */
+    UInt32 numPasses() const { return num_success;} /**< Get the number of passed assertions */
 
-    const std::string &name() const { return test_name;}    //< Get the test name string
-    const std::string &filename() const { return out_name;} //< Get the output file name string
+    const std::string &name() const { return test_name;}    /**< Get the test name string        */
+    const std::string &filename() const { return out_name;} /**< Get the output file name string */
 
-    void setRunTime( UInt32 t) { run_time = t; }//< Set the runtime value
-    UInt32 runTime() const { return run_time; } //< Get the runtime value
+    void setRunTime( UInt32 t) { run_time = t; }/**< Set the runtime value */
+    UInt32 runTime() const { return run_time; } /**< Get the runtime value */
 
     /** Get list of individual check results */
     std::list<UTestCheck>& results()
@@ -171,9 +171,9 @@ public:
     static void setRefPath( std::string &ref_path);
     static const std::string &refPath();
 
-    static int returnRes(); //< Generate return result for main
-    static void printStats(); //< Print test statistics
-    static void useLogFile( std::string name); //< Set output file name and open it
+    static int returnRes();   /**< Generate return result for main */
+    static void printStats(); /**< Print test statistics */
+    static void useLogFile( std::string name); /**< Set output file name and open it */
 private:
     static std::string ref_data_path;
     static void testHeader( std::string name);

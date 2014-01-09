@@ -14,10 +14,10 @@ namespace IR
     /** Types of constant */
     enum ConstType
     {
-        CONST_TYPE_INTEGER,//< Integer constant
-        CONST_TYPE_FLOAT,  //< Floating point constant
-        CONST_TYPE_SYMBOL, //< Symbolic constant
-        CONST_TYPES_NUM    //< Number of constant types
+        CONST_TYPE_INTEGER,/**< Integer constant         */
+        CONST_TYPE_FLOAT,  /**< Floating point constant  */
+        CONST_TYPE_SYMBOL, /**< Symbolic constant        */
+        CONST_TYPES_NUM    /**< Number of constant types */
     };
 
     /**
@@ -27,15 +27,15 @@ namespace IR
     class Const
     {
     public:
-        inline Const( Int64 int_val); //< Constructor of integer constant
-        inline Const( Double f_val);  //< Constructor of floating point constant
-        inline Const( string str);    //< Constructor of symbolic constant
+        inline Const( Int64 int_val); /**< Constructor of integer constant        */
+        inline Const( Double f_val);  /**< Constructor of floating point constant */
+        inline Const( string str);    /**< Constructor of symbolic constant       */
         
-        inline ConstType type()      const; //< Get type of constant
+        inline ConstType type()      const; /**< Get type of constant */
 
-        inline Int64     intVal()    const; //< Get integer constant value
-        inline Double    floatVal()  const; //< Get floating point constant value
-        inline string    strVal()    const; //< Get integer constant value
+        inline Int64     intVal()    const; /**< Get integer constant value        */
+        inline Double    floatVal()  const; /**< Get floating point constant value */
+        inline string    strVal()    const; /**< Get integer constant value        */
 
 
         /** Print constant to stream */
@@ -48,9 +48,9 @@ namespace IR
             Double d_val;
         } data;
         
-        std::string str_val;//< Placeholder for string data
+        std::string str_val;/**< Placeholder for string data */
         
-        ConstType type_; //< Type of the constant
+        ConstType type_; /**< Type of the constant */
     };
  
     /** Constructor of integer constant */

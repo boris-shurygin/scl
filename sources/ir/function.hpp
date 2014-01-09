@@ -20,13 +20,13 @@ template <class MDesType> class Function:
     public SListIface<Function <MDesType> >
 {
 public:
-    Function( Module<MDesType> *m);                   //< Create function in given module
-    Function( Module<MDesType> *m, string func_name); //< Create named function in given module
+    Function( Module<MDesType> *m);                   /**< Create function in given module */
+    Function( Module<MDesType> *m, string func_name); /**< Create named function in given module */
     
-    virtual ~Function();  //< Delete function
+    virtual ~Function();  /**< Delete function */
 
-    inline Module<MDesType> *module() const; //< Get the module of the function
-    inline CFG<MDesType> &cfg() ;            //< Get control flow graph of the function
+    inline Module<MDesType> *module() const; /**< Get the module of the function */
+    inline CFG<MDesType> &cfg() ;            /**< Get control flow graph of the function */
         
     /** Create new operation */
     inline Operation< MDesType> * newOper( typename MDesType::OperName name);
@@ -55,10 +55,10 @@ public:
     /** Get the function name */
     inline void setName( string new_name);
 private:
-    Operation< MDesType> *newNode();   // Create new dep graph node (operation without a name)
-    Module< MDesType> *module_p;       //< Pointer to the module
-    list< Object< MDesType> *> objects;//< List of function's objects
-    CFG< MDesType> cfg_;               //< Control flow graph
+    Operation< MDesType> *newNode();   /**< Create new dep graph node (operation without a name) */
+    Module< MDesType> *module_p;       /**< Pointer to the module */
+    list< Object< MDesType> *> objects;/**< List of function's objects */
+    CFG< MDesType> cfg_;               /**< Control flow graph */
         
     /** First operation in linear sequence of operaitons in this function */
     Operation< MDesType> *first_oper_in_seq;

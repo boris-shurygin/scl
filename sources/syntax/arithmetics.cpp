@@ -23,7 +23,29 @@ namespace Arithmetics
         }
         return END;
     }
-    
+
+    /** Dump token to stream */
+    void Token::toStream( std::ostream &stream)
+    {
+        //stream << "(";
+        switch ( val_)
+        {
+        case NUMBER:
+            //stream << "NUM,";
+            stream << number_;
+            break;
+        case END: stream << "END"; break;
+        case PLUS: stream << "ADD"; break;
+        case MINUS: stream << "SUB"; break;
+        case MUL: stream << "MUL"; break;
+        case DIV: stream << "DIV"; break;
+        case LP: stream << "LP"; break;
+        case RP: stream << "RP"; break;
+        case NO_TOKEN: break;
+        }
+        //stream << ")";
+    }
+
     Lexer::Lexer( std::string &str):
         pos( 0), str_copy( str)
     {
@@ -230,6 +252,9 @@ namespace Arithmetics
         return 0;
     }
     
+    /**
+     * Unit testing for the arithmetics parser
+     */
     bool uTest( UnitTest *utest)
     {
         std::string str("((1-2)+(2+3))");

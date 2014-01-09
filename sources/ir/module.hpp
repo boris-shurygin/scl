@@ -20,13 +20,13 @@ namespace IR
     public:
         typedef Function<MDesType> Func; 
 
-        inline Module();  //< Constructor of an empty translation unit
-        inline ~Module(); //< Destructor
+        inline Module();  /**< Constructor of an empty translation unit */
+        inline ~Module(); /**< Destructor */
         
-        inline Func * newFunction();                   //< Create a new function
-        inline Func * newFunction( string name);       //< Create a new named function
-        inline Func * findFunctionByName( string name);//< Find function by its name string
-        inline void removeFunction( Func *f);          //< Remove function from the module
+        inline Func * newFunction();                   /**< Create a new function */
+        inline Func * newFunction( string name);       /**< Create a new named function */
+        inline Func * findFunctionByName( string name);/**< Find function by its name string */
+        inline void removeFunction( Func *f);          /**< Remove function from the module */
         
         /** Find function with the given name, rename it and adjust the symbol table */
         inline void renameFunction( string name, string new_name); 
