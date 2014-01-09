@@ -90,7 +90,7 @@ namespace Syntax
     {
         visitor.doPre( this);
         bool first = true;
-        for ( std::list< ASTNode* >::iterator it = childrenBeg(),
+        for ( typename std::list< ASTNode* >::iterator it = childrenBeg(),
                                                 end = childrenEnd();
                 it != end;
                 ++it)
