@@ -133,15 +133,15 @@ utest: gen utest_link
 #
 # Linking targets for debug and release modes
 #
-utestd_link: $(call FILTER,UnitTest Utils Graph ir opt,$(DEBUG_OBJS))
+utestd_link: $(DEBUG_OBJS)
 	@echo [linking] $(BIN_DIR)/utestd
 	@$(MKDIR) -p $(BIN_DIR)
-	@$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/utestd $(call FILTER,UnitTest Utils Graph ir opt,$(DEBUG_OBJS)) $(DEBUG_LIB_DIRS) $(DEBUG_LIBS)
+	@$(CXX) $(DEBUG_LIB_FLAGS) -o $(BIN_DIR)/utestd $(DEBUG_OBJS) $(DEBUG_LIB_DIRS) $(DEBUG_LIBS)
 
-utest_link: $(call FILTER,UnitTest Utils Graph ir opt,$(RELEASE_OBJS))
+utest_link: $(RELEASE_OBJS)
 	@echo [linking] $(BIN_DIR)/utest
 	@$(MKDIR) -p $(BIN_DIR)
-	@$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/utest $(call FILTER,UnitTest Utils Graph ir opt,$(RELEASE_OBJS)) $(RELEASE_LIB_DIRS) $(RELEASE_LIBS)
+	@$(CXX) $(RELEASE_LIB_FLAGS) -o $(BIN_DIR)/utest $(RELEASE_OBJS) $(RELEASE_LIB_DIRS) $(RELEASE_LIBS)
 
 #
 # Generation of cpp files with flex
