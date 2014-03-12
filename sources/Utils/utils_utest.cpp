@@ -55,6 +55,15 @@ namespace UTestFinal
 }
 #endif
 
+class MyPrintable: public Printable<MyPrintable>
+{
+public:
+    void toStream( std::ostream &stream)
+    {
+        stream << "MyPrintable class";
+    }
+};
+
 /**
  * Various tests
  */
@@ -68,6 +77,8 @@ static bool uTestMisc()
     // FinalHook<Base>() constructor is not accessible from Derived 
     UTestFinal::Derived *d = new UTestFinal::Derived(); // <-- compilation error (C2248 in MSVC 10) 
 #endif
+    //MyPrintable my_p;
+    //std::cout << my_p << std::endl;
     return true;
 }
 

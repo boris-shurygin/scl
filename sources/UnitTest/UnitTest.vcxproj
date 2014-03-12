@@ -100,6 +100,9 @@
     <ProjectReference Include="..\opt\opt.vcxproj">
       <Project>{a5918eac-8bb5-47ed-bd40-261965827990}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\regexp\regexp.vcxproj">
+      <Project>{6a0fed63-5c53-4d9d-af13-7c6d4582b1d3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\syntax\syntax.vcxproj">
       <Project>{9de1ab8f-150e-455c-bee0-37793f797c5d}</Project>
     </ProjectReference>

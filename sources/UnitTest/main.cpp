@@ -24,6 +24,7 @@ int main(int argc, char **argv)
     /** Test optimizer package */
     RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
 
+    RUN_TEST( RegExp::uTestFA);
     RUN_TEST( RegExp::uTest);
     RUN_TEST_OUT_FILE_CHECK( Syntax::Arithmetics::uTest, "stx_utest.txt");
     RUN_TEST_OUT_FILE_CHECK( Lowering::uTestArithm, "low_utest_arithm.txt");

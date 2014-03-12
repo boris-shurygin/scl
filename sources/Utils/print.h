@@ -42,6 +42,58 @@ namespace PrintUtils
 
         return s;
     }
+    
+    /**
+     * @class Printable
+     * @brief Printing interface for child classes
+     * @ingroup Utils
+     *
+     * @details
+     * The Printable template provides means for automatic overloading of operator<< for its subclasses.
+     * By reimplementing the toStream routine in subclass one enables printing via operator <<.
+     * Example:
+     * @code
+    
+    //User-defined class with printing
+    class MyPrintable: public Printable<MyPrintable> //Sublcass of Printable
+    {
+    public:
+        //Custom implementation of toStream routine 
+        void toStream( std::ostream &stream) const
+        {
+            stream << "MyPrintable class";
+        }
+    };
+
+    void foo()
+    {
+        MyPrintable my_p;
+        std::cout << my_p << std::endl;
+        return true;
+    }
+
+    @endcode
+    */
+    template< class T> class Printable
+    {
+    public:
+        /** Calls user-defined printing from the subclass */
+        inline void toStream( std::ostream &stream) const
+        {
+            static_cast<T *>(this)->T::toStream( stream);
+        }
+    };
+
+    /**
+     * Output operator overload for Parser printing
+     * @ingroup Utils
+     */
+    template <class T> 
+    inline std::ostream & operator <<( std::ostream &stream, Printable<T> &p)
+    {
+        p.toStream( stream);
+        return stream;
+    }
 };
 
 

@@ -19,7 +19,7 @@ namespace RegExp
         RegExp( const RegExp & orig);/**< Copy constructor */
     private:
         std::string str_; /** String that was used to define the regular expression */
-        FiniteAutomata *fa;
+        NFA nfa;
     };
 
     /**
