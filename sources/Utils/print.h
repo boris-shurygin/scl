@@ -80,7 +80,7 @@ namespace PrintUtils
         /** Calls user-defined printing from the subclass */
         inline void toStream( std::ostream &stream) const
         {
-            static_cast<T *>(this)->T::toStream( stream);
+            static_cast<const T *>(this)->T::toStream( stream);
         }
     };
 
@@ -90,6 +90,16 @@ namespace PrintUtils
      */
     template <class T> 
     inline std::ostream & operator <<( std::ostream &stream, Printable<T> &p)
+    {
+        p.toStream( stream);
+        return stream;
+    }
+    /**
+     * Output operator overload for Parser printing
+     * @ingroup Utils
+     */
+    template <class T> 
+    inline std::ostream & operator <<( std::ostream &stream, const Printable<T> &p)
     {
         p.toStream( stream);
         return stream;

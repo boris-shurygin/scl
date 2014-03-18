@@ -202,4 +202,22 @@ time_tests(F f) // f is a function that returns its execution time
     \
     inline void test_name##_impl()
 
+template <class T> bool
+areSetsIntersected( const std::set<T> &x, const std::set< T> &y)
+{
+    typename std::set<T>::const_iterator i = x.begin();
+    typename std::set<T>::const_iterator j = y.begin();
+    
+    while ( i != x.end() && j != y.end() )
+    {
+        if ( *i < *j)
+            ++i;
+        else if ( *i > *j)
+            ++j;
+        else
+            return true;
+    }
+    return false;
+}
+
 #endif
