@@ -88,6 +88,8 @@ namespace RegExp
     /** Turns transitions into table */
     void NFA::buildTable()
     {
+        char_index[ Character() ] = 0; // add epsilon to alphabet
+        
         // Calclulate number of rows = number of states
         UInt32 num_rows = numStates();
 
@@ -210,16 +212,16 @@ namespace RegExp
     /** Test if the input string is accepted by this NFA */
     bool NFA::test( const std::string &str)
     {
-        return findIn( str) != str.end();
+        return findIn( str) != 0;
     }    
     
-    std::string::const_iterator 
+    UInt32
     NFA::findIn( const std::string &str)
     {
         return findIn( str, str.begin());
     }
 
-    std::string::const_iterator 
+    UInt32
     NFA::findIn( const std::string &str, std::string::const_iterator start_iterator)
     {
         RE_ASSERTD( use_table);
@@ -231,11 +233,18 @@ namespace RegExp
 
         current_states.insert( State(START_STATE));
         
+        UInt32 num_matched = 0;
+        UInt32 res = 0;
+
+        RE_LOGS( "Testing string " << str << endl);
+        RE_LOG_INC_INDENT;
+
         FOREVER
         {
             if ( areSetsIntersected( accepting_states, current_states))
             {
                 acpt_it = start_iterator;
+                res = num_matched;
             }
         
             std::set<State> new_states;
@@ -249,6 +258,8 @@ namespace RegExp
                 if ( !isCharInSet( curr_char) )
                     break;
                 
+                RE_LOGS( "Current character: " << curr_char << ", states: ");
+
                 /* Check all outgoing transitions from each of the current states */
                 for ( std::set<State>::iterator set_it  = current_states.begin(),
                                                 set_end = current_states.end();
@@ -257,6 +268,8 @@ namespace RegExp
                     State curr_state = *set_it;
                     const std::set<State> &next_states = getNextStates( curr_state, curr_char);
 
+                    RE_LOGS( "state " << curr_state << endl);
+
                     if ( next_states.size() > 0)
                     {
                         /* Move the string on */
@@ -264,15 +277,30 @@ namespace RegExp
                         std::set_union( new_states.begin(), new_states.end(), 
                                         next_states.begin(), next_states.end(), 
                                         std::inserter( new_states, new_states.begin()) );
+                        RE_LOGS( "   new states: ");
+
+                        for ( std::set<State>::iterator add_set_it  = new_states.begin(),
+                                                    add_set_end = new_states.end();
+                                                    add_set_it != add_set_end; ++add_set_it )
+                        {
+                            RE_LOGS( *add_set_it << " ");
+                        }
+                        RE_LOGS( endl);
                     }
                 }
+                RE_LOGS( endl);
             }
             
             if ( shift_input)
             {
                 ++in_it; 
-            } else /* Try epsilon transitions */
+                num_matched++;
+            }
+            
+            /* Try epsilon transitions */
             {
+                RE_LOGS( "trying epsilon transitions, states: ");
+
                 for ( std::set<State>::iterator set_it  = current_states.begin(),
                                             set_end = current_states.end();
                                             set_it != set_end; ++set_it )
@@ -280,22 +308,37 @@ namespace RegExp
                     Character eps;
                     State curr_state = *set_it;
                     
+                    RE_LOGS( "  state " << curr_state << endl);
+
                     const std::set<State> &next_states_eps = getNextStates( curr_state, eps);
                     
-                    if ( next_states_eps.size() == 0) 
-                        break;
-
                     std::set_union( new_states.begin(), new_states.end(), 
                                     next_states_eps.begin(), next_states_eps.end(), 
                                     std::inserter( new_states, new_states.begin()) );
+
+                    RE_LOGS( "   new states: ");
+
+                    for ( std::set<State>::iterator add_set_it  = new_states.begin(),
+                                                add_set_end = new_states.end();
+                                                add_set_it != add_set_end; ++add_set_it )
+                    {
+                        RE_LOGS( *add_set_it << " ");
+                    }
+                    RE_LOGS( endl);
                 }
+                RE_LOGS( endl);
             }
 
             current_states = new_states;
+
+            RE_LOGS( "States number " <<  current_states.size() << endl);
+
             if ( current_states.size() == 0) 
                 break;
         }
-        return acpt_it;
+        RE_LOG_DEC_INDENT;
+        RE_LOGS( "result: " << res << endl);
+        return res;
     }
 
     /** Test finite automaton operation */
@@ -323,13 +366,7 @@ namespace RegExp
 
         nfa.setAsMain( nfa_alter);
         nfa.buildTable();// Now the NFA is ready to test strings
-#if 0
-        std::ofstream out2;
-        out2.open("nfa.dot");
-        nfa.dotToStream( out2);
-        out2.close();
-#endif
-        
+       
         UTEST_CHECK( utest, nfa.test("ab")); // The resulting NFA should recognize the expression
         UTEST_CHECK( utest, nfa.test("c")); // The resulting NFA should recognize the expression
         UTEST_CHECK( utest, !nfa.test("d")); // The resulting NFA should recognize the expression
@@ -360,6 +397,37 @@ namespace RegExp
 
         UTEST_CHECK( utest, nfa2.test("cabcabab")); // The resulting NFA should recognize the expression
        
+        NFA nfa3;
+        
+        nfa3.buildTable();
+
+        UTEST_CHECK( utest, !nfa3.test("cabcabab")); // The resulting NFA should recognize the expression
+       
+
+        NFA nfa4;
+        
+        SubNFA nfa_a4( nfa4, 'a');
+        SubNFA nfa_b4(nfa4, 'b');
+        SubNFA nfa_b4_2(nfa4, 'b');
+        SubNFA nfa_c4(nfa4, 'c');
+        SubNFA nfa_d4(nfa4, 'd');
+
+        SubNFA nfa_concat_ab = nfa_a4 + nfa_b4;
+        SubNFA nfa_concat_bc = nfa_b4_2 + nfa_c4;
+        SubNFA nfa_alter_abbc = nfa_concat_ab | nfa_concat_bc;
+        SubNFA nfa_star_d = *nfa_d4;
+        SubNFA nfa_concat_abbcd = nfa_alter_abbc + nfa_star_d;
+        nfa4.setAsMain( nfa_concat_abbcd);
+        nfa4.buildTable();
+        
+        //NFA should recognize (ab|bc)d*"
+        UTEST_CHECK( utest, nfa4.test("ab")); // The resulting NFA should recognize the expression
+#if 1
+        std::ofstream out2;
+        out2.open("nfa_fa.dot");
+        nfa4.dotToStream( out2);
+        out2.close();
+#endif
         return utest->result();
     }
 }

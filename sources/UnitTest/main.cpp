@@ -23,12 +23,22 @@ int main(int argc, char **argv)
     RUN_TEST( uTestGraph);
     /** Test optimizer package */
     RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
-
+    
+    /*
+     * NOTE: For the unit tests below the logging can be usefull, 
+     * the logging itself is tested above in Utils::uTest
+     */
+    Log::init();
+    
+    log()->add( LOG_REG_EXP, "RegExp", -1, "reg_exp_log.txt");
+    log()->enable( LOG_REG_EXP);
+    
     RUN_TEST( RegExp::uTestFA);
     RUN_TEST( RegExp::uTest);
     RUN_TEST_OUT_FILE_CHECK( Syntax::Arithmetics::uTest, "stx_utest.txt");
     RUN_TEST_OUT_FILE_CHECK( Lowering::uTestArithm, "low_utest_arithm.txt");
 
+    Log::deinit();
     
 
     MemMgr::deinit();

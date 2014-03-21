@@ -45,6 +45,8 @@ enum LogId
     LOG_FE,
     /** Lexical analyzer log */
     LOG_FE_LEXER,
+    /** Regular expressions debug log */
+    LOG_REG_EXP,
     /** Parser log */
     LOG_FE_PARSER,
     /** AST->IR lowering log */
@@ -92,7 +94,7 @@ public:
      * Register log that writes to file with given name.
      * File is not open until enable() is called.
      */
-    void add( LogId id, string prefix_str, UInt8 verbosity_level, string &filename, bool enable_log = false); 
+    void add( LogId id, string prefix_str, UInt8 verbosity_level, string filename, bool enable_log = false); 
     
     /** Register log that writes to file with given name */
     void add( LogId id, string prefix_str, UInt8 verbosity_level, LogId parent_id, bool enable_log = false);
@@ -126,6 +128,7 @@ private:
     static const UInt8 max_verbosity = (UInt8)(-1);
     static const UInt32 max_buf_size = 256;
 
+    bool insert_newline[ LOGS_NUM];
     bool registered[ LOGS_NUM];
     bool enabled[ LOGS_NUM];
     bool unique_name[ LOGS_NUM];
@@ -265,18 +268,40 @@ LogControl::prepareString( LogId id, const std::string &str)
 {
     std::ostringstream tmp;
     std::stringstream ss(str);
-    std::string one_line_str;
     UInt32 padding_width = indent_size[ id] * indent_width[ id];
 
+    std::string::const_reverse_iterator at_end = str.rbegin();
+    bool first = true;
+
     // Split the incoming message string into a bunch of one-line strings separated by the '\n'
-    while ( std::getline(ss, one_line_str))
+    std::string::const_iterator it = str.begin();
+    std::string::const_iterator end = str.end();
+
+    while ( it != end)
     {
-        // Insert correct number of whitespaces
-        one_line_str.insert( one_line_str.begin(), padding_width, ' ');
+        char c = *it;
+        if ( insert_newline[ id])
+        {
+            std::string one_line_str;
+    
+            // Insert correct number of whitespaces
+            one_line_str.insert( one_line_str.begin(), padding_width, ' ');
         
-        // Print one string to the ostream with the prefix
-        tmp << prefix[ id] << ": " << one_line_str << endl;
+            // Print one string to the ostream with the prefix
+            tmp << prefix[ id] << ": " << one_line_str;
+        }
+        if ( c == '\n')
+        {
+            tmp << endl;
+            insert_newline[ id] = true;
+        } else
+        {
+            tmp << c;
+            insert_newline[ id] = false;
+        }
+        ++it;
     }
+
     return tmp.str();
 }
 

@@ -196,12 +196,13 @@ namespace RegExp
         /** Test if the input string is accepted by this NFA */
         bool test( const std::string &str);
 
-        /** Search for matches in given string starting from the beginning */
-        std::string::const_iterator findIn( const std::string &str);
+        /** Search for matches in given string starting from the beginning, returns number of matched symbols */
+        UInt32 findIn( const std::string &str);
 
-        /** Search for matches in given string starting from given position */
-        std::string::const_iterator findIn( const std::string &str,
-                                            std::string::const_iterator start_iterator);
+        /** Search for matches in given string starting from given position, returns number of matched symbols */
+        UInt32 findIn( const std::string &str,
+                       std::string::const_iterator start_iterator);
+
         bool isCharInSet( Character ch)
         {
             std::map<Character, UInt32>::const_iterator it = char_index.find( ch);
