@@ -214,6 +214,7 @@ void TestDriver::processResult( UnitTest* utest)
             *log_stream << "assertions summary: " 
                         << utest->numFails()  << " failed, "
                         << utest->numPasses() << " passed";
+            *log_stream << *utest;
         }
         if ( utest->cmpFailed() )
         {

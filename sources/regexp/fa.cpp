@@ -241,16 +241,42 @@ namespace RegExp
 
         FOREVER
         {
-            if ( areSetsIntersected( accepting_states, current_states))
+            /* Build epsilon-closure for current states */
+            FOREVER
             {
-                acpt_it = start_iterator;
+                std::set<State> new_states;
+                bool new_states_found = false;
+                for ( std::set<State>::iterator set_it = current_states.begin(),
+                                            set_end = current_states.end();
+                                            set_it != set_end; ++set_it )
+                {
+                    Character eps;
+                    State curr_state = *set_it;
+                    
+                    const std::set<State> &next_states_eps = getNextStates( curr_state, eps);
+                    
+                    if ( next_states_eps.size() == 0) 
+                    {
+                        new_states.insert( curr_state);// Add state back to the set
+                    } else
+                    {
+                        // Add new states to the set
+                        std::set_union( new_states.begin(), new_states.end(), 
+                                    next_states_eps.begin(), next_states_eps.end(), 
+                                    std::inserter( new_states, new_states.begin()) );
+                        new_states_found = true;
+                    }
+                }
+                current_states = new_states;
+                if ( !new_states_found) 
+                    break;
                 res = num_matched;
             }
-        
+ 
             std::set<State> new_states;
-            bool shift_input = false;
-
-            if ( in_it != str.end())
+               
+            /* Try to move on the input string */
+            if ( in_it != str.end() )
             {
                 Character curr_char = *in_it;
                 
@@ -273,7 +299,6 @@ namespace RegExp
                     if ( next_states.size() > 0)
                     {
                         /* Move the string on */
-                        shift_input = true;
                         std::set_union( new_states.begin(), new_states.end(), 
                                         next_states.begin(), next_states.end(), 
                                         std::inserter( new_states, new_states.begin()) );
@@ -335,6 +360,12 @@ namespace RegExp
 
             if ( current_states.size() == 0) 
                 break;
+
+            // Check if we have arrived at some accepting state
+            if ( areSetsIntersected( accepting_states, current_states) )
+            {
+                acpt_it = start_iterator;
+            }
         }
         RE_LOG_DEC_INDENT;
         RE_LOGS( "result: " << res << endl);

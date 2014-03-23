@@ -36,9 +36,10 @@
 #include "misc.h"
 #include "asrt.h"
 #include "timer.h"
+#include "print.h"
 #include "utest.h"
 //#include "techniques.h"
-#include "print.h"
+
 #include "list.h"
 #include "singleton.h"
 #include "log.h"

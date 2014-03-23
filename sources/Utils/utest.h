@@ -16,7 +16,7 @@
 
 namespace Utils
 {
-
+    using namespace PrintUtils;
 /**
  * Possible test outcomes
  */
@@ -53,14 +53,17 @@ typedef bool (*TestFuncWFileNamePtr)( UnitTest *utest_p, std::string &name);
 /**
  * Class for representation of individual check results
  */
-class UTestCheck
+class UTestCheck: public Printable<UTestCheck>
 {
 public:
     /** The full constructor */
     UTestCheck( bool result, const std::string &check, const std::string &place):
         check_text( check), location( place), res( result)
     {}
-
+    void toStream( std::ostream &stm) const
+    {
+        stm << location << ": " << check_text << " = " << (res ? "pass" : "fail") << endl;
+    }
 private:
     std::string location;
     std::string check_text;
@@ -70,7 +73,7 @@ private:
 /**
  * Unit test description class
  */
-class UnitTest
+class UnitTest: public Printable<UnitTest>
 {
 public:
     
@@ -112,6 +115,21 @@ public:
     {
         return checks;
     }
+
+    /** Print the test results */
+    void toStream( std::ostream &stm) const
+    {
+        stm << "Test " << test_name << ": " << num_fail << "failed, " << num_success << "succeed"<< endl;
+        std::list<UTestCheck>::const_iterator it = checks.begin();
+        std::list<UTestCheck>::const_iterator end_it = checks.end();
+        while ( it != end_it)
+        {
+            stm << (*it);
+            ++it;
+        }
+
+    }
+
 private:
     std::string test_name;
     std::string out_name;
