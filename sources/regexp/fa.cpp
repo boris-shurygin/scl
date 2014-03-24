@@ -84,7 +84,15 @@ namespace RegExp
         }
         stm << "}";
     }
-    
+
+    void NFA::dot2File( const char *fname) const
+    {
+        std::ofstream out;
+        out.open( fname);
+        dotToStream( out);
+        out.close();
+    }
+
     /** Turns transitions into table */
     void NFA::buildTable()
     {
@@ -212,16 +220,16 @@ namespace RegExp
     /** Test if the input string is accepted by this NFA */
     bool NFA::test( const std::string &str)
     {
-        return findIn( str) != 0;
+        return findIn( str) != -1;
     }    
     
-    UInt32
+    Int32
     NFA::findIn( const std::string &str)
     {
         return findIn( str, str.begin());
     }
 
-    UInt32
+    Int32 
     NFA::findIn( const std::string &str, std::string::const_iterator start_iterator)
     {
         RE_ASSERTD( use_table);
@@ -233,19 +241,28 @@ namespace RegExp
 
         current_states.insert( State(START_STATE));
         
-        UInt32 num_matched = 0;
-        UInt32 res = 0;
+        Int32 num_matched = 0;
+        Int32 res = -1;
 
         RE_LOGS( "Testing string " << str << endl);
         RE_LOG_INC_INDENT;
 
         FOREVER
         {
-            /* Build epsilon-closure for current states */
+            /*
+             * Build epsilon-closure for current states
+             * NOTE: state set here will be expanded by following all of the posibble
+             *       epsilon transitions from current states, so if we already reached
+             *       the accepting state we can check it right after building the epsilon
+             *       closure
+             */
             FOREVER
             {
                 std::set<State> new_states;
                 bool new_states_found = false;
+                
+                RE_LOGS( "Building epsilon transitions, current states: ");
+
                 for ( std::set<State>::iterator set_it = current_states.begin(),
                                             set_end = current_states.end();
                                             set_it != set_end; ++set_it )
@@ -253,26 +270,49 @@ namespace RegExp
                     Character eps;
                     State curr_state = *set_it;
                     
+                    RE_LOGS( "  state " << curr_state << endl);
+
                     const std::set<State> &next_states_eps = getNextStates( curr_state, eps);
                     
                     if ( next_states_eps.size() == 0) 
                     {
                         new_states.insert( curr_state);// Add state back to the set
+                        RE_LOGS( "   no new states");
+
                     } else
                     {
                         // Add new states to the set
                         std::set_union( new_states.begin(), new_states.end(), 
                                     next_states_eps.begin(), next_states_eps.end(), 
                                     std::inserter( new_states, new_states.begin()) );
+
+                        RE_LOGS( "   new states: ");
+#ifdef ENABLE_RE_LOGS
+                        for ( std::set<State>::iterator add_set_it  = new_states.begin(),
+                                                    add_set_end = new_states.end();
+                                                    add_set_it != add_set_end; ++add_set_it )
+                        {
+                            RE_LOGS( *add_set_it << " ");
+                        }
+#endif
                         new_states_found = true;
                     }
+                    RE_LOGS( endl);
                 }
                 current_states = new_states;
                 if ( !new_states_found) 
                     break;
+            }
+
+            RE_LOGS( "States number " <<  current_states.size() << endl);
+
+
+            // Check if we have arrived at some accepting state
+            if ( areSetsIntersected( accepting_states, current_states) )
+            {
                 res = num_matched;
             }
- 
+
             std::set<State> new_states;
                
             /* Try to move on the input string */
@@ -303,69 +343,27 @@ namespace RegExp
                                         next_states.begin(), next_states.end(), 
                                         std::inserter( new_states, new_states.begin()) );
                         RE_LOGS( "   new states: ");
-
+#ifdef ENABLE_RE_LOGS
                         for ( std::set<State>::iterator add_set_it  = new_states.begin(),
                                                     add_set_end = new_states.end();
                                                     add_set_it != add_set_end; ++add_set_it )
                         {
                             RE_LOGS( *add_set_it << " ");
                         }
+#endif
                         RE_LOGS( endl);
                     }
                 }
                 RE_LOGS( endl);
-            }
-            
-            if ( shift_input)
-            {
                 ++in_it; 
                 num_matched++;
             }
             
-            /* Try epsilon transitions */
-            {
-                RE_LOGS( "trying epsilon transitions, states: ");
-
-                for ( std::set<State>::iterator set_it  = current_states.begin(),
-                                            set_end = current_states.end();
-                                            set_it != set_end; ++set_it )
-                {
-                    Character eps;
-                    State curr_state = *set_it;
-                    
-                    RE_LOGS( "  state " << curr_state << endl);
-
-                    const std::set<State> &next_states_eps = getNextStates( curr_state, eps);
-                    
-                    std::set_union( new_states.begin(), new_states.end(), 
-                                    next_states_eps.begin(), next_states_eps.end(), 
-                                    std::inserter( new_states, new_states.begin()) );
-
-                    RE_LOGS( "   new states: ");
-
-                    for ( std::set<State>::iterator add_set_it  = new_states.begin(),
-                                                add_set_end = new_states.end();
-                                                add_set_it != add_set_end; ++add_set_it )
-                    {
-                        RE_LOGS( *add_set_it << " ");
-                    }
-                    RE_LOGS( endl);
-                }
-                RE_LOGS( endl);
-            }
-
             current_states = new_states;
 
             RE_LOGS( "States number " <<  current_states.size() << endl);
-
             if ( current_states.size() == 0) 
                 break;
-
-            // Check if we have arrived at some accepting state
-            if ( areSetsIntersected( accepting_states, current_states) )
-            {
-                acpt_it = start_iterator;
-            }
         }
         RE_LOG_DEC_INDENT;
         RE_LOGS( "result: " << res << endl);
@@ -397,7 +395,10 @@ namespace RegExp
 
         nfa.setAsMain( nfa_alter);
         nfa.buildTable();// Now the NFA is ready to test strings
-       
+
+        // Debug print
+        //nfa.dot2File("nfa_fa.dot");
+
         UTEST_CHECK( utest, nfa.test("ab")); // The resulting NFA should recognize the expression
         UTEST_CHECK( utest, nfa.test("c")); // The resulting NFA should recognize the expression
         UTEST_CHECK( utest, !nfa.test("d")); // The resulting NFA should recognize the expression
@@ -453,12 +454,6 @@ namespace RegExp
         
         //NFA should recognize (ab|bc)d*"
         UTEST_CHECK( utest, nfa4.test("ab")); // The resulting NFA should recognize the expression
-#if 1
-        std::ofstream out2;
-        out2.open("nfa_fa.dot");
-        nfa4.dotToStream( out2);
-        out2.close();
-#endif
         return utest->result();
     }
 }

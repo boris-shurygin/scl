@@ -202,13 +202,6 @@ namespace RegExp
 
         nfa.setAsMain( nfa_stack.top());
         nfa.buildTable();// Now the NFA is ready to test strings
-
-#if 1
-        std::ofstream out2;
-        out2.open("nfa_re.dot");
-        nfa.dotToStream( out2);
-        out2.close();
-#endif
     }
     
     /** Search for first match in string starting from given pos */
@@ -231,9 +224,9 @@ namespace RegExp
 
         while ( it != end)
         {
-            UInt32 matched = nfa.findIn( in_str, it);
+            Int32 matched = nfa.findIn( in_str, it);
         
-            if ( matched)
+            if ( matched != -1)
                 return match_pos;
             ++match_pos;
             ++it;
@@ -249,7 +242,7 @@ namespace RegExp
         RegExp rx("(ab|bc)d*");
 
         UTEST_CHECK( utest, rx.indexIn( "ab") != -1);
-        UTEST_CHECK( utest, rx.indexIn( "fffffffab") != -1);
+        UTEST_CHECK( utest, rx.indexIn( "fab") == 1);
         UTEST_CHECK( utest, rx.indexIn( "bcddd") != -1);
         UTEST_CHECK( utest, rx.indexIn( "asdf   asdf bcddd  ") != -1);
         UTEST_CHECK( utest, rx.indexIn( "ddddffff") == -1);

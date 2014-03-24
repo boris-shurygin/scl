@@ -30,8 +30,8 @@ int main(int argc, char **argv)
      */
     Log::init();
     
-    log()->add( LOG_REG_EXP, "RegExp", -1, "reg_exp_log.txt");
-    log()->enable( LOG_REG_EXP);
+    //log()->add( LOG_REG_EXP, "RegExp", -1, "reg_exp_log.txt");
+    //log()->enable( LOG_REG_EXP);
     
     RUN_TEST( RegExp::uTestFA);
     RUN_TEST( RegExp::uTest);

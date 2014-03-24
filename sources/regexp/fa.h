@@ -154,7 +154,8 @@ namespace RegExp
         NFA( Character ch); /**< Construct NFA accepting one character */
         virtual ~NFA(); /**< Destructor */
         void toStream( std::ostream &stm) const; /**< Text printing routine */
-        void dotToStream( std::ostream &stm) const; /**< Text printing routine */
+        void dotToStream( std::ostream &stm) const; /**< Dump to given stream as a dot graph */
+        void dot2File( const char *fname) const;  /**< Dump to given file as a dot graph  */
 
         /** Create transition from one state to another with condition of transition */
         void addTransition( State s, State d, Character c);
@@ -197,10 +198,10 @@ namespace RegExp
         bool test( const std::string &str);
 
         /** Search for matches in given string starting from the beginning, returns number of matched symbols */
-        UInt32 findIn( const std::string &str);
+        Int32 findIn( const std::string &str);
 
         /** Search for matches in given string starting from given position, returns number of matched symbols */
-        UInt32 findIn( const std::string &str,
+        Int32 findIn( const std::string &str,
                        std::string::const_iterator start_iterator);
 
         bool isCharInSet( Character ch)

@@ -23,7 +23,7 @@
 #    define RE_ASSERTXD(cond, what) ASSERT_XD(cond, "RegExp", what)
 #endif
 
-#define ENABLE_RE_LOGS
+//#define ENABLE_RE_LOGS
 
 #ifdef ENABLE_RE_LOGS
 #  define RE_LOGS( message) LOGVS( LOG_REG_EXP, 0, message)

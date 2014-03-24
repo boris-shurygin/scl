@@ -119,7 +119,7 @@ public:
     /** Print the test results */
     void toStream( std::ostream &stm) const
     {
-        stm << "Test " << test_name << ": " << num_fail << "failed, " << num_success << "succeed"<< endl;
+        //stm << "Test " << test_name << ": " << num_fail << " failed, " << num_success << " succeed"<< endl;
         std::list<UTestCheck>::const_iterator it = checks.begin();
         std::list<UTestCheck>::const_iterator end_it = checks.end();
         while ( it != end_it)
