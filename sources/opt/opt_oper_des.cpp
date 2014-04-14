@@ -12,6 +12,7 @@ template <> MDes::ObjDes MDes::objects[ MDes::num_objs] = {};
 
 #define OPER( name, str, ...) initOperDes< __VA_ARGS__>( name, str);
 #define OBJ( ...) initObjDes( __VA_ARGS__);
+#define OPER_CLASSES( name, ...) initOperClasses( name, __VA_ARGS__);
 
 /*
  * Enclosed the MDes constructor specialization in IR namespace to resolve

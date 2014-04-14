@@ -74,6 +74,7 @@
     <ClInclude Include="opt_iface.hpp" />
     <ClInclude Include="opt_mdes.hpp" />
     <ClInclude Include="opt_mdes_inc.hpp" />
+    <ClInclude Include="opt_oper_classes_inc.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="opt_oper_des.cpp" />

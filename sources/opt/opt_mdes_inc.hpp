@@ -13,6 +13,9 @@
 #ifndef OPER
 #  define OPER( name, mnem, ...)
 #endif
+#ifndef OPER_CLASSES
+#  define OPER_CLASSES( name, ...)
+#endif
 
 /* Objects */
 OBJ( Reg, "t", 32, 0, REGISTER, true)
@@ -31,13 +34,13 @@ OPER( Ld,   "ld",   Args<reg_imm_32>            , Ress<reg_32> )
 OPER( St,   "st",   Args<reg_imm_32, reg_imm_32>, Ress<>       )
 
 /* Branches */
-OPER( Br,   "br",   Args<target>                    , Ress<> )
-OPER( Brl,  "brl",  Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Brg,  "brg",  Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Brle, "brle", Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Brge, "brge", Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Bre,  "bre",  Args<reg_32, reg_imm_32, target>, Ress<> )
-OPER( Brne, "brne", Args<reg_32, reg_imm_32, target>, Ress<> )
+OPER( Br,   "br",   Args<target>                    , Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Brl,  "brl",  Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Brg,  "brg",  Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Brle, "brle", Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Brge, "brge", Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Bre,  "bre",  Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
+OPER( Brne, "brne", Args<reg_32, reg_imm_32, target>, Ress<> ) OPER_CLASSES( Br, CF)
 
 /* Frame control */
 OPER( Call, "call", Args<reg_imm_32, arg_set>, Ress<res_set> )
@@ -45,4 +48,5 @@ OPER( Ret,  "ret" , Args<arg_set>           , Ress<>         )
 
 #undef OPER
 #undef OBJ
+#undef OPER_CLASSES
 

@@ -131,7 +131,9 @@ namespace IR
         static void initOp( void *des){};
     };
 
-    template < typename ObjectName, typename OperName_t, UInt32 num_objs_, UInt32 num_opers_, UInt32 max_args_, UInt32 max_ress_> class MDesImpl
+    template < typename ObjectName, typename OperName_t, UInt32 num_objs_, UInt32 num_opers_,
+               UInt32 max_args_, UInt32 max_ress_,
+               typename OperClass, UInt32 oper_class_num> class MDesImpl
     {
     public:
         typedef ObjectName ObjName;
@@ -207,12 +209,15 @@ namespace IR
             OpDes ress[ max_ress];
             bool can_have_arg_set;
             bool can_have_res_set;
+            std::bitset< oper_class_num> classes;
 
             OperDes():
                 name( (OperName)num_opers),
                 can_have_arg_set( false), 
                 can_have_res_set( false)
-            {};
+            {
+                
+            };
 
 
             static UInt32 maxArgs(){ return max_args;}
@@ -222,6 +227,14 @@ namespace IR
             OpDes *resDes( UInt32 num)  { return (num < num_ress) ? &ress[ num] : NULL;}
             inline bool canHaveArgSet() { return can_have_arg_set;                     }
             inline bool canHaveResSet() { return can_have_res_set;                     }
+            inline bool belongsToClass( OperClass c)
+            {
+                return classes.test( c);
+            }
+            inline bool addClass( OperClass c)
+            {
+                classes.set( c);
+            }
         };
 
         template <ObjName obj_name,
@@ -377,6 +390,11 @@ namespace IR
             }
         }
 
+        void initOperClasses( OperName_t name, ...)
+        {
+
+        }
+
         void
         initObjDes( ObjectName name, string str, UInt32 max_size, UInt32 num, StorageClass stor_class, bool can_be_virtual)
         {
@@ -393,5 +411,3 @@ namespace IR
         static ObjDes objects[ num_objs];
     }; /* MDes definition */
 };
-
-

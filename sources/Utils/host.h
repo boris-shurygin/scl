@@ -62,6 +62,7 @@
 #include <iomanip>
 #include <exception>
 #include <set>
+#include <bitset>
 #include <iterator>
 
 using namespace std;

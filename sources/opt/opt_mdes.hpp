@@ -31,8 +31,18 @@ namespace Opt
         OPT_OPERS_NUM
     };
 
+#define OPER_CLASS( name, func_prefix, ...) name,
+
+    /** Operation classes */
+    enum OptOperClass
+    {
+#include "opt_oper_classes_inc.hpp"
+
+        OPT_OPER_CLASSES_NUM
+    };
+
     /** Machine description for optimizer */
-    typedef MDesImpl< OptObjectName, OptOperName, OPT_OBJECTS_NUM, OPT_OPERS_NUM, 3, 1> MDes;
+    typedef MDesImpl< OptObjectName, OptOperName, OPT_OBJECTS_NUM, OPT_OPERS_NUM, 3, 1, OptOperClass, OPT_OPER_CLASSES_NUM> MDes;
 
     /* Feasible operands descriptions */
     typedef MDes::OpType<OPT_OBJECTS_NUM, 32, CANNOT_BE_IMM, CAN_BE_TARGET> target;
