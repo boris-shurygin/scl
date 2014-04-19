@@ -7,6 +7,13 @@
 
 namespace IR
 {
+    
+template <class MDesType> typename MDesType::OperDes *
+Operation<MDesType>::archDes()
+{
+    return MDesType::operDescription( name());
+}
+    
 
 template <class MDesType> void 
 Object<MDesType>::setVirtual( bool is_virtual)
@@ -192,7 +199,7 @@ Operation<MDesName>::res( unsigned i) const
 
 /** Set type of object */
 template <class MDesType> 
-void Object<MDesType>::setType( ObjName tp)
+void Object<MDesType>::setType( ObjectName tp)
 {
     type_ = tp;
 }   
@@ -282,7 +289,7 @@ Operation<MDesType>::setResObj( UInt32 res_num, Object< MDesType> *obj)
 
 /** Return type of object */
 template <class MDesType> 
-typename Object<MDesType>::ObjName
+typename Object<MDesType>::ObjectName
 Object<MDesType>::type() const
 {
     return type_;    
@@ -307,7 +314,7 @@ Operation<MDesName>::name() const
 /** Operation constructor */
 template < class MDesType> 
 Operation<MDesType>::Operation( DG <MDesType> *g):
-    Node< DG< MDesType>, Operation< MDesType>, DepEdge<MDesType> >( g), // Dependence graph node constructor
+    Node< DG< MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >( g), // Dependence graph node constructor
     first_arg( NULL), // We don't have any arguments in the set on operation construction
     first_res( NULL), // We don't have any results in the set on operation construction
     node_( NULL)      // Node is not define at the moment of operation construction

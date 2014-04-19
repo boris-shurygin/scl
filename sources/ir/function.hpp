@@ -29,22 +29,22 @@ public:
     inline CFG<MDesType> &cfg() ;            /**< Get control flow graph of the function */
         
     /** Create new operation */
-    inline Operation< MDesType> * newOper( typename MDesType::OperName name);
+    inline typename MDesType::OperationType * newOper( typename MDesType::OperName name);
         
     /** Create new operaiton and insert it into sequence */
-    inline Operation< MDesType> * newOperAfter( typename MDesType::OperName name, Operation< MDesType> *prev_oper); 
+    inline typename MDesType::OperationType * newOperAfter( typename MDesType::OperName name, typename MDesType::OperationType *prev_oper); 
         
     /** Create new object */
-    inline Object< MDesType> * newObject( typename MDesType::ObjName name);
+    inline Object< MDesType> * newObject( typename MDesType::ObjectName name);
     
     /** Create new object */
-    inline Object< MDesType> * newArg( UInt16 arg_num, typename MDesType::ObjName name);
+    inline Object< MDesType> * newArg( UInt16 arg_num, typename MDesType::ObjectName name);
 
     /** Get function's first operation in sequence */
-    inline Operation< MDesType> * firstOper() const;
+    inline typename MDesType::OperationType * firstOper() const;
 
     /** Set function's first operation in sequence */
-    inline void setFirstOper( Operation< MDesType> * oper);
+    inline void setFirstOper( typename MDesType::OperationType * oper);
 
     /** Print function to stream */
     inline void toStream(ostream& os);
@@ -55,13 +55,13 @@ public:
     /** Get the function name */
     inline void setName( string new_name);
 private:
-    Operation< MDesType> *newNode();   /**< Create new dep graph node (operation without a name) */
+    typename MDesType::OperationType *newNode();   /**< Create new dep graph node (operation without a name) */
     Module< MDesType> *module_p;       /**< Pointer to the module */
     list< Object< MDesType> *> objects;/**< List of function's objects */
     CFG< MDesType> cfg_;               /**< Control flow graph */
         
     /** First operation in linear sequence of operaitons in this function */
-    Operation< MDesType> *first_oper_in_seq;
+    typename MDesType::OperationType *first_oper_in_seq;
     /** Next object id */
     UInt32 obj_id[ MDesType::num_objs];
     /** Name of the function */
@@ -83,13 +83,13 @@ template <class MDesType> void Function< MDesType>::setName( string new_name)
 }
     
 /** Get function's first operation in sequence */
-template <class MDesType> Operation< MDesType> *  Function< MDesType>::firstOper() const
+template <class MDesType> typename MDesType::OperationType *  Function< MDesType>::firstOper() const
 {
     return first_oper_in_seq;
 }
 
 /** Set function's first operation in sequence */
-template <class MDesType> void Function< MDesType>::setFirstOper( Operation< MDesType> * oper)
+template <class MDesType> void Function< MDesType>::setFirstOper( typename MDesType::OperationType * oper)
 {
     first_oper_in_seq = oper;
 }
@@ -144,27 +144,27 @@ Function< MDesType>::cfg()
 }
 
 template <class MDesType>
-Operation< MDesType> * 
+typename MDesType::OperationType * 
 Function< MDesType>::newNode()
 {
     return DG< MDesType>::newNode();
 }
 
 template <class MDesType>
-Operation< MDesType> * 
+typename MDesType::OperationType * 
 Function< MDesType>::newOper( typename MDesType::OperName name)
 {
     IR_ASSERTD( MDesType::checkName( name) );
-    Operation< MDesType> * oper = newNode();
+    typename MDesType::OperationType * oper = newNode();
     oper->setName( name);
     return oper;
 }
 template <class MDesType>
-Operation< MDesType> * 
-Function< MDesType>::newOperAfter( typename MDesType::OperName name, Operation< MDesType> *prev_oper)
+typename MDesType::OperationType * 
+Function< MDesType>::newOperAfter( typename MDesType::OperName name, typename MDesType::OperationType *prev_oper)
 {
     IR_ASSERTD( MDesType::checkName( name) );
-    Operation< MDesType> * oper = newNode();
+    typename MDesType::OperationType * oper = newNode();
     oper->setName( name);
     oper->insertAfter( prev_oper);
     return oper;
@@ -172,7 +172,7 @@ Function< MDesType>::newOperAfter( typename MDesType::OperName name, Operation< 
 
 template <class MDesType>
 Object< MDesType> * 
-Function< MDesType>::newObject( typename MDesType::ObjName name)
+Function< MDesType>::newObject( typename MDesType::ObjectName name)
 {
     Object< MDesType> * obj = new Object< MDesType>();
     obj->setType( name);
@@ -183,7 +183,7 @@ Function< MDesType>::newObject( typename MDesType::ObjName name)
 
 template <class MDesType>
 Object< MDesType> * 
-Function< MDesType>::newArg( UInt16 arg_num, typename MDesType::ObjName name)
+Function< MDesType>::newArg( UInt16 arg_num, typename MDesType::ObjectName name)
 {
     Object< MDesType> * obj = newObject( name);
     if ( ( arg_num + 1 ) > args.size() )
@@ -222,7 +222,7 @@ Function< MDesType>::toStream(ostream& os)
     }
 
     /* Find the target operations */
-    for ( Operation< MDesType> * oper = DG< MDesType>::firstNode();
+    for ( typename MDesType::OperationType * oper = DG< MDesType>::firstNode();
             isNotNullP( oper);
             oper = oper->nextNode())
     {
@@ -230,6 +230,7 @@ Function< MDesType>::toStream(ostream& os)
         {
             if ( oper->arg( i).isTarget())
             {
+                
                 Operation< MDesType> * target = oper->arg(i).target();
                 target->mark( m);
             }

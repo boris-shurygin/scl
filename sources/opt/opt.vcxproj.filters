@@ -27,6 +27,9 @@
     <ClInclude Include="opt_oper_classes_inc.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="opt_oper.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="opt_oper_des.cpp">

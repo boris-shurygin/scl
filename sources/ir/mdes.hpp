@@ -131,13 +131,14 @@ namespace IR
         static void initOp( void *des){};
     };
 
-    template < typename ObjectName, typename OperName_t, UInt32 num_objs_, UInt32 num_opers_,
-               UInt32 max_args_, UInt32 max_ress_,
-               typename OperClass, UInt32 oper_class_num> class MDesImpl
+    template < typename Operation, typename OperName_t , typename ObjectName_t, typename OperClass_t, UInt32 num_objs_, UInt32 num_opers_,
+               UInt32 max_args_, UInt32 max_ress_, UInt32 oper_class_num> class MDesImpl
     {
     public:
-        typedef ObjectName ObjName;
+        typedef Operation OperationType;
+        typedef ObjectName_t ObjectName;
         typedef OperName_t OperName;
+        typedef OperClass_t OperClass;
 
         static const  UInt32 num_opers = num_opers_;
         static const  UInt32 num_objs = num_objs_;
@@ -149,13 +150,13 @@ namespace IR
          */
         struct ObjDes
         {
-            ObjName name;
+            ObjectName name;
             string prefix;
             UInt32 max_size;
             UInt32 num;
             bool can_be_virtual;
 
-            ObjDes(): name( (ObjName)num_objs){}
+            ObjDes(): name( (ObjectName)num_objs){}
         };
 
         /**
@@ -163,7 +164,7 @@ namespace IR
          */
         struct OpDes
         {
-            ObjName name;
+            ObjectName name;
             UInt32 size;
             CanBeImm can_be_imm;
             CanBeTarget can_be_target;
@@ -171,7 +172,7 @@ namespace IR
 
             OpDes(){};
 
-            bool isProperName( ObjName obj_name)
+            bool isProperName( ObjectName obj_name)
             {
                 return name == obj_name;
             }
@@ -201,7 +202,7 @@ namespace IR
          */
         struct OperDes
         {
-            OperName_t name;
+            OperName name;
             string mnemonic_str;
             UInt32 num_args;
             UInt32 num_ress;
@@ -231,13 +232,13 @@ namespace IR
             {
                 return classes.test( c);
             }
-            inline bool addClass( OperClass c)
+            inline void addClass( OperClass c)
             {
                 classes.set( c);
             }
         };
 
-        template <ObjName obj_name,
+        template <ObjectName obj_name,
                   UInt32 size,
                   CanBeImm can_be_imm = CANNOT_BE_IMM,
                   CanBeTarget can_be_target = CANNOT_BE_TARGET,
@@ -248,7 +249,7 @@ namespace IR
             static UInt32 opSize(){ return size;}
             static CanBeImm canBeImm(){ return can_be_imm;}
             static CanBeTarget canBeTarget(){ return can_be_target;}
-            static ObjName name(){ return obj_name;}
+            static ObjectName name(){ return obj_name;}
             static void initOp( OpDes *obj)
             {
                 obj->can_be_imm = can_be_imm;
@@ -345,7 +346,7 @@ namespace IR
 
 
         /** Accessor of operation description */
-        static OperDes *operDescription( OperName_t name)
+        static OperDes *operDescription( OperName name)
         {
             IR_ASSERTD( name < num_opers);
 
@@ -353,7 +354,7 @@ namespace IR
             return &opers[ name];
         }
         /** Accessor of operation description */
-        static ObjDes *objectDescription( ObjName name)
+        static ObjDes *objectDescription( ObjectName name)
         {
             IR_ASSERTD( name < num_objs);
 
@@ -364,7 +365,7 @@ namespace IR
         /** Operation initializer routine */
         template <class ArgsType, class RessType>
         void
-        initOperDes( OperName_t name, string str)
+        initOperDes( OperName name, string str)
         {
             OperDes * des = &opers[ name];
             des->name = name;
@@ -390,9 +391,12 @@ namespace IR
             }
         }
 
-        void initOperClasses( OperName_t name, ...)
+        void initOperClasses( OperName name, int num_classes, OperClass *classes)
         {
-
+            for ( int i = 0; i < num_classes; ++i)
+            {
+                opers[name].addClass( classes[ i]);
+            }
         }
 
         void

@@ -16,7 +16,7 @@ namespace IR
 template <class MDesType> class Object
 {
 public:
-    typedef typename MDesType::ObjName ObjName;
+    typedef typename MDesType::ObjectName ObjectName;
         
     /** Set virtual flag to object */
     inline void setVirtual( bool is_virtual); 
@@ -33,14 +33,14 @@ public:
     /** Destructor */
     inline ~Object();
     /** Set type of object */
-    inline void setType( ObjName type);
+    inline void setType( ObjectName type);
     /** Return type of object */
-    inline ObjName type() const;
+    inline ObjectName type() const;
 
     /** Print object to stream */
     inline void toStream(ostream& os) const;
 private:
-    ObjName type_;
+    ObjectName type_;
     bool is_virtual;
     UInt32 id_;
 };
@@ -110,7 +110,7 @@ template <class MDesType> class OperSeq{};
  * @ingroup IR
  */
 template <class MDesType> class Operation:
-    public Node< DG< MDesType>, Operation< MDesType>, DepEdge< MDesType> >,
+    public Node< DG< MDesType>, typename MDesType::OperationType, DepEdge< MDesType> >,
     public ListItem< Operation< MDesType>, OperSeq< MDesType> >
 {
 public:
@@ -198,6 +198,8 @@ public:
 
     inline bool isLastInNode() const;  /**< Check if the operation is last in its CF node  */
     inline bool isFirstInNode() const; /**< Check if the operation is first in its CF node */
+
+    inline typename MDesType::OperDes *archDes();
     
 private:
     /* Arrays of operands */

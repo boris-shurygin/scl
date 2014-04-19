@@ -16,11 +16,11 @@ namespace IR
      * @ingroup DG
      */
     template <class MDesType> class DepEdge: 
-        public Edge< DG <MDesType>, Operation< MDesType>, DepEdge<MDesType> >
+        public Edge< DG <MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >
     {
     public:
         /** Control flow edge constructor */
-        inline DepEdge( DG<MDesType> *g, Operation<MDesType> *pred, Operation<MDesType> *succ);
+        inline DepEdge( DG<MDesType> *g, typename MDesType::OperationType *pred, typename MDesType::OperationType *succ);
     private:
     };
 
@@ -31,14 +31,14 @@ namespace IR
      * @ingroup IR
      */
     template <class MDesType> class DG: 
-        public Graph< DG <MDesType>, Operation< MDesType>, DepEdge<MDesType> >
+    public Graph< DG <MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >
     {
         
     };
 
     /** Dependence edge constructor */
-    template < class MDesType> DepEdge<MDesType>::DepEdge( DG <MDesType> *g, Operation<MDesType> *pred, Operation<MDesType> *succ):
-        Edge< DG <MDesType>, Operation< MDesType>, DepEdge<MDesType> >( g, pred, succ)
+    template < class MDesType> DepEdge<MDesType>::DepEdge( DG <MDesType> *g, typename MDesType::OperationType *pred, typename MDesType::OperationType *succ):
+        Edge< DG <MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >( g, pred, succ)
     {
     
     }

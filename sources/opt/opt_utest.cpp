@@ -36,6 +36,8 @@ bool Opt::uTest( UnitTest *utest)
     CFEdge *edge1 = cfg.newEdge( node1, node2);
     CFEdge *edge2 = cfg.newEdge( node1, node3);
     edge2->setSrcOper( brg);
+    UTEST_CHECK( utest, isOperCf( brg));
+    UTEST_CHECK( utest, brg->isCf() );
 
     /* {2} sub vt3 = vt2, 512 */
     Oper *sub = f->newOper( Sub);
