@@ -17,7 +17,7 @@ public:
     typedef OptObjectName ObjectName;
     typedef OptOperClass OperClass;
 
-    Oper( IR::DG<MDes> *g): IR::Operation< MDes>( g) {};
+    Oper(): IR::Operation< MDes>() {};
 
     /** Class check routines */
 #define OPER_CLASS( name, func_prefix, ...) bool is ## func_prefix(){ return archDes()->belongsToClass( name);}

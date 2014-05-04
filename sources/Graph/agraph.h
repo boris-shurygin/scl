@@ -29,7 +29,6 @@ class ANode: public Node< AGraph, ANode, AEdge>
 {
 public:
     int dummy;
-    ANode( AGraph* g): Node< AGraph, ANode, AEdge>( g){};
 };
 
 /**
@@ -43,7 +42,7 @@ class AEdge: public Edge< AGraph, ANode, AEdge>
 
 public:
     
-    AEdge( AGraph *g, ANode *pred, ANode *succ): Edge< AGraph, ANode, AEdge>( g, pred, succ)
+    AEdge( ANode *pred, ANode *succ): Edge< AGraph, ANode, AEdge>( pred, succ)
     {
         
     }

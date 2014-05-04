@@ -84,6 +84,8 @@ GraphImpl::addNode( NodeImpl *node_p)
     
     /** Add node to GraphImpl's list of nodes */
     node_p->attach( first_node);
+    node_p->setId( node_next_id);
+    node_p->setGraph( this);
     first_node = node_p;
     
     ++node_num;
@@ -96,12 +98,14 @@ GraphImpl::addNode( NodeImpl *node_p)
 inline void 
 GraphImpl::addEdge( EdgeImpl *edge_p)
 {
-    /**
-     * Check that we have available edge id 
-     */
+    /** Check that we have available edge id */
     GRAPH_ASSERTXD( edge_next_id < GRAPH_MAX_EDGE_NUM, "We're out of edge identificators");
+   
     edge_p->attach( EDGE_LIST_GRAPH, first_edge);
+    edge_p->setId( edge_next_id);
+    edge_p->setGraph( this);
     first_edge = edge_p;
+
     ++edge_num;
     ++edge_next_id;
 }
@@ -116,7 +120,7 @@ template < class G, class N, class E> Graph< G, N, E>::Graph()
 template < class G, class N, class E> 
     N * Graph< G, N, E>::newNode()
 {
-    N* node = new ( &node_pool) N( static_cast< G*>(this));
+    N* node = new ( &node_pool) N();
     addNode( node);
     return node;
 }
@@ -125,7 +129,7 @@ template < class G, class N, class E>
 template < class G, class N, class E> 
     E * Graph< G, N, E>::newEdge( N *pred, N* succ)
 {
-    E *edge = new ( &edge_pool) E( static_cast< G*>(this), pred, succ);
+    E *edge = new ( &edge_pool) E( pred, succ);
     addEdge( edge);
     return edge;
 } 

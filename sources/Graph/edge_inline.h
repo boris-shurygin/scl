@@ -10,8 +10,7 @@
 #define EDGE_INLINE_H
 
 /** Constructor implementation */
-inline EdgeImpl::EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ):
-    uid( _graph_p->edge_next_id), graph_p(_graph_p)
+inline EdgeImpl::EdgeImpl( NodeImpl *_pred, NodeImpl* _succ)
 {
     GRAPH_ASSERTXD( checkNodes( _pred, _succ),
                     "Predecessor and sucessor used in edge construction belong to different GraphImpls");
@@ -58,12 +57,24 @@ inline GraphUid EdgeImpl::id() const
     return uid;
 }
 
+/** Set edge's unique ID           */
+inline void EdgeImpl::setId( GraphUid new_id)
+{
+    uid = new_id;
+}
+
 /**
  * Get edge's corresponding GraphImpl
  */
 inline GraphImpl * EdgeImpl::graph() const
 {
     return graph_p;
+}
+
+/** Set edge's pointer to graph */
+inline void EdgeImpl::setGraph( GraphImpl *g)
+{
+    graph_p = g;
 }
 
 /**

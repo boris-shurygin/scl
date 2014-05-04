@@ -11,7 +11,7 @@
 #define NODE_INLINE_H
 
 /** We can't create nodes separately, do it through newNode method of graph */
-inline NodeImpl::NodeImpl( GraphImpl *_graph_p): uid(_graph_p->node_next_id), graph_p( _graph_p)
+inline NodeImpl::NodeImpl()
 {
     first_edge[ GRAPH_DIR_UP] = NULL;
     first_edge[ GRAPH_DIR_DOWN] = NULL;
@@ -33,6 +33,12 @@ inline GraphUid NodeImpl::id() const
     return uid;
 }
 
+/** Set node's unique ID           */
+inline void NodeImpl::setId( GraphUid new_id)
+{
+    uid = new_id;
+}
+    
 /**
  * Get node's corresponding GraphImpl
  */
@@ -40,6 +46,14 @@ inline GraphImpl * NodeImpl::graph() const
 {
     return graph_p;
 }
+
+/** Set node's pointer to graph */
+inline void NodeImpl::setGraph( GraphImpl *g)
+{
+    graph_p = g;
+}
+
+
 /**
  * Next node in GraphImpl's list
  */

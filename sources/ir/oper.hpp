@@ -122,7 +122,7 @@ public:
     typedef typename MDesType::OperName OperName;
     
     /** Constructor */
-    Operation( DG <MDesType> *g);
+    Operation();
 
     /** Destructor */
     ~Operation();

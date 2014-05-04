@@ -313,8 +313,8 @@ Operation<MDesName>::name() const
 
 /** Operation constructor */
 template < class MDesType> 
-Operation<MDesType>::Operation( DG <MDesType> *g):
-    Node< DG< MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >( g), // Dependence graph node constructor
+Operation<MDesType>::Operation():
+    Node< DG< MDesType>, typename MDesType::OperationType, DepEdge<MDesType> >(), // Dependence graph node constructor
     first_arg( NULL), // We don't have any arguments in the set on operation construction
     first_res( NULL), // We don't have any results in the set on operation construction
     node_( NULL)      // Node is not define at the moment of operation construction

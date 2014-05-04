@@ -93,25 +93,9 @@ public:
     
     /** Print edge in dot fomat to stdout */
     virtual void debugPrint();
-
-private:
-    /** Graph part */
-    GraphUid uid; //Unique ID
-    GraphImpl * graph_p; //Graph
-
-    /** Nodes */
-    NodeImpl *nodes[ GRAPH_DIRS_NUM]; //Adjacent nodes
-    /** NodeImpl checking routine */
-    bool checkNodes( NodeImpl* _pred, NodeImpl* _succ);
-
 protected:
-    /** GraphImpl should have access to EdgeImpl's members */
-    friend class GraphImpl;
-    /** NodeImpl should have access to EdgeImpl's members */
-    friend class NodeImpl;
-
     /** Constructors are made private, only nodes and GraphImpl can create edges */
-    inline EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ);
+    inline EdgeImpl( NodeImpl *_pred, NodeImpl* _succ);
 
     /**
      * Detach edge from a node.
@@ -126,6 +110,25 @@ protected:
     {
         detach( EDGE_LIST_GRAPH);
     }
+private:
+    /** NodeImpl checking routine */
+    bool checkNodes( NodeImpl* _pred, NodeImpl* _succ);
+    
+    inline void setId( GraphUid uid);   /**< Set edge's unique ID           */
+    inline void setGraph( GraphImpl *g);/**< Set edge's pointer to graph */
+    
+    /** Graph part */
+    GraphUid uid; //Unique ID
+    GraphImpl * graph_p; //Graph
+
+    /** Nodes */
+    NodeImpl *nodes[ GRAPH_DIRS_NUM]; //Adjacent nodes
+
+    /** GraphImpl should have access to EdgeImpl's members */
+    friend class GraphImpl;
+    /** NodeImpl should have access to EdgeImpl's members */
+    friend class NodeImpl;
+
 };
 
 /**
@@ -174,7 +177,7 @@ template < class G, class N, class E> class Edge:
 {
 public:    
 
-    Edge( G* g, N* pred, N* succ): EdgeImpl( g, pred, succ){};
+    Edge( N* pred, N* succ): EdgeImpl( pred, succ){};
     ~Edge(){};
 
     /** Insert node on this edge */

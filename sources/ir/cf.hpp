@@ -22,7 +22,7 @@ namespace IR
     {
     public:
         /** Control flow edge constructor */
-        inline CFEdge( CFG<MDesType> *g, CFNode<MDesType> *pred, CFNode<MDesType> *succ);
+        inline CFEdge( CFNode<MDesType> *pred, CFNode<MDesType> *succ);
         inline Operation<MDesType> *srcOper() const;       /**< Get control source operation */
         inline void setSrcOper( Operation<MDesType> *oper);/**< Set control source operation */
 
@@ -42,7 +42,7 @@ namespace IR
         public Node< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >
     {
     public:
-        inline CFNode( CFG<MDesType> *g); /**< Constructor of CF node */
+        inline CFNode(); /**< Constructor of CF node */
 
         inline Operation<MDesType> *firstOper() const;       /**< Get first operation of the node */
         inline void setFirstOper( Operation<MDesType> *oper);/**< Set first operation of the node */

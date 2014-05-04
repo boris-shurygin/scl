@@ -33,6 +33,5 @@ bool EdgeImpl::checkNodes( NodeImpl* _pred, NodeImpl* _succ)
 {
     return isNotNullP( _pred)
            && isNotNullP( _succ)
-           && areEqP( this->graph(), _pred->graph())
            && areEqP( _pred->graph(), _succ->graph());
 }

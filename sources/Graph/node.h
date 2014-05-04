@@ -79,9 +79,9 @@ public:
     virtual ~NodeImpl();
     
     inline GraphUid id() const;  /**< Get node's unique ID           */
-    inline GraphImpl * graph() const;/**< Get node's corresponding GraphImpl */
-    inline NodeImpl* nextNode() const;     /**< Next node in GraphImpl's list      */
-    inline NodeImpl* prevNode() const;     /**< Prev node in GraphImpl's list      */
+    inline GraphImpl * graph() const;/**< Get node's corresponding graph */
+    inline NodeImpl* nextNode() const;     /**< Next node in graph's list      */
+    inline NodeImpl* prevNode() const;     /**< Prev node in graph's list      */
     
     /** Add edge to node in specified direction */
     inline void AddEdgeInDir( EdgeImpl *edge, GraphDir dir);
@@ -104,21 +104,24 @@ public:
     virtual void debugPrint(); /**< Print node in DOT format to stdout */
 
 protected:
-    /** We can't create nodes separately, do it through newNode method of GraphImpl */
-    inline NodeImpl( GraphImpl *_graph_p);
+    /** We can't create nodes separately, do it through newNode method of graph */
+    inline NodeImpl();
 private:
-    /** GraphImpl class controls nodes */
-    friend class GraphImpl;    
-    
     /** Detach this node from GraphImpl's node list */
     inline void detachFromGraph();
-
-    /* Connection with inclusive GraphImpl */
+    
+    inline void setId( GraphUid uid);   /**< Set node's unique ID           */
+    inline void setGraph( GraphImpl *g);/**< Set node's pointer to graph */
+    
+    /* Connection with inclusive graph */
     GraphUid uid;       /**< Unique id        */
-    GraphImpl * graph_p;/**< Pointer to GraphImpl */
+    GraphImpl * graph_p;/**< Pointer to graph */
 
     /** First edges in GraphImpl's directions */
     EdgeImpl *first_edge[ GRAPH_DIRS_NUM];
+
+    /** GraphImpl class controls nodes */
+    friend class GraphImpl; 
 };
 
 
@@ -195,8 +198,6 @@ template < class G, class N, class E> class Node:
     public PoolObj< N, UseCustomFixedPool>
 {
 public:
-    
-    inline Node( G* g): NodeImpl( g){};
     virtual ~Node();
 
     inline G * graph()  const;/**< Get node's corresponding GraphImpl */

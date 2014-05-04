@@ -162,9 +162,6 @@ protected:
      *  needed for edges to have unique id. In DEBUG mode edge id is not reused.
      */
     GraphUid edge_next_id;
-
-    friend EdgeImpl::EdgeImpl( GraphImpl *_graph_p, NodeImpl *_pred, NodeImpl* _succ);
-    friend NodeImpl::NodeImpl( GraphImpl *_graph_p);
 };
 
 /**

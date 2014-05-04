@@ -24,16 +24,17 @@ CFEdge<MDesType>::setSrcOper( Operation<MDesType> *oper)
 }
 /** Control Flow Edge constructor */
 template <class MDesType> 
-CFEdge<MDesType>::CFEdge( CFG<MDesType> *g, CFNode<MDesType> *pred, CFNode<MDesType> *succ):
-    Edge< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >( g, pred, succ),
+CFEdge<MDesType>::CFEdge( CFNode<MDesType> *pred, CFNode<MDesType> *succ):
+    Edge< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >( pred, succ),
     src_oper_p( NULL)
 {
     
 }
 
 /** Control Flow node constructor */
-template <class MDesType> CFNode<MDesType>::CFNode( CFG<MDesType> *g):
-    Node< CFG<MDesType>, CFNode<MDesType>, CFEdge<MDesType> >( g), first( NULL), last( NULL)
+template <class MDesType>
+CFNode<MDesType>::CFNode():
+    first( NULL), last( NULL)
 {
     
 }

@@ -25,6 +25,7 @@ bool uTestGraphImplOwn( UnitTest* utest_p)
         /** Check node insertion */
         ANode *new_node = edge->insertNode();
         AEdge *edge2 = new_node->firstSucc();
+        UTEST_CHECK( utest_p, areEqP( new_node->graph(), &graph)); 
         UTEST_CHECK( utest_p, areEqP( new_node->firstPred(), pred->firstSucc())); 
         UTEST_CHECK( utest_p, areEqP( new_node->firstSucc(), succ->firstPred()));
         UTEST_CHECK( utest_p, areEqP( edge->pred(), pred));
