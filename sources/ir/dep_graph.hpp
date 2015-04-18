@@ -10,6 +10,7 @@
 
 namespace IR
 {
+    using namespace Graph;
     /**
      * @class DepEdge
      * @brief Dependence edge class

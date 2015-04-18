@@ -9,6 +9,9 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
+namespace Graph
+{
+
 /**
  * @class GraphImpl
  * @brief Basic representation of graph
@@ -301,5 +304,7 @@ private:
     /** Memory pool for edges */
     TypedPool<E> edge_pool;
 };
+
+} // namespace Graph 
 
 #endif /* GRAPH_H*/

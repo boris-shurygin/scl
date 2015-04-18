@@ -66,6 +66,10 @@
  * GraphImpl library, internal representation of GraphImpls in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
+#pragma once
+namespace Graph
+{
+
 /** 
  * Marker index type
  * @ingroup Mark
@@ -426,3 +430,4 @@ inline void MarkerManager::freeMarker( Marker m)
 {
     is_used[ m.index] = false;
 }
+} //namespace Graph

@@ -9,17 +9,13 @@
 #ifndef EDGE_H
 #define EDGE_H
 
-/**
- * EdgeImpl lists identificators
- * @ingroup GraphBase 
- */
-enum EdgeListType
+namespace Graph
 {
-    EDGE_LIST_PREDS,
-    EDGE_LIST_SUCCS,
-    EDGE_LIST_GRAPH,
-    EDGE_LISTS_NUM
-};
+
+// Tags for the lists of edges
+class PredListTag{};
+class SuccListTag{};
+class EdgeListTag{};
 
 /**
  * @class EdgeImpl
@@ -38,21 +34,23 @@ enum EdgeListType
  * Also for debug purposes all nodes in a GraphImpl
  * have unique id, which can be usefull for printing to console or setting breakpoint conditions.
  *
- * Every edge have associated QDomElement for XML export support. The updateElement() routine should be called before
- * export to get element in sync with edge's properties.
- *
  * @sa GraphImpl
  * @sa NodeImpl
  * @sa Mark
  * @sa Nums
  */
 class EdgeImpl: 
-    public MListIface< EdgeImpl, // List item
-                       EDGE_LISTS_NUM >, // Lists number                      
+    public ListItem < PredListTag >,
+    public ListItem < SuccListTag >,
+    public ListItem < EdgeListTag >,
     public Marked,
     public Numbered
 {
 public:
+    typedef ListItem < PredListTag > PredList;
+    typedef ListItem < SuccListTag > SuccList;
+    typedef ListItem < EdgeListTag > EdgeList;
+
     /** Get edge's unique ID */
     inline GraphUid id() const;
 
@@ -108,7 +106,7 @@ protected:
      */
     inline void detachFromGraph()
     {
-        detach( EDGE_LIST_GRAPH);
+        EdgeList::detach();
     }
 private:
     /** NodeImpl checking routine */
@@ -197,4 +195,5 @@ public:
     inline E* nextPred() const; /**< Next predecessor */
 };
 
+} // namespace Graph
 #endif

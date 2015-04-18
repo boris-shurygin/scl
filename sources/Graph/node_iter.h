@@ -10,6 +10,8 @@
 #ifndef NODE_ITER_H
 #define NODE_ITER_H
 
+namespace Graph
+{
 
 /** Baseclass for implementing iterator template parameters */
 template < class N, class E> class IterImplBase
@@ -103,4 +105,5 @@ public:
     EdgeIterImpl< N, E> impl;
 };
 
+} // namespace Graph
 #endif

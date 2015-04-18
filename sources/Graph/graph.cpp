@@ -8,6 +8,8 @@
  */
 #include "graph_iface.h"
 
+namespace Graph 
+{
 /**
  * Constructor.
  */
@@ -93,3 +95,4 @@ GraphImpl::clearMarkersInObjects()
         clearUnusedMarkers( static_cast<Marked *>(n));
     }
 }
+} // namespace Graph

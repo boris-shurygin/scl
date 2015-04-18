@@ -17,7 +17,7 @@ namespace IR
  */
 template <class MDesType> class Function: 
     public DG< MDesType>,
-    public SListIface<Function <MDesType> >
+    public ListItem<Function <MDesType> >
 {
 public:
     Function( Module<MDesType> *m);                   /**< Create function in given module */

@@ -14,13 +14,13 @@
  */
 int main(int argc, char **argv)
 {
-    MemMgr::init();
+    Utils::MemMgr::init();
 
     /** Test utils */
     Utils::uTest();
 
     /** Test Graph package */
-    RUN_TEST( uTestGraph);
+    RUN_TEST( Graph::uTest);
     /** Test optimizer package */
     RUN_TEST_OUT_FILE_CHECK( Opt::uTest, "opt_utest.txt");
     
@@ -28,7 +28,7 @@ int main(int argc, char **argv)
      * NOTE: For the unit tests below the logging can be usefull, 
      * the logging itself is tested above in Utils::uTest
      */
-    Log::init();
+    Utils::Log::init();
     
     //log()->add( LOG_REG_EXP, "RegExp", -1, "reg_exp_log.txt");
     //log()->enable( LOG_REG_EXP);
@@ -38,13 +38,13 @@ int main(int argc, char **argv)
     RUN_TEST_OUT_FILE_CHECK( Syntax::Arithmetics::uTest, "stx_utest.txt");
     RUN_TEST_OUT_FILE_CHECK( Lowering::uTestArithm, "low_utest_arithm.txt");
 
-    Log::deinit();
+    Utils::Log::deinit();
     
 
-    MemMgr::deinit();
+    Utils::MemMgr::deinit();
     
     cout.flush();
     cerr.flush();
-    TestDriver::printStats();
-    return TestDriver::returnRes();
+    Utils::TestDriver::printStats();
+    return Utils::TestDriver::returnRes();
 }

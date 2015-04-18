@@ -11,6 +11,9 @@
  */
 #include "graph_iface.h"
 
+namespace Graph
+{
+
 NodeImpl::~NodeImpl()
 {
     GRAPH_ASSERTXD( isNullP(firstSucc()), "Deleted node still has successor edge(s)");
@@ -28,3 +31,4 @@ NodeImpl::debugPrint()
 {
     out("%llu;", id());
 }
+} //namespace Graph

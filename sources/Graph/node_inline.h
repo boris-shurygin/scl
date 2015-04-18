@@ -10,6 +10,9 @@
 #ifndef NODE_INLINE_H
 #define NODE_INLINE_H
 
+namespace Graph 
+{
+
 /** We can't create nodes separately, do it through newNode method of graph */
 inline NodeImpl::NodeImpl()
 {
@@ -59,7 +62,7 @@ inline void NodeImpl::setGraph( GraphImpl *g)
  */
 inline NodeImpl* NodeImpl::nextNode() const
 {
-    return next();
+    return static_cast< NodeImpl *>(NodeList::next());
 }
 
 /**
@@ -67,7 +70,7 @@ inline NodeImpl* NodeImpl::nextNode() const
  */
 inline NodeImpl* NodeImpl::prevNode() const
 {
-    return prev();
+    return static_cast< NodeImpl *>(NodeList::prev());
 }
 
 /**
@@ -130,11 +133,13 @@ inline void
 NodeImpl::AddEdgeInDir( EdgeImpl *edge, GraphDir dir)
 {
     GRAPH_ASSERTD( isNotNullP( edge));
-    GRAPH_ASSERTXD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
-                   "Enums of direction and edge lists are not having right values");
-    GRAPH_ASSERTXD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
-                   "Enums of direction and edge lists are not having right values");
-    edge->attach( dir, first_edge[ dir]); 
+    if (dir == GRAPH_DIR_UP)
+    {
+        edge->PredList::attach(first_edge[dir]);
+    } else if (dir == GRAPH_DIR_DOWN)
+    {
+        edge->SuccList::attach(first_edge[dir]);
+    }
     first_edge[ dir] = edge;
 }
 
@@ -437,4 +442,5 @@ template < class N, class E> UnDirIterImpl< N, E>::UnDirIterImpl( N *n)
     } 
 }
 
+} // namespace Graph
 #endif /* NODE_INLINE_H */

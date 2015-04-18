@@ -102,7 +102,9 @@ am Graph Graph of interest
 #include "node_inline.h"
 #include "graph_inline.h"
 
-/** Unit tests for Graph library */
-extern bool uTestGraph( UnitTest* utest_p);
-
+namespace Graph
+{
+    /** Unit tests for Graph library */
+    extern bool uTest( UnitTest* utest_p);
+} // namespace Graph
 #endif

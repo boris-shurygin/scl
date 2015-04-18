@@ -57,7 +57,7 @@ namespace Arithmetics
      * Token class represents results of the lexical analysis
      * @ingroup ARTHM
      */
-    class Token
+     class Token : public Printable<Token>
     {
     public:
         /** Simple constructor from token value and (optionally) a constant (for NUMBER tokens) */
@@ -68,21 +68,11 @@ namespace Arithmetics
         UInt32   number() const { return number_;} /**< Get the associated number */
         
         /** Dump token to stream */
-        void toStream( std::ostream &stream);
+        void toStream( std::ostream &stream) const;
     private:
         TokenVal val_;
         UInt32 number_;
     };
-
-    /**
-     * Output operator overload for Token objects
-     *
-     */
-    inline std::ostream &operator << ( std::ostream &stream, Token &t)
-    {
-        t.toStream( stream);
-        return stream;
-    }
 
     /**
      * Lexer class implements lexical analysis for the parsing of the arithmetic expressions
@@ -121,7 +111,7 @@ namespace Arithmetics
          prim: NUMBER | - prim | ( expr )
      @endcode
      */
-    class Parser
+    class Parser: public Printable<Parser>
     {
     public:
         typedef ASTNode< Token> TreeNode;
@@ -131,7 +121,7 @@ namespace Arithmetics
         virtual ~Parser() { delete root; } /**< Destructor */
 
         /** Dump parser state to stream */
-        void toStream( std::ostream &stream);
+        void toStream( std::ostream &stream) const;
         
         /** Get the root node of the built AST */
         TreeNode *rootNode() const { return root;}
@@ -163,17 +153,6 @@ namespace Arithmetics
         /* Lexer object. Used internally for lexical anlysis */
         Lexer lex;
     };
-
-    /**
-     * Output operator overload for Parser printing
-     * @ingroup ARTHM
-     */
-    inline std::ostream & operator <<( std::ostream &stream, Parser &p)
-    {
-        p.toStream( stream);
-        return stream;
-    }
-
 
     bool uTest( UnitTest *utest);
 } // Arithmetics

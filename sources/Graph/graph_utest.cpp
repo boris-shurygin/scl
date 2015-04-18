@@ -7,6 +7,9 @@
  */
 #include "graph_iface.h"
 
+namespace Graph
+{
+
 static const int GRAPH_TEST_NUM_NODES = 100000;
 
  /**
@@ -285,7 +288,7 @@ bool uTestSave()
 /**
  * Unit tests for Graph library
  */
-bool uTestGraph( UnitTest* utest_p)
+bool uTest( UnitTest* utest_p)
 {
     /**
      * Check Graph's data structures consistency
@@ -302,5 +305,7 @@ bool uTestGraph( UnitTest* utest_p)
 
     return utest_p->result();
 }
+
+} // namespace Graph
 #endif
 

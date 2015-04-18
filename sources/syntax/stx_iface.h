@@ -23,6 +23,11 @@
 #    define STX_ASSERTXD(cond, what) ASSERT_XD(cond, "Syntax", what)
 #endif
 
+namespace Syntax
+{
+    using namespace Tools;
+}
+
 #include "ast.h"
 #include "arithmetics.h"
 

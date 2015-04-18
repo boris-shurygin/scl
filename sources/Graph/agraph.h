@@ -15,6 +15,9 @@
 #ifndef AGraph_H
 #define AGraph_H
 
+namespace Graph
+{
+
 /* Predeclarations */
 class ANode;
 class AEdge;
@@ -57,4 +60,6 @@ class AGraph: public Graph< AGraph, ANode, AEdge>
 {
     int dummy; //Dummy class member
 };
+
+} // namespace Graph
 #endif

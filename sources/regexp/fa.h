@@ -6,9 +6,10 @@
 
 #pragma once
 
-
 namespace RegExp
 {
+    using namespace Utils;
+
     /**
      * Describes the possible input character in FA and regular expressions
      * @ingroup REGEXP

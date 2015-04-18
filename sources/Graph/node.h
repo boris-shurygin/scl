@@ -12,6 +12,9 @@
 
 #include "node_iter.h"
 
+namespace Graph
+{
+    class NodeListTag{};
 /**
  * @class NodeImpl
  * @brief Representation of GraphImpl node. 
@@ -68,9 +71,10 @@
  */
 class NodeImpl: 
     public Marked, public Numbered,
-    public SListIface< NodeImpl>
+    public ListItem< NodeListTag>
 {
 public:
+    typedef ListItem< NodeListTag> NodeList;
     /**
      * @brief Destructor.
      * Destructs the node. Operator delete shouldn't be called directly.
@@ -222,5 +226,6 @@ public:
     inline EdgeIter edgesEnd();   /**< Create iterator pointing to succ end */
 
 };
-    
+
+} // namespace Graph    
 #endif /* NODE_H */

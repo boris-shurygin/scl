@@ -10,6 +10,9 @@
 #ifndef GRAPH_INLINE_H
 #define GRAPH_INLINE_H
 
+namespace Graph
+{
+
 /**
  * Remove node from node list of GraphImpl
  */
@@ -101,7 +104,7 @@ GraphImpl::addEdge( EdgeImpl *edge_p)
     /** Check that we have available edge id */
     GRAPH_ASSERTXD( edge_next_id < GRAPH_MAX_EDGE_NUM, "We're out of edge identificators");
    
-    edge_p->attach( EDGE_LIST_GRAPH, first_edge);
+    edge_p->EdgeList::attach( first_edge);
     edge_p->setId( edge_next_id);
     edge_p->setGraph( this);
     first_edge = edge_p;
@@ -176,5 +179,5 @@ Graph< G, N, E>::~Graph()
         node = next;
     }
 }
-
+}//namespace Graph
 #endif /** GRAPH_INLINE_H */

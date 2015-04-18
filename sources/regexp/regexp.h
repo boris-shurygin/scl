@@ -8,6 +8,8 @@
 
 namespace RegExp
 {
+    using namespace Utils;
+
     /**
      * Exception class for regular expressions errors
      * @ingroup ARTHM

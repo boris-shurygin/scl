@@ -56,6 +56,8 @@ enum OpDir
 
 namespace IR
 {
+    using namespace Graph;
+    
     template <class MDesType> class  Function;
     template <class MDesType> class  Module;
 

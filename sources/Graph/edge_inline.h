@@ -9,6 +9,9 @@
 #ifndef EDGE_INLINE_H
 #define EDGE_INLINE_H
 
+namespace Graph
+{
+
 /** Constructor implementation */
 inline EdgeImpl::EdgeImpl( NodeImpl *_pred, NodeImpl* _succ)
 {
@@ -28,7 +31,14 @@ EdgeImpl::detachFromNode( GraphDir dir)
     {
         NodeImpl *n = node( dir);
         n->deleteEdgeInDir( RevDir( dir), this);
-        detach( RevDir( dir));
+        if (dir == GRAPH_DIR_UP)
+        {
+            SuccList::detach();
+        } else
+        {
+            GRAPH_ASSERTD(dir == GRAPH_DIR_DOWN);
+            PredList::detach();
+        }
         nodes[ dir] = 0;
     }
 }
@@ -119,7 +129,7 @@ inline NodeImpl *EdgeImpl::succ() const
  */
 inline EdgeImpl* EdgeImpl::nextEdge() const
 {
-    return next( EDGE_LIST_GRAPH);
+    return static_cast<EdgeImpl *>(EdgeList::next());
 }
 
 /**
@@ -128,11 +138,12 @@ inline EdgeImpl* EdgeImpl::nextEdge() const
 inline EdgeImpl* EdgeImpl::nextEdgeInDir( GraphDir dir) const
 {
     GRAPH_ASSERTXD( dir < GRAPH_DIRS_NUM, "Wrong direction parameter");
-    GRAPH_ASSERTXD( (int) GRAPH_DIR_DOWN == (int) EDGE_LIST_SUCCS,
-                   "Enums of direction and edge lists are not having right values");
-    GRAPH_ASSERTXD( (int) GRAPH_DIR_UP == (int) EDGE_LIST_PREDS,
-                   "Enums of direction and edge lists are not having right values");
-    return next( dir);
+    
+    if (dir == GRAPH_DIR_DOWN) return static_cast<EdgeImpl *>( SuccList::next());
+    if (dir == GRAPH_DIR_UP)   return static_cast<EdgeImpl *>( PredList::next());
+    
+    GRAPH_ASSERTXD(0, "Wrong directions number");
+    return 0;
 }
 
 /**
@@ -225,4 +236,6 @@ Edge< G, N, E>::nextPred() const
 {
     return static_cast< E*>( EdgeImpl::nextPred());
 }
+
+} // namespace Graph
 #endif

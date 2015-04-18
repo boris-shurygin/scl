@@ -9,18 +9,19 @@
 
 namespace Syntax
 {
+
     /**
      * Node of the abstract syntax tree
      * @ingroup STX
      */
-    template <class Token> class ASTNode
+    template <class Token> class ASTNode: public Printable< ASTNode< Token> >
     {
         //Conveniece typedefs
         typedef typename std::list< ASTNode* > NodeList;
         typedef typename NodeList::iterator iterator;
 
     public:
-        void toStream( std::ostream &stream);                  /**< Text dump of the node */
+        void toStream( std::ostream &stream) const;                  /**< Text dump of the node */
         ASTNode( Token t = Token(), ASTNode *parent_node = 0); /**< AST node constructor  */
         virtual ~ASTNode();            /**< AST node destructor. Deletes children as well */
  
@@ -182,19 +183,10 @@ namespace Syntax
     /** 
      * Dump the node to the given stream
      */
-    template <class Token> void ASTNode< Token>::toStream( std::ostream &stream)
+    template <class Token> void ASTNode< Token>::toStream( std::ostream &stream) const
     {
         stream 
             //<< id() << ": "
             << token_;
-    }
-    /**
-     * Output operator overload for AST node
-     * @ingroup STX
-     */
-    template <class Token> std::ostream & operator << ( std::ostream &stream, ASTNode< Token> &t)
-    {
-        t.toStream( stream);
-        return stream;
     }
 } // Syntax

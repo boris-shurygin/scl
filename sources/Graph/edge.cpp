@@ -8,6 +8,9 @@
  */
 #include "graph_iface.h"
 
+namespace Graph
+{
+
 /**
  * EdgeImpl destructor.
  * delete edge from GraphImpl's list of edges
@@ -35,3 +38,4 @@ bool EdgeImpl::checkNodes( NodeImpl* _pred, NodeImpl* _succ)
            && isNotNullP( _succ)
            && areEqP( _pred->graph(), _succ->graph());
 }
+} //namespace Graph

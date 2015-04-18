@@ -7,6 +7,8 @@
 
 namespace Lowering
 {
+    using namespace Utils;
+
     /** Typedef for shortening the node type name */
     typedef Syntax::Arithmetics::Parser::TreeNode TreeNode;
     

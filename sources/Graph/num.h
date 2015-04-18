@@ -7,7 +7,7 @@
  * @ingroup GraphBase
  * Numerations can be used to assign numbers to objects.
  *
- * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
+ * In application to Graphs a numeration is a mapping of Graph's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()
@@ -71,9 +71,13 @@
  * @sa Mark
  */
 /*
- * GraphImpl library, internal representation of GraphImpls in compiler prototype project
+ * Graph library, internal representation of graphs in compiler prototype project
  * Copyright (C) 2012  Boris Shurygin
  */
+#pragma once
+namespace Graph
+{
+
 /**
  * Numeration index type
  * @ingroup Nums
@@ -143,7 +147,7 @@ const GraphNum NUMBER_MAX = (( GraphNum) -1) - 1;
  * @brief Numeration description. 
  *
 
- * In application to GraphImpls a numeration is a mapping of GraphImpl's nodes and/or edges to 
+ * In application to Graphs a numeration is a mapping of Graph's nodes and/or edges to 
  * numbers. A node or an edge can be assigned a number in several different numerations. So
  * when we number them we say what numeration we are dealing with. Numeration class describes
  * one particular numeration. It is used as a parameter for functions like Numbered::number()
@@ -485,3 +489,5 @@ inline void NumManager::freeNum( Numeration n)
 {
     is_used[ n.index] = false;
 }
+
+} //namespace Graph

@@ -11,7 +11,7 @@
 /** Middle-end optimizer of SCL */
 namespace Opt
 {
-        using namespace IR;
+    using namespace IR;
 
 #define OBJ( name, ...) name,
 

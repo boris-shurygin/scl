@@ -54,7 +54,7 @@ template <class MDesType> class OperandList{};
  * @ingroup IR
  */
 template <class MDesType> class Operand: 
-    public SListIface< Operand< MDesType> >
+    public ListItem< Operand< MDesType> >
 {
 public:
     /** Set object to operand */
@@ -111,12 +111,12 @@ template <class MDesType> class OperSeq{};
  */
 template <class MDesType> class Operation:
     public Node< DG< MDesType>, typename MDesType::OperationType, DepEdge< MDesType> >,
-    public ListItem< Operation< MDesType>, OperSeq< MDesType> >
+    public ListItem< OperSeq< MDesType> >
 {
 public:
     
     /** Typedef for operation sequence list */
-    typedef ListItem< Operation< MDesType>, OperSeq< MDesType> > OperSeqList;
+    typedef ListItem< OperSeq< MDesType> > OperSeqList;
 
     /** Type of operation name */
     typedef typename MDesType::OperName OperName;

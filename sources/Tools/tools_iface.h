@@ -12,4 +12,9 @@
 
 #include "../Graph/graph_iface.h"
 
+namespace Tools
+{
+    using namespace Graph;
+}
+
 #endif /** TOOLS_IFFACE_H */

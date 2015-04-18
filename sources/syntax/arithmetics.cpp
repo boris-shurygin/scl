@@ -25,7 +25,7 @@ namespace Arithmetics
     }
 
     /** Dump token to stream */
-    void Token::toStream( std::ostream &stream)
+    void Token::toStream( std::ostream &stream) const
     {
         //stream << "(";
         switch ( val_)
@@ -96,7 +96,7 @@ namespace Arithmetics
         root = expr();// Start parsing
     }
 
-    void Parser::toStream( std::ostream &stream)
+    void Parser::toStream( std::ostream &stream) const
     {
         ASTPrinter< TreeNode> printer( stream);
         if ( root)
